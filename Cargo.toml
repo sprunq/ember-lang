@@ -1,0 +1,11 @@
+[package]
+name = "crab-lang"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "crab_lib"
+path = "crab_lib/lib.rs"
+
+
+[dependencies]
