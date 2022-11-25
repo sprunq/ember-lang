@@ -1,4 +1,4 @@
-use crab_lib::{lexer::lexer::Lexer, parser::parser::Parser};
+use crab_lib::{lexer::lex::Lexer, parser::parse::Parser};
 use std::{fs, time::Instant};
 
 fn main() {

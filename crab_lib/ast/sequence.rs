@@ -10,7 +10,7 @@ pub struct Sequence {
 impl fmt::Display for Sequence {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         for stmt in &self.statements {
-            write!(f, "{{ {} }}", stmt)?;
+            write!(f, "{}", stmt)?;
         }
         Ok(())
     }

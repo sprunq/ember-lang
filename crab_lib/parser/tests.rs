@@ -1,12 +1,17 @@
 #[cfg(test)]
 pub mod tests {
-    use crate::ast::expression::TypedExpr;
-    use crate::ast::ty::Type;
-    use crate::ast::{expression::Expr, infix::Infix, statement::Stmt};
-    use crate::lexer::lexer::Lexer;
-    use crate::parser::parser::Parser;
+    use crate::{
+        ast::{
+            expression::{Expr, TypedExpr},
+            infix::Infix,
+            statement::Stmt,
+            ty::Type,
+        },
+        lexer::lex::Lexer,
+        parser::parse::Parser,
+    };
 
-    fn check_str_str_eq(intput_output: Vec<(&str, &str)>) {
+    pub fn check_str_str_eq(intput_output: Vec<(&str, &str)>) {
         for (input, expected) in intput_output {
             let lexer = Lexer::new(input.to_owned());
             let mut parser = Parser::new(lexer);
@@ -97,17 +102,17 @@ pub mod tests {
             assert_eq!(
                 program.unwrap().sequence,
                 vec![Stmt::Expression {
-                    expr: TypedExpr::new(Expr::Infix(
-                        operator,
-                        Box::new(TypedExpr {
+                    expr: TypedExpr::new(Expr::Infix {
+                        op: operator,
+                        left: Box::new(TypedExpr {
                             ty: Some(Type::I64),
                             expr: Expr::IntegerLiteral(left)
                         }),
-                        Box::new(TypedExpr {
+                        right: Box::new(TypedExpr {
                             ty: Some(Type::I64),
                             expr: Expr::IntegerLiteral(right)
                         })
-                    ))
+                    })
                 }]
             );
         }

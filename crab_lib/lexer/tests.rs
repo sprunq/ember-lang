@@ -1,7 +1,7 @@
 #[cfg(test)]
 pub mod tests {
     use crate::lexer::{
-        lexer::Lexer,
+        lex::Lexer,
         token::{Literal, Token},
     };
 

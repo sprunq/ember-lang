@@ -9,7 +9,7 @@ use crate::ast::{
     ty::Type,
 };
 use crate::lexer::{
-    lexer::{Lexer, Position},
+    lex::{Lexer, Position},
     token::{Literal, Token},
 };
 
@@ -45,7 +45,7 @@ impl Parser {
         (self.peek_token, self.peek_token_pos) = self.lexer.next_token();
     }
 
-    fn expect_peek(
+    fn expect_and_move(
         &mut self,
         token: Token,
         expected: fn(Token, Position) -> ParseErr,
@@ -71,9 +71,49 @@ impl Parser {
 
     fn parse_statement(&mut self) -> Result<Stmt, ParseErr> {
         match self.current_token {
-            Token::I64 => self.parse_declaration_statement(),
-            _ => self.parse_expression_statement(),
+            Token::I64 => self.parse_declaration_stmt(),
+            Token::While => self.parse_while_stmt(),
+            Token::If => self.parse_if_stmt(),
+            _ => self.parse_expr_stmt(),
         }
+    }
+
+    fn parse_if_stmt(&mut self) -> Result<Stmt, ParseErr> {
+        self.expect_and_move(Token::LParenthesis, ParseErr::ExpectedLparen)?;
+        self.next_token();
+        let condition = self.parse_expr(Precedence::Lowest)?;
+        self.expect_and_move(Token::RParenthesis, ParseErr::ExpectedRparen)?;
+        self.expect_and_move(Token::LBrace, ParseErr::ExpectedLbrace)?;
+        let consequence = self.parse_sequence()?;
+        let alternative = if self.peek_token == Token::Else {
+            self.next_token();
+            self.expect_and_move(Token::LBrace, ParseErr::ExpectedLbrace)?;
+            Some(self.parse_sequence()?)
+        } else {
+            None
+        };
+        self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
+
+        Ok(Stmt::If {
+            condition: Box::new(condition),
+            body: consequence,
+            alternative,
+        })
+    }
+
+    fn parse_while_stmt(&mut self) -> Result<Stmt, ParseErr> {
+        self.expect_and_move(Token::LParenthesis, ParseErr::ExpectedLparen)?;
+        self.next_token();
+        let condition = self.parse_expr(Precedence::Lowest)?;
+        self.expect_and_move(Token::RParenthesis, ParseErr::ExpectedRparen)?;
+        self.expect_and_move(Token::LBrace, ParseErr::ExpectedLbrace)?;
+        let consequence = self.parse_sequence()?;
+        self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
+
+        Ok(Stmt::While {
+            condition: Box::new(condition),
+            body: consequence,
+        })
     }
 
     fn get_prefix_fn(&self) -> Option<PrefixParseFn> {
@@ -83,47 +123,11 @@ impl Parser {
             Token::Minus => Some(Parser::parse_prefix_expression),
             Token::LParenthesis => Some(Parser::parse_grouped_expression),
             Token::Literal(_) => Some(Parser::parse_literal_expression),
-            Token::While => Some(Parser::parse_whileloop_expression),
-            Token::If => Some(Parser::parse_if_expression),
             _ => None,
         }
     }
 
-    fn parse_if_expression(&mut self) -> Result<TypedExpr, ParseErr> {
-        self.expect_peek(Token::LParenthesis, ParseErr::ExpectedLparen)?;
-        self.next_token();
-        let condition = self.parse_expression(Precedence::Lowest)?;
-        self.expect_peek(Token::RParenthesis, ParseErr::ExpectedRparen)?;
-        self.expect_peek(Token::LBrace, ParseErr::ExpectedLbrace)?;
-        let consequence = self.parse_block_statement()?;
-        let alternative = if self.peek_token == Token::Else {
-            self.next_token();
-            self.expect_peek(Token::LBrace, ParseErr::ExpectedLbrace)?;
-            Some(self.parse_block_statement()?)
-        } else {
-            None
-        };
-        Ok(TypedExpr::new(Expr::If(
-            Box::new(condition),
-            consequence,
-            alternative,
-        )))
-    }
-
-    fn parse_whileloop_expression(&mut self) -> Result<TypedExpr, ParseErr> {
-        self.expect_peek(Token::LParenthesis, ParseErr::ExpectedLparen)?;
-        self.next_token();
-        let condition = self.parse_expression(Precedence::Lowest)?;
-        self.expect_peek(Token::RParenthesis, ParseErr::ExpectedRparen)?;
-        self.expect_peek(Token::LBrace, ParseErr::ExpectedLbrace)?;
-        let consequence = self.parse_block_statement()?;
-        Ok(TypedExpr::new(Expr::WhileLoop(
-            Box::new(condition),
-            consequence,
-        )))
-    }
-
-    fn parse_block_statement(&mut self) -> Result<Sequence, ParseErr> {
+    fn parse_sequence(&mut self) -> Result<Sequence, ParseErr> {
         let mut statements = vec![];
 
         self.next_token();
@@ -199,7 +203,7 @@ impl Parser {
         }
     }
 
-    fn parse_expression(&mut self, precedence: Precedence) -> Result<TypedExpr, ParseErr> {
+    fn parse_expr(&mut self, precedence: Precedence) -> Result<TypedExpr, ParseErr> {
         let prefix = self.get_prefix_fn().ok_or_else(|| {
             ParseErr::ExpectedPrefixToken(self.current_token.clone(), self.peek_token_pos)
         })?;
@@ -243,12 +247,12 @@ impl Parser {
             }
         };
         self.next_token();
-        let value = self.parse_expression(Precedence::Lowest)?;
-        Ok(TypedExpr::new(Expr::Assign(
-            name,
-            operator,
-            Box::new(value),
-        )))
+        let value = self.parse_expr(Precedence::Lowest)?;
+        Ok(TypedExpr::new(Expr::Assign {
+            ident: name,
+            operand: operator,
+            expr: Box::new(value),
+        }))
     }
 
     fn parse_type(&mut self) -> Result<Type, ParseErr> {
@@ -262,19 +266,19 @@ impl Parser {
         }
     }
 
-    fn parse_declaration_statement(&mut self) -> Result<Stmt, ParseErr> {
+    fn parse_declaration_stmt(&mut self) -> Result<Stmt, ParseErr> {
         let ty = self.parse_type()?;
         self.next_token();
         let ident = self.parse_identifier_string()?;
-        self.expect_peek(Token::Assign, ParseErr::ExpectedAssign)?;
+        self.expect_and_move(Token::Assign, ParseErr::ExpectedAssign)?;
         self.next_token();
-        let value = self.parse_expression(Precedence::Lowest)?;
-        self.expect_peek(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
+        let value = self.parse_expr(Precedence::Lowest)?;
+        self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
         Ok(Stmt::Declaration { ty, ident, value })
     }
 
-    fn parse_expression_statement(&mut self) -> Result<Stmt, ParseErr> {
-        let expression = self.parse_expression(Precedence::Lowest)?;
+    fn parse_expr_stmt(&mut self) -> Result<Stmt, ParseErr> {
+        let expression = self.parse_expr(Precedence::Lowest)?;
         if self.peek_token == Token::Semicolon {
             self.next_token();
         }
@@ -302,11 +306,11 @@ impl Parser {
     fn parse_prefix_expression(&mut self) -> Result<TypedExpr, ParseErr> {
         let prefix_token = self.get_prefix_token(&self.current_token)?;
         self.next_token();
-        let right_expr = self.parse_expression(Precedence::Prefix)?;
-        Ok(TypedExpr::new(Expr::Prefix(
-            prefix_token,
-            Box::new(right_expr),
-        )))
+        let right_expr = self.parse_expr(Precedence::Prefix)?;
+        Ok(TypedExpr::new(Expr::Prefix {
+            op: prefix_token,
+            expr: Box::new(right_expr),
+        }))
     }
 
     fn parse_infix_expression(&mut self, left: TypedExpr) -> Result<TypedExpr, ParseErr> {
@@ -315,19 +319,19 @@ impl Parser {
             ParseErr::ExpectedInfixToken(self.current_token.clone(), self.peek_token_pos)
         })?;
         self.next_token();
-        let right = self.parse_expression(precedence)?;
+        let right = self.parse_expr(precedence)?;
 
-        Ok(TypedExpr::new(Expr::Infix(
-            i,
-            Box::new(left),
-            Box::new(right),
-        )))
+        Ok(TypedExpr::new(Expr::Infix {
+            op: i,
+            left: Box::new(left),
+            right: Box::new(right),
+        }))
     }
 
     fn parse_grouped_expression(&mut self) -> Result<TypedExpr, ParseErr> {
         self.next_token();
-        let expr = self.parse_expression(Precedence::Lowest)?;
-        self.expect_peek(Token::RParenthesis, ParseErr::ExpectedRparen)?;
+        let expr = self.parse_expr(Precedence::Lowest)?;
+        self.expect_and_move(Token::RParenthesis, ParseErr::ExpectedRparen)?;
         Ok(expr)
     }
 }

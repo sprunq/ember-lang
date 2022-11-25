@@ -1,37 +1,39 @@
-use super::{infix::Infix, prefix::Prefix, sequence::Sequence, ty::Type};
+use super::{infix::Infix, prefix::Prefix, ty::Type};
 use std::fmt;
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expr {
-    Infix(Infix, Box<TypedExpr>, Box<TypedExpr>),
-    Prefix(Prefix, Box<TypedExpr>),
+    Infix {
+        op: Infix,
+        left: Box<TypedExpr>,
+        right: Box<TypedExpr>,
+    },
+    Prefix {
+        op: Prefix,
+        expr: Box<TypedExpr>,
+    },
     Identifier(String),
     IntegerLiteral(i64),
-    If(Box<TypedExpr>, Sequence, Option<Sequence>),
-    Empty,
-    WhileLoop(Box<TypedExpr>, Sequence),
-    Assign(String, Infix, Box<TypedExpr>),
+    Assign {
+        ident: String,
+        // =, +=, *=, ...
+        operand: Infix,
+        expr: Box<TypedExpr>,
+    },
 }
 
 impl fmt::Display for Expr {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Expr::Infix(op, l, r) => write!(f, "({} {} {})", l, op, r),
-            Expr::Identifier(ident) => write!(f, "{}", ident),
-            Expr::IntegerLiteral(int) => write!(f, "{}", int),
-            Expr::Empty => write!(f, ""),
-            Expr::Prefix(prefix, expr) => write!(f, "({}{})", prefix, expr),
-            Expr::If(condition, consequence, alternative) => {
-                write!(f, "if {} {}", condition, consequence)?;
-                if let Some(alt) = alternative {
-                    write!(f, " else {}", alt)?;
-                }
-                Ok(())
-            }
-            Expr::WhileLoop(condition, consequence) => {
-                write!(f, "while ({}) {{{}}}", condition, consequence)
-            }
-            Expr::Assign(ident, op, expr) => write!(f, "{} {} {}", ident, op, expr),
+            Expr::Infix { op, left, right } => write!(f, "({left} {op} {right})"),
+            Expr::Identifier(ident) => write!(f, "{ident}"),
+            Expr::IntegerLiteral(int) => write!(f, "{int}"),
+            Expr::Prefix { op, expr } => write!(f, "({op}{expr})"),
+            Expr::Assign {
+                ident,
+                operand: op,
+                expr,
+            } => write!(f, "{ident} {op} {expr}"),
         }
     }
 }
