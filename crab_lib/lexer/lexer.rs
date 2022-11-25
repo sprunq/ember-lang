@@ -1,4 +1,4 @@
-use super::token::{self, Token};
+use super::token::{self, Literal, Token};
 
 #[derive(Clone, Debug, Copy, PartialEq, Eq)]
 pub struct Position {
@@ -45,9 +45,6 @@ impl Lexer {
             }
             ']' => {
                 tok = Token::RBracket;
-            }
-            '"' => {
-                tok = Token::String(self.read_string().to_string());
             }
             '=' => {
                 tok = {
@@ -106,17 +103,8 @@ impl Lexer {
                     let ident = self.read_identifier();
                     return (token::lookup_ident(&ident), self.pos_2d);
                 } else if Self::is_digit(self.character) {
-                    let integer_part = self.read_number();
-                    if self.character == '.' && Self::is_digit(self.peek_char()) {
-                        self.read_char();
-                        let fractional_part = self.read_number();
-                        return (
-                            Token::Float(format!("{}.{}", integer_part, fractional_part)),
-                            self.pos_2d,
-                        );
-                    } else {
-                        return (Token::Int(integer_part), self.pos_2d);
-                    }
+                    let integer_part = self.read_number().parse::<i64>().unwrap_or(i64::MIN);
+                    return (Token::Literal(Literal::Integer(integer_part)), self.pos_2d);
                 } else {
                     tok = Token::Illegal
                 }
@@ -143,20 +131,9 @@ impl Lexer {
         character.is_alphabetic() || character == '_'
     }
 
-    fn read_string(&mut self) -> &str {
-        let position = self.position + 1;
-        loop {
-            self.read_char();
-            if self.character == '"' || self.character == '\u{0}' {
-                break;
-            }
-        }
-        &self.input[position..self.position]
-    }
-
     pub fn read_identifier(&mut self) -> String {
         let start_pos = self.position;
-        while Self::is_letter(self.character) {
+        while Self::is_letter(self.character) || Self::is_digit(self.character) {
             self.read_char();
         }
         self.input[start_pos..self.position].to_string()

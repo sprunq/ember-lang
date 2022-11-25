@@ -1,6 +1,8 @@
 #[cfg(test)]
 pub mod tests {
-    use crate::ast::{expression::Expression, infix::Infix, statement::Statement};
+    use crate::ast::expression::TypedExpr;
+    use crate::ast::ty::Type;
+    use crate::ast::{expression::Expr, infix::Infix, statement::Stmt};
     use crate::lexer::lexer::Lexer;
     use crate::parser::parser::Parser;
 
@@ -11,30 +13,48 @@ pub mod tests {
             let parse_res = parser.parse_program();
 
             match parse_res {
-                Ok(program) => assert_eq!(program.to_string(), expected),
+                Ok(program) => assert_eq!(format!("{}", program), expected),
                 Err(err) => panic!("Got error: {:?}", err),
             }
         }
     }
 
     #[test]
-    fn test_let_stmt() {
+    fn test_decl_stmt() {
         let input = "
-        let x = 5;
-        let y = 7;
-        let foobar = y;
+        i64 x = 5;
+        i64 y = 7;
+        i64 foobar = y;
         ";
         let lexer = Lexer::new(input.to_owned());
         let mut parser = Parser::new(lexer);
 
         let program = parser.parse_program();
         let expected = vec![
-            Statement::Let("x".to_string(), Expression::IntegerLiteral(5)),
-            Statement::Let("y".to_string(), Expression::IntegerLiteral(7)),
-            Statement::Let(
-                "foobar".to_string(),
-                Expression::Identifier("y".to_string()),
-            ),
+            Stmt::Declaration {
+                ty: Type::I64,
+                ident: "x".to_string(),
+                value: TypedExpr {
+                    ty: Some(Type::I64),
+                    expr: Expr::IntegerLiteral(5),
+                },
+            },
+            Stmt::Declaration {
+                ty: Type::I64,
+                ident: "y".to_string(),
+                value: TypedExpr {
+                    ty: Some(Type::I64),
+                    expr: Expr::IntegerLiteral(7),
+                },
+            },
+            Stmt::Declaration {
+                ty: Type::I64,
+                ident: "foobar".to_string(),
+                value: TypedExpr {
+                    ty: None,
+                    expr: Expr::Identifier("y".to_string()),
+                },
+            },
         ];
 
         assert_eq!(expected, program.unwrap().sequence);
@@ -46,7 +66,12 @@ pub mod tests {
         let lexer = Lexer::new(input.to_owned());
         let mut parser = Parser::new(lexer);
         let program = parser.parse_program();
-        let expected = vec![Statement::Expression(Expression::IntegerLiteral(5))];
+        let expected = vec![Stmt::Expression {
+            expr: TypedExpr {
+                ty: Some(Type::I64),
+                expr: Expr::IntegerLiteral(5),
+            },
+        }];
 
         assert_eq!(expected, program.unwrap().sequence);
     }
@@ -71,11 +96,19 @@ pub mod tests {
 
             assert_eq!(
                 program.unwrap().sequence,
-                vec![Statement::Expression(Expression::Infix(
-                    operator,
-                    Box::new(Expression::IntegerLiteral(left)),
-                    Box::new(Expression::IntegerLiteral(right))
-                ))]
+                vec![Stmt::Expression {
+                    expr: TypedExpr::new(Expr::Infix(
+                        operator,
+                        Box::new(TypedExpr {
+                            ty: Some(Type::I64),
+                            expr: Expr::IntegerLiteral(left)
+                        }),
+                        Box::new(TypedExpr {
+                            ty: Some(Type::I64),
+                            expr: Expr::IntegerLiteral(right)
+                        })
+                    ))
+                }]
             );
         }
     }
@@ -83,7 +116,6 @@ pub mod tests {
     #[test]
     fn test_identifier() {
         let intput_output = vec![("foobar;", "foobar;")];
-
         check_str_str_eq(intput_output);
     }
 

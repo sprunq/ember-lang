@@ -23,6 +23,8 @@ pub enum ParseErr {
     ParseInt(String, Position),
     ParseFloat(String, Position),
     UnsupportedInfixToken(Token, Position),
+    TokenNotFound(Token, Position),
+    CbaError(),
 }
 
 impl fmt::Display for ParseErr {
@@ -67,6 +69,10 @@ impl fmt::Display for ParseErr {
             ParseErr::UnsupportedInfixToken(val, pos) => {
                 write!(f, "{}", format_token("=,+=,*=,/=", val, pos))
             }
+            ParseErr::TokenNotFound(val, pos) => {
+                write!(f, "Token {} not found. [{}-{}]", val, pos.line, pos.column)
+            }
+            ParseErr::CbaError() => write!(f, "Temporary just cba to implement this"),
         }
     }
 }

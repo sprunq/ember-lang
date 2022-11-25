@@ -1,18 +1,20 @@
 use super::parse_error::ParseErr;
 use crate::ast::{
-    expression::Expression,
+    expression::{Expr, TypedExpr},
     infix::Infix,
     precedence::Precedence,
     prefix::Prefix,
-    statement::{Program, SequenceStatement, Statement},
+    sequence::Sequence,
+    statement::{Program, Stmt},
+    ty::Type,
 };
 use crate::lexer::{
     lexer::{Lexer, Position},
-    token::Token,
+    token::{Literal, Token},
 };
 
-type PrefixParseFn = fn(&mut Parser) -> Result<Expression, ParseErr>;
-type InfixParseFn = fn(&mut Parser, Expression) -> Result<Expression, ParseErr>;
+type PrefixParseFn = fn(&mut Parser) -> Result<TypedExpr, ParseErr>;
+type InfixParseFn = fn(&mut Parser, TypedExpr) -> Result<TypedExpr, ParseErr>;
 
 pub struct Parser {
     lexer: Lexer,
@@ -67,9 +69,9 @@ impl Parser {
         })
     }
 
-    fn parse_statement(&mut self) -> Result<Statement, ParseErr> {
+    fn parse_statement(&mut self) -> Result<Stmt, ParseErr> {
         match self.current_token {
-            Token::Let => self.parse_let_statement(),
+            Token::I64 => self.parse_declaration_statement(),
             _ => self.parse_expression_statement(),
         }
     }
@@ -77,13 +79,72 @@ impl Parser {
     fn get_prefix_fn(&self) -> Option<PrefixParseFn> {
         match &self.current_token {
             Token::Identifier(_) => Some(Parser::parse_identifier_expression),
-            Token::Int(_) => Some(Parser::parse_integer_expression),
             Token::Bang => Some(Parser::parse_prefix_expression),
             Token::Minus => Some(Parser::parse_prefix_expression),
             Token::LParenthesis => Some(Parser::parse_grouped_expression),
+            Token::Literal(_) => Some(Parser::parse_literal_expression),
+            Token::While => Some(Parser::parse_whileloop_expression),
             Token::If => Some(Parser::parse_if_expression),
-            Token::While => Some(Parser::parse_forloop_expression),
             _ => None,
+        }
+    }
+
+    fn parse_if_expression(&mut self) -> Result<TypedExpr, ParseErr> {
+        self.expect_peek(Token::LParenthesis, ParseErr::ExpectedLparen)?;
+        self.next_token();
+        let condition = self.parse_expression(Precedence::Lowest)?;
+        self.expect_peek(Token::RParenthesis, ParseErr::ExpectedRparen)?;
+        self.expect_peek(Token::LBrace, ParseErr::ExpectedLbrace)?;
+        let consequence = self.parse_block_statement()?;
+        let alternative = if self.peek_token == Token::Else {
+            self.next_token();
+            self.expect_peek(Token::LBrace, ParseErr::ExpectedLbrace)?;
+            Some(self.parse_block_statement()?)
+        } else {
+            None
+        };
+        Ok(TypedExpr::new(Expr::If(
+            Box::new(condition),
+            consequence,
+            alternative,
+        )))
+    }
+
+    fn parse_whileloop_expression(&mut self) -> Result<TypedExpr, ParseErr> {
+        self.expect_peek(Token::LParenthesis, ParseErr::ExpectedLparen)?;
+        self.next_token();
+        let condition = self.parse_expression(Precedence::Lowest)?;
+        self.expect_peek(Token::RParenthesis, ParseErr::ExpectedRparen)?;
+        self.expect_peek(Token::LBrace, ParseErr::ExpectedLbrace)?;
+        let consequence = self.parse_block_statement()?;
+        Ok(TypedExpr::new(Expr::WhileLoop(
+            Box::new(condition),
+            consequence,
+        )))
+    }
+
+    fn parse_block_statement(&mut self) -> Result<Sequence, ParseErr> {
+        let mut statements = vec![];
+
+        self.next_token();
+        while self.current_token != Token::RBrace && self.current_token != Token::Eof {
+            statements.push(self.parse_statement()?);
+            self.next_token();
+        }
+
+        Ok(Sequence { statements })
+    }
+
+    fn parse_literal_expression(&mut self) -> Result<TypedExpr, ParseErr> {
+        if let Token::Literal(lit) = &self.current_token {
+            match lit {
+                Literal::Integer(value) => Ok(TypedExpr {
+                    ty: Some(Type::I64),
+                    expr: Expr::IntegerLiteral(*value),
+                }),
+            }
+        } else {
+            Err(ParseErr::CbaError())
         }
     }
 
@@ -138,7 +199,7 @@ impl Parser {
         }
     }
 
-    fn parse_expression(&mut self, precedence: Precedence) -> Result<Expression, ParseErr> {
+    fn parse_expression(&mut self, precedence: Precedence) -> Result<TypedExpr, ParseErr> {
         let prefix = self.get_prefix_fn().ok_or_else(|| {
             ParseErr::ExpectedPrefixToken(self.current_token.clone(), self.peek_token_pos)
         })?;
@@ -157,9 +218,9 @@ impl Parser {
         Ok(left_expr)
     }
 
-    fn parse_assign_expression(&mut self, left: Expression) -> Result<Expression, ParseErr> {
+    fn parse_assign_expression(&mut self, left: TypedExpr) -> Result<TypedExpr, ParseErr> {
         let name = {
-            if let Expression::Identifier(ident) = left {
+            if let Expr::Identifier(ident) = left.expr {
                 Ok(ident)
             } else {
                 Err(ParseErr::ExpectedIdentifierToken(
@@ -183,29 +244,48 @@ impl Parser {
         };
         self.next_token();
         let value = self.parse_expression(Precedence::Lowest)?;
-        Ok(Expression::Assign(name, operator, Box::new(value)))
+        Ok(TypedExpr::new(Expr::Assign(
+            name,
+            operator,
+            Box::new(value),
+        )))
     }
 
-    fn parse_let_statement(&mut self) -> Result<Statement, ParseErr> {
+    fn parse_type(&mut self) -> Result<Type, ParseErr> {
+        if let Some(ty) = Type::from_token(&self.current_token) {
+            Ok(ty)
+        } else {
+            Err(ParseErr::TokenNotFound(
+                self.current_token.clone(),
+                self.peek_token_pos,
+            ))
+        }
+    }
+
+    fn parse_declaration_statement(&mut self) -> Result<Stmt, ParseErr> {
+        let ty = self.parse_type()?;
         self.next_token();
-        let name = self.parse_identifier_string()?;
+        let ident = self.parse_identifier_string()?;
         self.expect_peek(Token::Assign, ParseErr::ExpectedAssign)?;
         self.next_token();
         let value = self.parse_expression(Precedence::Lowest)?;
         self.expect_peek(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
-        Ok(Statement::Let(name, value))
+        Ok(Stmt::Declaration { ty, ident, value })
     }
 
-    fn parse_expression_statement(&mut self) -> Result<Statement, ParseErr> {
-        let expression = self.parse_expression(Precedence::Lowest);
+    fn parse_expression_statement(&mut self) -> Result<Stmt, ParseErr> {
+        let expression = self.parse_expression(Precedence::Lowest)?;
         if self.peek_token == Token::Semicolon {
             self.next_token();
         }
-        expression.map(Statement::Expression)
+        Ok(Stmt::Expression { expr: expression })
     }
 
-    fn parse_identifier_expression(&mut self) -> Result<Expression, ParseErr> {
-        self.parse_identifier_string().map(Expression::Identifier)
+    fn parse_identifier_expression(&mut self) -> Result<TypedExpr, ParseErr> {
+        match self.parse_identifier_string().map(Expr::Identifier) {
+            Ok(expr) => Ok(TypedExpr::new(expr)),
+            Err(err) => Err(err),
+        }
     }
 
     fn parse_identifier_string(&self) -> Result<String, ParseErr> {
@@ -219,14 +299,17 @@ impl Parser {
         }
     }
 
-    fn parse_prefix_expression(&mut self) -> Result<Expression, ParseErr> {
+    fn parse_prefix_expression(&mut self) -> Result<TypedExpr, ParseErr> {
         let prefix_token = self.get_prefix_token(&self.current_token)?;
         self.next_token();
         let right_expr = self.parse_expression(Precedence::Prefix)?;
-        Ok(Expression::Prefix(prefix_token, Box::new(right_expr)))
+        Ok(TypedExpr::new(Expr::Prefix(
+            prefix_token,
+            Box::new(right_expr),
+        )))
     }
 
-    fn parse_infix_expression(&mut self, left: Expression) -> Result<Expression, ParseErr> {
+    fn parse_infix_expression(&mut self, left: TypedExpr) -> Result<TypedExpr, ParseErr> {
         let (precedence, infix) = self.get_infix_token(&self.current_token);
         let i = infix.ok_or_else(|| {
             ParseErr::ExpectedInfixToken(self.current_token.clone(), self.peek_token_pos)
@@ -234,70 +317,17 @@ impl Parser {
         self.next_token();
         let right = self.parse_expression(precedence)?;
 
-        Ok(Expression::Infix(i, Box::new(left), Box::new(right)))
+        Ok(TypedExpr::new(Expr::Infix(
+            i,
+            Box::new(left),
+            Box::new(right),
+        )))
     }
 
-    fn parse_grouped_expression(&mut self) -> Result<Expression, ParseErr> {
+    fn parse_grouped_expression(&mut self) -> Result<TypedExpr, ParseErr> {
         self.next_token();
         let expr = self.parse_expression(Precedence::Lowest)?;
         self.expect_peek(Token::RParenthesis, ParseErr::ExpectedRparen)?;
         Ok(expr)
-    }
-
-    fn parse_block_statement(&mut self) -> Result<SequenceStatement, ParseErr> {
-        let mut statements = vec![];
-
-        self.next_token();
-        while self.current_token != Token::RBrace && self.current_token != Token::Eof {
-            statements.push(self.parse_statement()?);
-            self.next_token();
-        }
-
-        Ok(SequenceStatement { statements })
-    }
-
-    fn parse_if_expression(&mut self) -> Result<Expression, ParseErr> {
-        self.expect_peek(Token::LParenthesis, ParseErr::ExpectedLparen)?;
-        self.next_token();
-        let condition = self.parse_expression(Precedence::Lowest)?;
-        self.expect_peek(Token::RParenthesis, ParseErr::ExpectedRparen)?;
-        self.expect_peek(Token::LBrace, ParseErr::ExpectedLbrace)?;
-        let consequence = self.parse_block_statement()?;
-        let alternative = if self.peek_token == Token::Else {
-            self.next_token();
-            self.expect_peek(Token::LBrace, ParseErr::ExpectedLbrace)?;
-            Some(self.parse_block_statement()?)
-        } else {
-            None
-        };
-        Ok(Expression::If(
-            Box::new(condition),
-            consequence,
-            alternative,
-        ))
-    }
-
-    fn parse_forloop_expression(&mut self) -> Result<Expression, ParseErr> {
-        self.expect_peek(Token::LParenthesis, ParseErr::ExpectedLparen)?;
-        self.next_token();
-        let condition = self.parse_expression(Precedence::Lowest)?;
-        self.expect_peek(Token::RParenthesis, ParseErr::ExpectedRparen)?;
-        self.expect_peek(Token::LBrace, ParseErr::ExpectedLbrace)?;
-        let consequence = self.parse_block_statement()?;
-        Ok(Expression::WhileLoop(Box::new(condition), consequence))
-    }
-
-    fn parse_integer_expression(&mut self) -> Result<Expression, ParseErr> {
-        if let Token::Int(int) = &self.current_token {
-            match int.parse() {
-                Ok(value) => Ok(Expression::IntegerLiteral(value)),
-                Err(_) => Err(ParseErr::ParseInt(int.to_string(), self.peek_token_pos)),
-            }
-        } else {
-            Err(ParseErr::ExpectedIntegerToken(
-                self.current_token.clone(),
-                self.peek_token_pos,
-            ))
-        }
     }
 }
