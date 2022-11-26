@@ -47,7 +47,7 @@ pub fn run(options: CompilerOptions) {
 
     let ast = parse_res.unwrap();
     if options.emit_ast {
-        fs::create_dir_all(".\\emit").unwrap();
+        fs::create_dir_all(".\\emit").expect("Failed to create directory");
         fs::write(".\\emit\\ast.txt", format!("{ast:#?}")).expect("Unable to write file");
     }
 
