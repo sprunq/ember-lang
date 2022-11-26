@@ -19,7 +19,7 @@ pub mod tests {
 
             match parse_res {
                 Ok(program) => assert_eq!(format!("{}", program), expected),
-                Err(err) => panic!("Got error: {:?}", err),
+                Err(err) => panic!("Got error: {:#?}", err),
             }
         }
     }
@@ -128,7 +128,6 @@ pub mod tests {
     fn test_operator_precedence() {
         let intput_output = vec![
             ("-a * b;", "((-a) * b);"),
-            ("!-a;", "(!(-a));"),
             ("a + b + c;", "((a + b) + c);"),
             ("a + b - c;", "((a + b) - c);"),
             ("a * b * c;", "((a * b) * c);"),

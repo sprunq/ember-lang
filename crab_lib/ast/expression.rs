@@ -14,6 +14,7 @@ pub enum Expr {
     },
     Identifier(String),
     IntegerLiteral(i64),
+    BooleanLiteral(bool),
     Assign {
         ident: String,
         // =, +=, *=, ...
@@ -28,6 +29,7 @@ impl fmt::Display for Expr {
             Expr::Infix { op, left, right } => write!(f, "({left} {op} {right})"),
             Expr::Identifier(ident) => write!(f, "{ident}"),
             Expr::IntegerLiteral(int) => write!(f, "{int}"),
+            Expr::BooleanLiteral(bool) => write!(f, "{}", bool),
             Expr::Prefix { op, expr } => write!(f, "({op}{expr})"),
             Expr::Assign {
                 ident,

@@ -69,7 +69,7 @@ impl Parser {
 
     fn parse_statement(&mut self) -> Result<Stmt, ParseErr> {
         match self.current_token.token {
-            Token::I64 => self.parse_declaration_stmt(),
+            Token::I64 | Token::Bool => self.parse_declaration_stmt(),
             Token::While => self.parse_while_stmt(),
             Token::If => self.parse_if_stmt(),
             _ => self.parse_expr_stmt(),
@@ -119,7 +119,8 @@ impl Parser {
             Token::Identifier(_) => Some(Parser::parse_identifier_expression),
             Token::Minus => Some(Parser::parse_prefix_expression),
             Token::LParenthesis => Some(Parser::parse_grouped_expression),
-            Token::Literal(_) => Some(Parser::parse_literal_expression),
+            Token::Number(_) => Some(Parser::parse_literal_expression),
+            Token::True | Token::False => Some(Parser::parse_boolean_expression),
             _ => None,
         }
     }
@@ -137,7 +138,7 @@ impl Parser {
     }
 
     fn parse_literal_expression(&mut self) -> Result<TypedExpr, ParseErr> {
-        if let Token::Literal(lit) = &self.current_token.token {
+        if let Token::Number(lit) = &self.current_token.token {
             match lit.parse::<i64>() {
                 Ok(value) => Ok(TypedExpr {
                     ty: Some(Type::I64),
@@ -147,6 +148,21 @@ impl Parser {
             }
         } else {
             Err(ParseErr::ExpectedLiteral(self.current_token.clone()))
+        }
+    }
+
+    fn parse_boolean_expression(&mut self) -> Result<TypedExpr, ParseErr> {
+        let value = match &self.current_token.token {
+            Token::True => Some(Expr::BooleanLiteral(true)),
+            Token::False => Some(Expr::BooleanLiteral(false)),
+            _ => None,
+        };
+        match value {
+            Some(expr) => Ok(TypedExpr {
+                ty: Some(Type::Bool),
+                expr: expr,
+            }),
+            None => Err(ParseErr::ExpectedBoolToken(self.current_token.clone())),
         }
     }
 

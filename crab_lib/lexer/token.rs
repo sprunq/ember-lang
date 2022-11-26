@@ -19,7 +19,7 @@ impl TokenInfo {
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Token {
-    Literal(String),
+    Number(String),
     Identifier(String),
     Illegal,
     Eof,
@@ -29,11 +29,8 @@ pub enum Token {
     RParenthesis,
     LBrace,
     RBrace,
-    True,
-    False,
     If,
     Else,
-    Return,
     Assign,
     PlusEquals,
     MinusEquals,
@@ -51,7 +48,10 @@ pub enum Token {
     RBracket,
     Colon,
     While,
+    True,
+    False,
     I64,
+    Bool,
 }
 
 pub fn lookup_ident(ident: &str) -> Token {
@@ -59,7 +59,10 @@ pub fn lookup_ident(ident: &str) -> Token {
         "if" => Some(Token::If),
         "else" => Some(Token::Else),
         "while" => Some(Token::While),
+        "true" => Some(Token::True),
+        "false" => Some(Token::False),
         "i64" => Some(Token::I64),
+        "bool" => Some(Token::Bool),
         _ => None,
     };
     if let Some(token) = token {
@@ -87,24 +90,24 @@ impl fmt::Display for Token {
             Token::Slash => write!(f, "/"),
             Token::Lt => write!(f, "<"),
             Token::Gt => write!(f, ">"),
-            Token::True => write!(f, "true"),
-            Token::False => write!(f, "false"),
             Token::If => write!(f, "if"),
             Token::Else => write!(f, "else"),
-            Token::Return => write!(f, "return"),
             Token::Equal => write!(f, "=="),
             Token::NotEqual => write!(f, "!="),
             Token::LBracket => write!(f, "["),
             Token::RBracket => write!(f, "]"),
             Token::Colon => write!(f, ":"),
-            Token::While => write!(f, "for"),
+            Token::While => write!(f, "while"),
             Token::PlusEquals => write!(f, "+="),
             Token::MinusEquals => write!(f, "-="),
             Token::SlashEuqals => write!(f, "/="),
             Token::AsteriskEquals => write!(f, "*="),
             Token::Identifier(ident) => write!(f, "{}", ident),
-            Token::Literal(lit) => write!(f, "{}", lit),
+            Token::Number(lit) => write!(f, "{}", lit),
+            Token::True => write!(f, "true"),
+            Token::False => write!(f, "false"),
             Token::I64 => write!(f, "i64"),
+            Token::Bool => write!(f, "bool"),
         }
     }
 }

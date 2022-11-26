@@ -19,4 +19,5 @@ pub enum ParseErr {
     ParseIntError(TokenInfo, ParseIntError),
     UnsupportedInfixToken(TokenInfo),
     TokenNotFound(TokenInfo),
+    ExpectedBoolToken(TokenInfo),
 }

@@ -104,5 +104,11 @@ pub fn build_parse_error_diagnostic(error: ParseErr, file_id: usize) -> Diagnost
             .with_code("P020")
             .with_labels(vec![Label::primary(file_id, info.start_idx..info.end_idx)
                 .with_message(format!("{}", int_error))]),
+
+        ParseErr::ExpectedBoolToken(info) => Diagnostic::error()
+            .with_message("Expected a Boolean")
+            .with_code("P021")
+            .with_labels(vec![Label::primary(file_id, info.start_idx..info.end_idx)
+                .with_message(format!("expected true/false but got {}", info.token))]),
     }
 }

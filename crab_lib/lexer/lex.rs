@@ -97,7 +97,7 @@ impl Lexer {
                     return TokenInfo::new(token::lookup_ident(&ident), start_pos, self.position);
                 } else if Self::is_digit(self.character) {
                     let integer_part = self.read_number();
-                    return TokenInfo::new(Token::Literal(integer_part), start_pos, self.position);
+                    return TokenInfo::new(Token::Number(integer_part), start_pos, self.position);
                 } else {
                     tok = Token::Illegal
                 }
