@@ -5,21 +5,30 @@ use crab_lib::diagnostic_converter::converter_parse_error::build_parse_error_dia
 use crab_lib::{lexer::lex::Lexer, parser::parse::Parser};
 use std::{fs, time::Instant};
 
-fn main() {
-    let path = String::from(".\\examples\\compile.crab");
-    let measure_perf = true;
-
-    run(&path, measure_perf);
+pub struct CompilerOptions {
+    pub path: String,
+    pub measure_performance: bool,
+    pub emit_ast: bool,
 }
 
-pub fn run(path: &String, measure_time: bool) {
+fn main() {
+    let options = CompilerOptions {
+        path: String::from(".\\examples\\compile.crab"),
+        measure_performance: true,
+        emit_ast: true,
+    };
+
+    run(options);
+}
+
+pub fn run(options: CompilerOptions) {
     let writer = StandardStream::stderr(ColorChoice::Auto);
     let config = codespan_reporting::term::Config::default();
 
-    let data = fs::read_to_string(path).expect("Unable to read file");
+    let data = fs::read_to_string(&options.path).expect("Unable to read file");
 
     let mut files = SimpleFiles::new();
-    let file_id = files.add(path, data);
+    let file_id = files.add(&options.path, data);
 
     let file = files.get(file_id).unwrap();
     let input = file.source().clone();
@@ -30,16 +39,19 @@ pub fn run(path: &String, measure_time: bool) {
     let parse_res = parser.parse_program();
     let parsing_elapsed = now.elapsed();
 
-    match parse_res {
-        Err(err) => {
-            let diagnostic = build_parse_error_diagnostic(err, file_id);
-            term::emit(&mut writer.lock(), &config, &files, &diagnostic).unwrap();
-            std::process::exit(0);
-        }
-        Ok(ast) => println!("{:#?}", ast),
+    if let Err(error) = parse_res {
+        let diagnostic = build_parse_error_diagnostic(error, file_id);
+        term::emit(&mut writer.lock(), &config, &files, &diagnostic).unwrap();
+        std::process::exit(0);
     }
 
-    if measure_time {
+    let ast = parse_res.unwrap();
+    if options.emit_ast {
+        fs::create_dir_all(".\\emit").unwrap();
+        fs::write(".\\emit\\ast.txt", format!("{ast:#?}")).expect("Unable to write file");
+    }
+
+    if options.measure_performance {
         println!("\nExection times:");
         println!("Parsing time: {:.2?}", parsing_elapsed);
     }

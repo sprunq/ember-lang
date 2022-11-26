@@ -131,7 +131,7 @@ impl Lexer {
 
     fn read_number(&mut self) -> String {
         let start_pos = self.position;
-        while Self::is_digit(self.character) {
+        while Self::is_digit(self.character) || self.character == '.' {
             self.read_char();
         }
         self.input[start_pos..self.position].to_string()
