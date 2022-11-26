@@ -1,4 +1,3 @@
-use super::literal::Literal;
 use std::fmt;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -20,7 +19,7 @@ impl TokenInfo {
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Token {
-    Literal(Literal),
+    Literal(String),
     Identifier(String),
     Illegal,
     Eof,
@@ -42,7 +41,6 @@ pub enum Token {
     AsteriskEquals,
     Plus,
     Minus,
-    Bang,
     Asterisk,
     Slash,
     Lt,
@@ -58,11 +56,8 @@ pub enum Token {
 
 pub fn lookup_ident(ident: &str) -> Token {
     let token = match ident {
-        "true" => Some(Token::True),
-        "false" => Some(Token::False),
         "if" => Some(Token::If),
         "else" => Some(Token::Else),
-        "return" => Some(Token::Return),
         "while" => Some(Token::While),
         "i64" => Some(Token::I64),
         _ => None,
@@ -88,7 +83,6 @@ impl fmt::Display for Token {
             Token::LBrace => write!(f, "{{"),
             Token::RBrace => write!(f, "}}"),
             Token::Minus => write!(f, "-"),
-            Token::Bang => write!(f, "!"),
             Token::Asterisk => write!(f, "*"),
             Token::Slash => write!(f, "/"),
             Token::Lt => write!(f, "<"),

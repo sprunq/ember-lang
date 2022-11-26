@@ -1,7 +1,4 @@
-use super::{
-    literal::Literal,
-    token::{self, Token, TokenInfo},
-};
+use super::token::{self, Token, TokenInfo};
 
 pub struct Lexer {
     pub input: String,
@@ -58,7 +55,7 @@ impl Lexer {
                         self.read_char();
                         Token::NotEqual
                     } else {
-                        Token::Bang
+                        Token::Illegal
                     }
                 };
             }
@@ -99,12 +96,8 @@ impl Lexer {
                     let ident = self.read_identifier();
                     return TokenInfo::new(token::lookup_ident(&ident), start_pos, self.position);
                 } else if Self::is_digit(self.character) {
-                    let integer_part = self.read_number().parse::<i64>().unwrap_or(i64::MIN);
-                    return TokenInfo::new(
-                        Token::Literal(Literal::Integer(integer_part)),
-                        start_pos,
-                        self.position,
-                    );
+                    let integer_part = self.read_number();
+                    return TokenInfo::new(Token::Literal(integer_part), start_pos, self.position);
                 } else {
                     tok = Token::Illegal
                 }

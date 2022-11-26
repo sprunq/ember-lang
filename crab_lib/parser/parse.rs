@@ -1,5 +1,4 @@
 use super::parse_error::ParseErr;
-use crate::lexer::literal::Literal;
 use crate::lexer::{lex::Lexer, token::Token};
 use crate::{
     ast::{
@@ -118,7 +117,6 @@ impl Parser {
     fn get_prefix_fn(&self) -> Option<PrefixParseFn> {
         match &self.current_token.token {
             Token::Identifier(_) => Some(Parser::parse_identifier_expression),
-            Token::Bang => Some(Parser::parse_prefix_expression),
             Token::Minus => Some(Parser::parse_prefix_expression),
             Token::LParenthesis => Some(Parser::parse_grouped_expression),
             Token::Literal(_) => Some(Parser::parse_literal_expression),
@@ -140,11 +138,12 @@ impl Parser {
 
     fn parse_literal_expression(&mut self) -> Result<TypedExpr, ParseErr> {
         if let Token::Literal(lit) = &self.current_token.token {
-            match lit {
-                Literal::Integer(value) => Ok(TypedExpr {
+            match lit.parse::<i64>() {
+                Ok(value) => Ok(TypedExpr {
                     ty: Some(Type::I64),
-                    expr: Expr::IntegerLiteral(*value),
+                    expr: Expr::IntegerLiteral(value),
                 }),
+                Err(error) => Err(ParseErr::ParseIntError(self.current_token.clone(), error)),
             }
         } else {
             Err(ParseErr::ExpectedLiteral(self.current_token.clone()))
@@ -172,7 +171,6 @@ impl Parser {
 
     fn get_prefix_token(&self, token: &TokenInfo) -> Result<Prefix, ParseErr> {
         match token.token {
-            Token::Bang => Ok(Prefix::Bang),
             Token::Minus => Ok(Prefix::Minus),
             _ => Err(ParseErr::ExpectedPrefixToken(token.clone())),
         }

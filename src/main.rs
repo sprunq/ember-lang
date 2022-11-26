@@ -13,6 +13,9 @@ fn main() {
 }
 
 pub fn run(path: &String, measure_time: bool) {
+    let writer = StandardStream::stderr(ColorChoice::Auto);
+    let config = codespan_reporting::term::Config::default();
+
     let data = fs::read_to_string(path).expect("Unable to read file");
 
     let mut files = SimpleFiles::new();
@@ -30,8 +33,6 @@ pub fn run(path: &String, measure_time: bool) {
     match parse_res {
         Err(err) => {
             let diagnostic = build_parse_error_diagnostic(err, file_id);
-            let writer = StandardStream::stderr(ColorChoice::Always);
-            let config = codespan_reporting::term::Config::default();
             term::emit(&mut writer.lock(), &config, &files, &diagnostic).unwrap();
             std::process::exit(0);
         }

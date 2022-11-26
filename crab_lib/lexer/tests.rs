@@ -1,6 +1,6 @@
 #[cfg(test)]
 pub mod tests {
-    use crate::lexer::{lex::Lexer, literal::Literal, token::Token};
+    use crate::lexer::{lex::Lexer, token::Token};
 
     fn assert_lex_against(input: String, expected: Vec<Token>) {
         let mut lexer = Lexer::new(input);
@@ -25,12 +25,12 @@ pub mod tests {
             Token::I64,
             Token::Identifier("five".to_string()),
             Token::Assign,
-            Token::Literal(Literal::Integer(5)),
+            Token::Literal("5".to_string()),
             Token::Semicolon,
             Token::I64,
             Token::Identifier("ten".to_string()),
             Token::Assign,
-            Token::Literal(Literal::Integer(10)),
+            Token::Literal("10".to_string()),
             Token::Semicolon,
         ];
         assert_lex_against(input, expected);
@@ -39,23 +39,22 @@ pub mod tests {
     #[test]
     fn test_operator_lex() {
         let input = r#"
-        +-!/*5;
+        +-/*5;
         5 < 10 > 5;
         "#
         .to_string();
         let expected = vec![
             Token::Plus,
             Token::Minus,
-            Token::Bang,
             Token::Slash,
             Token::Asterisk,
-            Token::Literal(Literal::Integer(5)),
+            Token::Literal("5".to_string()),
             Token::Semicolon,
-            Token::Literal(Literal::Integer(5)),
+            Token::Literal("5".to_string()),
             Token::Lt,
-            Token::Literal(Literal::Integer(10)),
+            Token::Literal("10".to_string()),
             Token::Gt,
-            Token::Literal(Literal::Integer(5)),
+            Token::Literal("5".to_string()),
             Token::Semicolon,
         ];
 
@@ -70,13 +69,13 @@ pub mod tests {
         "#
         .to_string();
         let expected = vec![
-            Token::Literal(Literal::Integer(10)),
+            Token::Literal("10".to_string()),
             Token::Equal,
-            Token::Literal(Literal::Integer(10)),
+            Token::Literal("10".to_string()),
             Token::Semicolon,
-            Token::Literal(Literal::Integer(10)),
+            Token::Literal("10".to_string()),
             Token::NotEqual,
-            Token::Literal(Literal::Integer(9)),
+            Token::Literal("9".to_string()),
             Token::Semicolon,
         ];
 

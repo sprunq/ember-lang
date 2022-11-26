@@ -1,3 +1,5 @@
+use std::num::ParseIntError;
+
 use crate::lexer::token::TokenInfo;
 
 #[derive(Debug, Clone)]
@@ -14,6 +16,7 @@ pub enum ParseErr {
     ExpectedAssign(TokenInfo),
     ExpectedSemicolon(TokenInfo),
     ExpectedLiteral(TokenInfo),
+    ParseIntError(TokenInfo, ParseIntError),
     UnsupportedInfixToken(TokenInfo),
     TokenNotFound(TokenInfo),
 }
