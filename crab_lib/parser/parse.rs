@@ -1,16 +1,17 @@
 use super::parse_error::ParseErr;
-use crate::ast::{
-    expression::{Expr, TypedExpr},
-    infix::Infix,
-    precedence::Precedence,
-    prefix::Prefix,
-    sequence::Sequence,
-    statement::{Program, Stmt},
-    ty::Type,
-};
-use crate::lexer::{
-    lex::{Lexer, Position},
-    token::{Literal, Token},
+use crate::lexer::literal::Literal;
+use crate::lexer::{lex::Lexer, token::Token};
+use crate::{
+    ast::{
+        expression::{Expr, TypedExpr},
+        infix::Infix,
+        precedence::Precedence,
+        prefix::Prefix,
+        sequence::Sequence,
+        statement::{Program, Stmt},
+        ty::Type,
+    },
+    lexer::token::TokenInfo,
 };
 
 type PrefixParseFn = fn(&mut Parser) -> Result<TypedExpr, ParseErr>;
@@ -18,18 +19,16 @@ type InfixParseFn = fn(&mut Parser, TypedExpr) -> Result<TypedExpr, ParseErr>;
 
 pub struct Parser {
     lexer: Lexer,
-    current_token: Token,
-    peek_token: Token,
-    peek_token_pos: Position,
+    current_token: TokenInfo,
+    peek_token: TokenInfo,
 }
 
 impl Parser {
     pub fn new(lexer: Lexer) -> Self {
         let mut parser = Parser {
             lexer,
-            current_token: Token::Illegal,
-            peek_token: Token::Illegal,
-            peek_token_pos: Position { line: 0, column: 0 },
+            current_token: TokenInfo::new(Token::Illegal, 0, 0),
+            peek_token: TokenInfo::new(Token::Illegal, 0, 0),
         };
         parser.next_token();
         parser.next_token();
@@ -42,16 +41,16 @@ impl Parser {
 
     pub fn next_token(&mut self) {
         self.current_token = self.peek_token.clone();
-        (self.peek_token, self.peek_token_pos) = self.lexer.next_token();
+        self.peek_token = self.lexer.next_token();
     }
 
     fn expect_and_move(
         &mut self,
         token: Token,
-        expected: fn(Token, Position) -> ParseErr,
+        expected: fn(TokenInfo) -> ParseErr,
     ) -> Result<(), ParseErr> {
-        if self.peek_token != token {
-            return Err(expected(self.peek_token.clone(), self.peek_token_pos));
+        if self.peek_token.token != token {
+            return Err(expected(self.peek_token.clone()));
         }
         self.next_token();
         Ok(())
@@ -59,7 +58,7 @@ impl Parser {
 
     pub fn parse_program(&mut self) -> Result<Program, ParseErr> {
         let mut statements = vec![];
-        while self.current_token != Token::Eof {
+        while self.current_token.token != Token::Eof {
             let statement = self.parse_statement()?;
             statements.push(statement);
             self.next_token();
@@ -70,7 +69,7 @@ impl Parser {
     }
 
     fn parse_statement(&mut self) -> Result<Stmt, ParseErr> {
-        match self.current_token {
+        match self.current_token.token {
             Token::I64 => self.parse_declaration_stmt(),
             Token::While => self.parse_while_stmt(),
             Token::If => self.parse_if_stmt(),
@@ -85,7 +84,7 @@ impl Parser {
         self.expect_and_move(Token::RParenthesis, ParseErr::ExpectedRparen)?;
         self.expect_and_move(Token::LBrace, ParseErr::ExpectedLbrace)?;
         let consequence = self.parse_sequence()?;
-        let alternative = if self.peek_token == Token::Else {
+        let alternative = if self.peek_token.token == Token::Else {
             self.next_token();
             self.expect_and_move(Token::LBrace, ParseErr::ExpectedLbrace)?;
             Some(self.parse_sequence()?)
@@ -117,7 +116,7 @@ impl Parser {
     }
 
     fn get_prefix_fn(&self) -> Option<PrefixParseFn> {
-        match &self.current_token {
+        match &self.current_token.token {
             Token::Identifier(_) => Some(Parser::parse_identifier_expression),
             Token::Bang => Some(Parser::parse_prefix_expression),
             Token::Minus => Some(Parser::parse_prefix_expression),
@@ -131,7 +130,7 @@ impl Parser {
         let mut statements = vec![];
 
         self.next_token();
-        while self.current_token != Token::RBrace && self.current_token != Token::Eof {
+        while self.current_token.token != Token::RBrace && self.current_token.token != Token::Eof {
             statements.push(self.parse_statement()?);
             self.next_token();
         }
@@ -140,7 +139,7 @@ impl Parser {
     }
 
     fn parse_literal_expression(&mut self) -> Result<TypedExpr, ParseErr> {
-        if let Token::Literal(lit) = &self.current_token {
+        if let Token::Literal(lit) = &self.current_token.token {
             match lit {
                 Literal::Integer(value) => Ok(TypedExpr {
                     ty: Some(Type::I64),
@@ -148,12 +147,12 @@ impl Parser {
                 }),
             }
         } else {
-            Err(ParseErr::CbaError())
+            Err(ParseErr::ExpectedLiteral(self.current_token.clone()))
         }
     }
 
     fn get_infix_fn(&mut self) -> Option<InfixParseFn> {
-        match &self.peek_token {
+        match &self.peek_token.token {
             Token::Plus
             | Token::Minus
             | Token::Asterisk
@@ -171,14 +170,11 @@ impl Parser {
         }
     }
 
-    fn get_prefix_token(&self, token: &Token) -> Result<Prefix, ParseErr> {
-        match token {
+    fn get_prefix_token(&self, token: &TokenInfo) -> Result<Prefix, ParseErr> {
+        match token.token {
             Token::Bang => Ok(Prefix::Bang),
             Token::Minus => Ok(Prefix::Minus),
-            token => Err(ParseErr::ExpectedPrefixToken(
-                token.clone(),
-                self.peek_token_pos,
-            )),
+            _ => Err(ParseErr::ExpectedPrefixToken(token.clone())),
         }
     }
 
@@ -204,13 +200,13 @@ impl Parser {
     }
 
     fn parse_expr(&mut self, precedence: Precedence) -> Result<TypedExpr, ParseErr> {
-        let prefix = self.get_prefix_fn().ok_or_else(|| {
-            ParseErr::ExpectedPrefixToken(self.current_token.clone(), self.peek_token_pos)
-        })?;
+        let prefix = self
+            .get_prefix_fn()
+            .ok_or_else(|| ParseErr::ExpectedPrefixToken(self.current_token.clone()))?;
         let mut left_expr = prefix(self)?;
 
-        while self.peek_token != Token::Semicolon
-            && precedence < self.get_infix_token(&self.peek_token).0
+        while self.peek_token.token != Token::Semicolon
+            && precedence < self.get_infix_token(&self.peek_token.token).0
         {
             if let Some(infix) = self.get_infix_fn() {
                 self.next_token();
@@ -229,22 +225,16 @@ impl Parser {
             } else {
                 Err(ParseErr::ExpectedIdentifierToken(
                     self.current_token.clone(),
-                    self.peek_token_pos,
                 ))
             }
         }?;
-        let operator = match self.current_token {
+        let operator = match self.current_token.token {
             Token::Assign => Infix::Assign,
             Token::PlusEquals => Infix::PlusEquals,
             Token::MinusEquals => Infix::MinusEquals,
             Token::AsteriskEquals => Infix::AsteriskEquals,
             Token::SlashEuqals => Infix::SlashEuqals,
-            _ => {
-                return Err(ParseErr::UnsupportedInfixToken(
-                    self.current_token.clone(),
-                    self.peek_token_pos,
-                ))
-            }
+            _ => return Err(ParseErr::UnsupportedInfixToken(self.current_token.clone())),
         };
         self.next_token();
         let value = self.parse_expr(Precedence::Lowest)?;
@@ -256,13 +246,10 @@ impl Parser {
     }
 
     fn parse_type(&mut self) -> Result<Type, ParseErr> {
-        if let Some(ty) = Type::from_token(&self.current_token) {
+        if let Some(ty) = Type::from_token(&self.current_token.token) {
             Ok(ty)
         } else {
-            Err(ParseErr::TokenNotFound(
-                self.current_token.clone(),
-                self.peek_token_pos,
-            ))
+            Err(ParseErr::TokenNotFound(self.current_token.clone()))
         }
     }
 
@@ -279,7 +266,7 @@ impl Parser {
 
     fn parse_expr_stmt(&mut self) -> Result<Stmt, ParseErr> {
         let expression = self.parse_expr(Precedence::Lowest)?;
-        if self.peek_token == Token::Semicolon {
+        if self.peek_token.token == Token::Semicolon {
             self.next_token();
         }
         Ok(Stmt::Expression { expr: expression })
@@ -293,12 +280,11 @@ impl Parser {
     }
 
     fn parse_identifier_string(&self) -> Result<String, ParseErr> {
-        if let Token::Identifier(ident) = &self.current_token {
+        if let Token::Identifier(ident) = &self.current_token.token {
             Ok(ident.to_string())
         } else {
             Err(ParseErr::ExpectedIdentifierToken(
                 self.current_token.clone(),
-                self.peek_token_pos,
             ))
         }
     }
@@ -314,10 +300,8 @@ impl Parser {
     }
 
     fn parse_infix_expression(&mut self, left: TypedExpr) -> Result<TypedExpr, ParseErr> {
-        let (precedence, infix) = self.get_infix_token(&self.current_token);
-        let i = infix.ok_or_else(|| {
-            ParseErr::ExpectedInfixToken(self.current_token.clone(), self.peek_token_pos)
-        })?;
+        let (precedence, infix) = self.get_infix_token(&self.current_token.token);
+        let i = infix.ok_or_else(|| ParseErr::ExpectedInfixToken(self.current_token.clone()))?;
         self.next_token();
         let right = self.parse_expr(precedence)?;
 

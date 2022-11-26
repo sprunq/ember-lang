@@ -1,14 +1,11 @@
 #[cfg(test)]
 pub mod tests {
-    use crate::lexer::{
-        lex::Lexer,
-        token::{Literal, Token},
-    };
+    use crate::lexer::{lex::Lexer, literal::Literal, token::Token};
 
     fn assert_lex_against(input: &str, expected: Vec<Token>) {
         let mut lexer = Lexer::new(input.to_owned());
         for expected_token in expected.iter() {
-            let actual_token = lexer.next_token().0;
+            let actual_token = lexer.next_token().token;
             assert_eq!(
                 *expected_token, actual_token,
                 "expected {} found {}",

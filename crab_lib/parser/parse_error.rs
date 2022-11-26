@@ -1,91 +1,84 @@
-use crate::lexer::{lex::Position, token::Token};
+use crate::lexer::token::TokenInfo;
 use std::fmt;
 
 #[derive(Debug, Clone)]
 pub enum ParseErr {
-    ExpectedPrefixToken(Token, Position),
-    ExpectedInfixToken(Token, Position),
-    ExpectedIdentifierToken(Token, Position),
-    ExpectedBoolToken(Token, Position),
-    ExpectedIntegerToken(Token, Position),
-    ExpectedFloatToken(Token, Position),
-    ExpectedStringToken(Token, Position),
-    ExpectedLparen(Token, Position),
-    ExpectedRparen(Token, Position),
-    ExpectedLbrace(Token, Position),
-    ExpectedRbrace(Token, Position),
-    ExpectedRbracket(Token, Position),
-    ExpectedAssign(Token, Position),
-    ExpectedSemicolon(Token, Position),
-    ExpectedComma(Token, Position),
-    ExpectedColon(Token, Position),
-    ParseInt(String, Position),
-    ParseFloat(String, Position),
-    UnsupportedInfixToken(Token, Position),
-    TokenNotFound(Token, Position),
-    CbaError(),
+    ExpectedPrefixToken(TokenInfo),
+    ExpectedInfixToken(TokenInfo),
+    ExpectedIdentifierToken(TokenInfo),
+    ExpectedBoolToken(TokenInfo),
+    ExpectedIntegerToken(TokenInfo),
+    ExpectedFloatToken(TokenInfo),
+    ExpectedStringToken(TokenInfo),
+    ExpectedLparen(TokenInfo),
+    ExpectedRparen(TokenInfo),
+    ExpectedLbrace(TokenInfo),
+    ExpectedRbrace(TokenInfo),
+    ExpectedRbracket(TokenInfo),
+    ExpectedAssign(TokenInfo),
+    ExpectedSemicolon(TokenInfo),
+    ExpectedComma(TokenInfo),
+    ExpectedColon(TokenInfo),
+    ExpectedLiteral(TokenInfo),
+    UnsupportedInfixToken(TokenInfo),
+    TokenNotFound(TokenInfo),
 }
 
 impl fmt::Display for ParseErr {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self {
-            ParseErr::ExpectedPrefixToken(val, pos) => {
-                write!(f, "{}", format_token("Prefix", val, pos))
+            ParseErr::ExpectedPrefixToken(info) => {
+                write!(f, "{}", format_token("Prefix", info))
             }
-            ParseErr::ExpectedInfixToken(val, pos) => {
-                write!(f, "{}", format_token("Infix", val, pos))
+            ParseErr::ExpectedInfixToken(info) => {
+                write!(f, "{}", format_token("Infix", info))
             }
-            ParseErr::ExpectedIdentifierToken(val, pos) => {
-                write!(f, "{}", format_token("Indetifier", val, pos))
+            ParseErr::ExpectedIdentifierToken(info) => {
+                write!(f, "{}", format_token("Indetifier", info))
             }
-            ParseErr::ExpectedBoolToken(val, pos) => {
-                write!(f, "{}", format_token("Boolean", val, pos))
+            ParseErr::ExpectedBoolToken(info) => {
+                write!(f, "{}", format_token("Boolean", info))
             }
-            ParseErr::ExpectedIntegerToken(val, pos) => {
-                write!(f, "{}", format_token("Integer", val, pos))
+            ParseErr::ExpectedIntegerToken(info) => {
+                write!(f, "{}", format_token("Integer", info))
             }
-            ParseErr::ExpectedFloatToken(val, pos) => {
-                write!(f, "{}", format_token("Float", val, pos))
+            ParseErr::ExpectedFloatToken(info) => {
+                write!(f, "{}", format_token("Float", info))
             }
-            ParseErr::ExpectedStringToken(val, pos) => {
-                write!(f, "{}", format_token("String", val, pos))
+            ParseErr::ExpectedStringToken(info) => {
+                write!(f, "{}", format_token("String", info))
             }
-            ParseErr::ExpectedLparen(val, pos) => write!(f, "{}", format_token("LParen", val, pos)),
-            ParseErr::ExpectedRparen(val, pos) => write!(f, "{}", format_token("RParen", val, pos)),
-            ParseErr::ExpectedLbrace(val, pos) => write!(f, "{}", format_token("LBrace", val, pos)),
-            ParseErr::ExpectedRbrace(val, pos) => write!(f, "{}", format_token("RBrace", val, pos)),
-            ParseErr::ExpectedRbracket(val, pos) => {
-                write!(f, "{}", format_token("RBracket", val, pos))
+            ParseErr::ExpectedLparen(info) => write!(f, "{}", format_token("LParen", info)),
+            ParseErr::ExpectedRparen(info) => write!(f, "{}", format_token("RParen", info)),
+            ParseErr::ExpectedLbrace(info) => write!(f, "{}", format_token("LBrace", info)),
+            ParseErr::ExpectedRbrace(info) => write!(f, "{}", format_token("RBrace", info)),
+            ParseErr::ExpectedRbracket(info) => {
+                write!(f, "{}", format_token("RBracket", info))
             }
-            ParseErr::ExpectedAssign(val, pos) => write!(f, "{}", format_token("Assign", val, pos)),
-            ParseErr::ExpectedSemicolon(val, pos) => {
-                write!(f, "{}", format_token("Semicolon", val, pos))
+            ParseErr::ExpectedAssign(info) => write!(f, "{}", format_token("Assign", info)),
+            ParseErr::ExpectedSemicolon(info) => {
+                write!(f, "{}", format_token("Semicolon", info))
             }
-            ParseErr::ExpectedComma(val, pos) => write!(f, "{}", format_token("Comma", val, pos)),
-            ParseErr::ExpectedColon(val, pos) => write!(f, "{}", format_token("Colon", val, pos)),
-            ParseErr::ParseInt(val, pos) => write!(f, "{}", format_str("Int", val, pos)),
-            ParseErr::ParseFloat(val, pos) => write!(f, "{}", format_str("Float", val, pos)),
-            ParseErr::UnsupportedInfixToken(val, pos) => {
-                write!(f, "{}", format_token("=,+=,*=,/=", val, pos))
+            ParseErr::ExpectedComma(info) => write!(f, "{}", format_token("Comma", info)),
+            ParseErr::ExpectedColon(info) => write!(f, "{}", format_token("Colon", info)),
+            ParseErr::UnsupportedInfixToken(info) => {
+                write!(f, "{}", format_token("=,+=,*=,/=", info))
             }
-            ParseErr::TokenNotFound(val, pos) => {
-                write!(f, "Token {} not found. [{}-{}]", val, pos.line, pos.column)
+            ParseErr::TokenNotFound(info) => {
+                write!(
+                    f,
+                    "Token {} not found. [{}-{}]",
+                    info.token, info.start_idx, info.end_idx
+                )
             }
-            ParseErr::CbaError() => write!(f, "Temporary just cba to implement this"),
+            ParseErr::ExpectedLiteral(info) => write!(f, "{}", format_token("Literal", info)),
         }
     }
 }
 
-fn format_token(expected_token: &str, error_token: &Token, pos: &Position) -> String {
+fn format_token(expected_token: &str, error_token: &TokenInfo) -> String {
     format!(
-        "Expected '{}' but got '{:?}' at position {}:{}",
-        expected_token, error_token, pos.line, pos.column
-    )
-}
-
-fn format_str(expected_token: &str, error_token: &str, pos: &Position) -> String {
-    format!(
-        "Expected '{}' but got '{:?}'at position {}:{}",
-        expected_token, error_token, pos.line, pos.column
+        "Expected '{}' but got '{:?}' at position {} to {}",
+        expected_token, error_token.token, error_token.start_idx, error_token.end_idx
     )
 }

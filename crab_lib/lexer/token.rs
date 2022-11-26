@@ -1,4 +1,22 @@
+use super::literal::Literal;
 use std::fmt;
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct TokenInfo {
+    pub token: Token,
+    pub start_idx: usize,
+    pub end_idx: usize,
+}
+
+impl TokenInfo {
+    pub fn new(token: Token, start_idx: usize, end_idx: usize) -> Self {
+        TokenInfo {
+            token,
+            start_idx,
+            end_idx,
+        }
+    }
+}
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Token {
@@ -93,19 +111,6 @@ impl fmt::Display for Token {
             Token::Identifier(ident) => write!(f, "{}", ident),
             Token::Literal(lit) => write!(f, "{}", lit),
             Token::I64 => write!(f, "i64"),
-        }
-    }
-}
-
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Literal {
-    Integer(i64),
-}
-
-impl fmt::Display for Literal {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match &self {
-            Literal::Integer(value) => write!(f, "{}", value),
         }
     }
 }

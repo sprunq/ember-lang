@@ -1,14 +1,10 @@
-use super::token::{self, Literal, Token};
-
-#[derive(Clone, Debug, Copy, PartialEq, Eq)]
-pub struct Position {
-    pub line: usize,
-    pub column: usize,
-}
+use super::{
+    literal::Literal,
+    token::{self, Token, TokenInfo},
+};
 
 pub struct Lexer {
     pub input: String,
-    pub pos_2d: Position,
     position: usize,      // current position in input (points to current char)
     read_position: usize, // current reading position in input (after current char)
     character: char,      // current char under examination
@@ -21,15 +17,15 @@ impl Lexer {
             character: '\u{0}',
             read_position: 0,
             position: 0,
-            pos_2d: Position { line: 1, column: 0 },
         };
         lexer.read_char();
         lexer
     }
 
-    pub fn next_token(&mut self) -> (Token, Position) {
+    pub fn next_token(&mut self) -> TokenInfo {
         self.skip_whitespace();
         let tok: Token;
+        let start_pos = self.position;
         match self.character {
             '<' => tok = Token::Lt,
             '>' => tok = Token::Gt,
@@ -101,24 +97,25 @@ impl Lexer {
             _ => {
                 if Self::is_letter(self.character) {
                     let ident = self.read_identifier();
-                    return (token::lookup_ident(&ident), self.pos_2d);
+                    return TokenInfo::new(token::lookup_ident(&ident), start_pos, self.position);
                 } else if Self::is_digit(self.character) {
                     let integer_part = self.read_number().parse::<i64>().unwrap_or(i64::MIN);
-                    return (Token::Literal(Literal::Integer(integer_part)), self.pos_2d);
+                    return TokenInfo::new(
+                        Token::Literal(Literal::Integer(integer_part)),
+                        start_pos,
+                        self.position,
+                    );
                 } else {
                     tok = Token::Illegal
                 }
             }
         };
         self.read_char();
-        (tok, self.pos_2d)
+        TokenInfo::new(tok, start_pos, self.position)
     }
 
     fn skip_whitespace(&mut self) {
         while self.character.is_ascii_whitespace() {
-            if self.character == '\n' {
-                self.reset_position();
-            }
             self.read_char();
         }
     }
@@ -155,7 +152,6 @@ impl Lexer {
         }
         self.position = self.read_position;
         self.read_position += 1;
-        self.pos_2d.column += 1;
     }
 
     fn peek_char(&mut self) -> char {
@@ -164,10 +160,5 @@ impl Lexer {
         } else {
             self.input.chars().nth(self.read_position).unwrap_or('\0')
         }
-    }
-
-    fn reset_position(&mut self) {
-        self.pos_2d.line += 1;
-        self.pos_2d.column = 0;
     }
 }
