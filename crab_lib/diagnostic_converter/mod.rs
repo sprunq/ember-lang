@@ -1,2 +1,2 @@
-pub mod converter_parse_error;
-pub mod converter_typecheck_error;
+pub mod convert_parse;
+pub mod convert_typecheck;

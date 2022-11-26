@@ -1,9 +1,9 @@
-use crate::{parser::parse_error::ParseErr, typechecker::typechecker_error::TypeCheckError};
-use codespan_reporting::diagnostic::{Diagnostic, Label};
+use crate::typechecker::typechecker_error::TypeCheckError;
+use codespan_reporting::diagnostic::Diagnostic;
 
 pub fn build_typecheck_error_diagnostic(
     error: TypeCheckError,
-    file_id: usize,
+    _file_id: usize,
 ) -> Diagnostic<usize> {
     match error {
         TypeCheckError::PlaceHolder => todo!(),
@@ -15,7 +15,7 @@ pub fn build_typecheck_error_diagnostic(
         TypeCheckError::InfixOperandsNotMatching => todo!(),
         TypeCheckError::IfContainsError => todo!(),
         TypeCheckError::WhiteContainsError => todo!(),
-        TypeCheckError::IdentifierNotFound(ident) => Diagnostic::error()
+        TypeCheckError::IdentifierNotFound(_) => Diagnostic::error()
             .with_message("Identifier not found")
             .with_code("T019"),
     }

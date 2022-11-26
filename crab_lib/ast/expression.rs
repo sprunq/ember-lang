@@ -1,4 +1,4 @@
-use super::{infix::Infix, prefix::Prefix, ty::Type};
+use super::{infix::Infix, prefix::Prefix, typed_expression::TypedExpr};
 use std::fmt;
 
 #[derive(Debug, PartialEq, Clone)]
@@ -37,23 +37,5 @@ impl fmt::Display for Expr {
                 expr,
             } => write!(f, "{ident} {op} {expr}"),
         }
-    }
-}
-
-#[derive(Debug, PartialEq, Clone)]
-pub struct TypedExpr {
-    pub ty: Option<Type>,
-    pub expr: Expr,
-}
-
-impl TypedExpr {
-    pub fn new(expr: Expr) -> Self {
-        TypedExpr { ty: None, expr }
-    }
-}
-
-impl fmt::Display for TypedExpr {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.expr)
     }
 }

@@ -1,7 +1,6 @@
-      i64 a = 0;
-        i64 b = 1;
-        if (a == b){
-            i64 i = 20;
-        } else{
-            bool j = true;
-        };
+i64 a = 0;
+i64 b = 1;
+
+if(a / b == false){
+    a = b + 210;
+};

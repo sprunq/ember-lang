@@ -1,11 +1,8 @@
 #![allow(unused_variables)]
 
 use crate::ast::{
-    expression::{Expr, TypedExpr},
-    infix::Infix,
-    sequence::Sequence,
-    statement::Stmt,
-    ty::Type,
+    expression::Expr, infix::Infix, program::Program, sequence::Sequence, statement::Stmt,
+    ty::Type, typed_expression::TypedExpr,
 };
 use std::collections::HashMap;
 
@@ -21,7 +18,12 @@ impl TypeChecker {
             environment: HashMap::new(),
         }
     }
-    pub fn check(&mut self, sequence: Vec<Stmt>) -> Option<TypeCheckError> {
+
+    pub fn typecheck(&mut self, program: Program) -> Option<TypeCheckError> {
+        self.check_statements(program.sequence)
+    }
+
+    fn check_statements(&mut self, sequence: Vec<Stmt>) -> Option<TypeCheckError> {
         for stmt in sequence {
             let x = self.check_statement(stmt);
             if x.is_some() {
@@ -31,7 +33,7 @@ impl TypeChecker {
         None
     }
 
-    pub fn check_statement(&mut self, stmt: Stmt) -> Option<TypeCheckError> {
+    fn check_statement(&mut self, stmt: Stmt) -> Option<TypeCheckError> {
         match stmt {
             Stmt::Declaration { ty, ident, value } => {
                 self.environment.insert(ident, ty.clone());
@@ -41,7 +43,7 @@ impl TypeChecker {
             Stmt::Expression { expr } => self.check_expression(expr, None).err(),
             Stmt::While { condition, body } => {
                 let cond = self.check_expression(*condition, Some(Type::Bool));
-                let b = self.check(body.statements);
+                let b = self.check_statements(body.statements);
 
                 if cond.is_err() {
                     return cond.err();
@@ -57,8 +59,8 @@ impl TypeChecker {
                 alternative,
             } => {
                 let cond = self.check_expression(*condition, Some(Type::Bool));
-                let bod = self.check(body.statements);
-                let alt = self.check(alternative.unwrap_or(Sequence::new()).statements);
+                let bod = self.check_statements(body.statements);
+                let alt = self.check_statements(alternative.unwrap_or(Sequence::new()).statements);
 
                 if cond.is_err() {
                     return cond.err();
@@ -73,7 +75,7 @@ impl TypeChecker {
         }
     }
 
-    pub fn check_expression(
+    fn check_expression(
         &self,
         expression: TypedExpr,
         expected_type: Option<Type>,

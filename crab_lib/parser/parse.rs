@@ -1,14 +1,11 @@
 use super::parse_error::ParseErr;
+use crate::ast::program::Program;
+use crate::ast::typed_expression::TypedExpr;
 use crate::lexer::{lex::Lexer, token::Token};
 use crate::{
     ast::{
-        expression::{Expr, TypedExpr},
-        infix::Infix,
-        precedence::Precedence,
-        prefix::Prefix,
-        sequence::Sequence,
-        statement::{Program, Stmt},
-        ty::Type,
+        expression::Expr, infix::Infix, precedence::Precedence, prefix::Prefix, sequence::Sequence,
+        statement::Stmt, ty::Type,
     },
     lexer::token::TokenInfo,
 };

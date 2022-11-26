@@ -1,8 +1,8 @@
 use codespan_reporting::files::SimpleFiles;
 use codespan_reporting::term;
 use codespan_reporting::term::termcolor::{ColorChoice, StandardStream};
-use crab_lib::diagnostic_converter::converter_parse_error::build_parse_error_diagnostic;
-use crab_lib::diagnostic_converter::converter_typecheck_error::build_typecheck_error_diagnostic;
+use crab_lib::diagnostic_converter::convert_parse::build_parse_error_diagnostic;
+use crab_lib::diagnostic_converter::convert_typecheck::build_typecheck_error_diagnostic;
 use crab_lib::typechecker::typecheck::TypeChecker;
 use crab_lib::{lexer::lex::Lexer, parser::parse::Parser};
 use std::{fs, time::Instant};
@@ -55,7 +55,7 @@ pub fn run(options: CompilerOptions) {
 
     let now = Instant::now();
     let mut typechecker = TypeChecker::new();
-    let typecheck_result = typechecker.check(ast.sequence);
+    let typecheck_result = typechecker.typecheck(ast);
     let typecheck_elapsed = now.elapsed();
 
     if let Some(error) = typecheck_result {

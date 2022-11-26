@@ -2,10 +2,7 @@
 pub mod tests {
     use crate::{
         ast::{
-            expression::{Expr, TypedExpr},
-            infix::Infix,
-            statement::Stmt,
-            ty::Type,
+            expression::Expr, infix::Infix, statement::Stmt, ty::Type, typed_expression::TypedExpr,
         },
         lexer::lex::Lexer,
         parser::parse::Parser,
