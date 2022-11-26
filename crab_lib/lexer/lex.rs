@@ -95,7 +95,7 @@ impl Lexer {
                 }
             }
             _ => {
-                if Self::is_letter(self.character) {
+                if Self::is_letter(self.character) && self.character != '_' {
                     let ident = self.read_identifier();
                     return TokenInfo::new(token::lookup_ident(&ident), start_pos, self.position);
                 } else if Self::is_digit(self.character) {
