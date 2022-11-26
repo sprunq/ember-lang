@@ -80,13 +80,13 @@ impl TypeChecker {
     ) -> Result<Type, TypeCheckError> {
         match expression.expr {
             Expr::Infix { op, left, right } => {
-                let l = self.check_expression(*left, expected_type.clone())?;
-                let r = self.check_expression(*right, expected_type.clone())?;
-                println!("{:?}, {:?}", l, r);
-                match (l.clone(), r.clone()) {
-                    (ty, _) => match op {
+                let l = self.check_expression(*left, None)?;
+                let r = self.check_expression(*right, None)?;
+
+                match (&l, &r) {
+                    (Type::I64, Type::I64) | (Type::Bool, Type::Bool) => match op {
                         Infix::Eq | Infix::NotEq | Infix::Lt | Infix::Gt => Ok(Type::Bool),
-                        _ => Ok(ty),
+                        _ => Ok(l),
                     },
                     _ => Err(TypeCheckError::InfixOperandsNotMatching),
                 }
@@ -96,24 +96,27 @@ impl TypeChecker {
                 let type_opt = self.environment.get(&ident);
                 match type_opt {
                     Some(ty) => {
-                        if Some(ty.clone()) == expected_type {
+                        if Some(ty) == expected_type.as_ref() || expected_type == None {
                             Ok(ty.clone())
                         } else {
-                            Err(TypeCheckError::IdentifierTypeNotMatching)
+                            Err(TypeCheckError::IdentifierTypeNotMatching(
+                                expected_type,
+                                ty.clone(),
+                            ))
                         }
                     }
-                    None => Err(TypeCheckError::IdentifierNoType),
+                    None => Err(TypeCheckError::IdentifierNotFound(ident)),
                 }
             }
             Expr::IntegerLiteral(_) => {
-                if expected_type == Some(Type::I64) {
+                if expected_type == Some(Type::I64) || expected_type == None {
                     Ok(Type::I64)
                 } else {
                     Err(TypeCheckError::Integer(expected_type))
                 }
             }
             Expr::BooleanLiteral(_) => {
-                if expected_type == Some(Type::Bool) {
+                if expected_type == Some(Type::Bool) || expected_type == None {
                     Ok(Type::Bool)
                 } else {
                     Err(TypeCheckError::Boolean(expected_type))
@@ -123,13 +126,10 @@ impl TypeChecker {
                 ident,
                 operand,
                 expr,
-            } => {
-                let type_opt = self.environment.get(&ident);
-                match type_opt {
-                    Some(ty) => self.check_expression(*expr, Some(ty.clone())),
-                    None => Err(TypeCheckError::Assign),
-                }
-            }
+            } => match self.environment.get(&ident) {
+                Some(ty) => self.check_expression(*expr, Some(ty.clone())),
+                None => Err(TypeCheckError::IdentifierNotFound(ident)),
+            },
         }
     }
 }

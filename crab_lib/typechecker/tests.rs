@@ -181,7 +181,7 @@ pub mod tests {
             bool j = true;
         };
         ";
-        expect_res(input, false);
+        expect_res(input, true);
     }
 
     #[test]

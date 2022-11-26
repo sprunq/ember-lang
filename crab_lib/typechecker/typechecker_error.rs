@@ -7,8 +7,9 @@ pub enum TypeCheckError {
     Boolean(Option<Type>),
     Integer(Option<Type>),
     IdentifierNoType,
-    IdentifierTypeNotMatching,
+    IdentifierTypeNotMatching(Option<Type>, Type),
     InfixOperandsNotMatching,
     IfContainsError,
     WhiteContainsError,
+    IdentifierNotFound(String),
 }

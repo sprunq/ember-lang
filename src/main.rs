@@ -2,6 +2,7 @@ use codespan_reporting::files::SimpleFiles;
 use codespan_reporting::term;
 use codespan_reporting::term::termcolor::{ColorChoice, StandardStream};
 use crab_lib::diagnostic_converter::converter_parse_error::build_parse_error_diagnostic;
+use crab_lib::diagnostic_converter::converter_typecheck_error::build_typecheck_error_diagnostic;
 use crab_lib::typechecker::typecheck::TypeChecker;
 use crab_lib::{lexer::lex::Lexer, parser::parse::Parser};
 use std::{fs, time::Instant};
@@ -52,13 +53,20 @@ pub fn run(options: CompilerOptions) {
         fs::write(".\\emit\\ast.txt", format!("{ast:#?}")).expect("Unable to write file");
     }
 
+    let now = Instant::now();
     let mut typechecker = TypeChecker::new();
     let typecheck_result = typechecker.check(ast.sequence);
+    let typecheck_elapsed = now.elapsed();
 
-    println!("Typecheck result: \n{:?}", typecheck_result);
+    if let Some(error) = typecheck_result {
+        let diagnostic = build_typecheck_error_diagnostic(error, file_id);
+        term::emit(&mut writer.lock(), &config, &files, &diagnostic).unwrap();
+        std::process::exit(0);
+    }
 
     if options.measure_performance {
         println!("\nExection times:");
         println!("Parsing time: {:.2?}", parsing_elapsed);
+        println!("Typecheck time: {:.2?}", typecheck_elapsed);
     }
 }
