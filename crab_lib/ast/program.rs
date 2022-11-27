@@ -3,14 +3,12 @@ use std::fmt;
 
 #[derive(Debug, PartialEq)]
 pub struct Program {
-    pub sequence: Vec<Stmt>,
+    pub sequence: Stmt,
 }
 
 impl fmt::Display for Program {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        for stmt in &self.sequence {
-            write!(f, "{}", stmt)?;
-        }
+        write!(f, "{}", self.sequence)?;
         Ok(())
     }
 }

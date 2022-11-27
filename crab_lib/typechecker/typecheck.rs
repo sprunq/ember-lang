@@ -1,8 +1,7 @@
 #![allow(unused_variables)]
 
 use crate::ast::{
-    expression::Expr, program::Program, sequence::Sequence, statement::Stmt, ty::Type,
-    typed_expression::TypedExpr,
+    expression::Expr, program::Program, statement::Stmt, ty::Type, typed_expression::TypedExpr,
 };
 use std::collections::HashMap;
 
@@ -17,21 +16,7 @@ impl TypeChecker {
 
     pub fn typecheck(&mut self, program: Program) -> Option<TypeCheckError> {
         let mut env = HashMap::new();
-        self.check_statements(&mut env, program.sequence)
-    }
-
-    fn check_statements(
-        &mut self,
-        env: &mut HashMap<String, Type>,
-        sequence: Vec<Stmt>,
-    ) -> Option<TypeCheckError> {
-        for stmt in sequence {
-            let x = self.check_statement(env, stmt);
-            if x.is_some() {
-                return x;
-            }
-        }
-        None
+        self.check_statement(&mut env, program.sequence)
     }
 
     fn check_statement(
@@ -57,7 +42,7 @@ impl TypeChecker {
             Stmt::Expression { expr } => self.check_expression(env, expr, None).err(),
             Stmt::While { condition, body } => {
                 let cond = self.check_expression(env, *condition, Some(Type::Bool));
-                let b = self.check_statements(env, body.statements);
+                let b = self.check_statement(env, *body);
 
                 if cond.is_err() {
                     return cond.err();
@@ -73,9 +58,13 @@ impl TypeChecker {
                 alternative,
             } => {
                 let cond = self.check_expression(env, *condition, Some(Type::Bool));
-                let bod = self.check_statements(env, body.statements);
-                let alt =
-                    self.check_statements(env, alternative.unwrap_or(Sequence::new()).statements);
+                let bod = self.check_statement(env, *body);
+                let alt = self.check_statement(
+                    env,
+                    *alternative.unwrap_or(Box::new(Stmt::Sequence {
+                        statements: Box::new(Vec::new()),
+                    })),
+                );
 
                 if cond.is_err() {
                     return cond.err();
@@ -86,6 +75,15 @@ impl TypeChecker {
                 } else {
                     None
                 }
+            }
+            Stmt::Sequence { statements } => {
+                for stmt in statements.into_iter() {
+                    let x = self.check_statement(env, stmt);
+                    if x.is_some() {
+                        return x;
+                    }
+                }
+                None
             }
         }
     }

@@ -4,8 +4,8 @@ use crate::ast::typed_expression::TypedExpr;
 use crate::lexer::{lex::Lexer, token::Token};
 use crate::{
     ast::{
-        expression::Expr, infix::Infix, precedence::Precedence, prefix::Prefix, sequence::Sequence,
-        statement::Stmt, ty::Type,
+        expression::Expr, infix::Infix, precedence::Precedence, prefix::Prefix, statement::Stmt,
+        ty::Type,
     },
     lexer::token::TokenInfo,
 };
@@ -60,7 +60,9 @@ impl Parser {
             self.next_token();
         }
         Ok(Program {
-            sequence: statements,
+            sequence: Stmt::Sequence {
+                statements: Box::new(statements),
+            },
         })
     }
 
@@ -83,7 +85,7 @@ impl Parser {
         let alternative = if self.peek_token.token == Token::Else {
             self.next_token();
             self.expect_and_move(Token::LBrace, ParseErr::ExpectedLbrace)?;
-            Some(self.parse_sequence()?)
+            Some(Box::new(self.parse_sequence()?))
         } else {
             None
         };
@@ -91,7 +93,7 @@ impl Parser {
 
         Ok(Stmt::If {
             condition: Box::new(condition),
-            body: consequence,
+            body: Box::new(consequence),
             alternative,
         })
     }
@@ -107,7 +109,7 @@ impl Parser {
 
         Ok(Stmt::While {
             condition: Box::new(condition),
-            body: consequence,
+            body: Box::new(consequence),
         })
     }
 
@@ -122,7 +124,7 @@ impl Parser {
         }
     }
 
-    fn parse_sequence(&mut self) -> Result<Sequence, ParseErr> {
+    fn parse_sequence(&mut self) -> Result<Stmt, ParseErr> {
         let mut statements = vec![];
 
         self.next_token();
@@ -131,7 +133,9 @@ impl Parser {
             self.next_token();
         }
 
-        Ok(Sequence { statements })
+        Ok(Stmt::Sequence {
+            statements: Box::new(statements),
+        })
     }
 
     fn parse_literal_expression(&mut self) -> Result<TypedExpr, ParseErr> {

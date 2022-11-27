@@ -32,32 +32,34 @@ pub mod tests {
         let mut parser = Parser::new(lexer);
 
         let program = parser.parse_program();
-        let expected = vec![
-            Stmt::Declaration {
-                ty: Type::I64,
-                ident: "x".to_string(),
-                value: TypedExpr {
-                    ty: Some(Type::I64),
-                    expr: Expr::IntegerLiteral(5),
+        let expected = Stmt::Sequence {
+            statements: Box::new(vec![
+                Stmt::Declaration {
+                    ty: Type::I64,
+                    ident: "x".to_string(),
+                    value: TypedExpr {
+                        ty: Some(Type::I64),
+                        expr: Expr::IntegerLiteral(5),
+                    },
                 },
-            },
-            Stmt::Declaration {
-                ty: Type::I64,
-                ident: "y".to_string(),
-                value: TypedExpr {
-                    ty: Some(Type::I64),
-                    expr: Expr::IntegerLiteral(7),
+                Stmt::Declaration {
+                    ty: Type::I64,
+                    ident: "y".to_string(),
+                    value: TypedExpr {
+                        ty: Some(Type::I64),
+                        expr: Expr::IntegerLiteral(7),
+                    },
                 },
-            },
-            Stmt::Declaration {
-                ty: Type::I64,
-                ident: "foobar".to_string(),
-                value: TypedExpr {
-                    ty: None,
-                    expr: Expr::Identifier("y".to_string()),
+                Stmt::Declaration {
+                    ty: Type::I64,
+                    ident: "foobar".to_string(),
+                    value: TypedExpr {
+                        ty: None,
+                        expr: Expr::Identifier("y".to_string()),
+                    },
                 },
-            },
-        ];
+            ]),
+        };
 
         assert_eq!(expected, program.unwrap().sequence);
     }
@@ -68,12 +70,14 @@ pub mod tests {
         let lexer = Lexer::new(input.to_owned());
         let mut parser = Parser::new(lexer);
         let program = parser.parse_program();
-        let expected = vec![Stmt::Expression {
-            expr: TypedExpr {
-                ty: Some(Type::I64),
-                expr: Expr::IntegerLiteral(5),
-            },
-        }];
+        let expected = Stmt::Sequence {
+            statements: Box::new(vec![Stmt::Expression {
+                expr: TypedExpr {
+                    ty: Some(Type::I64),
+                    expr: Expr::IntegerLiteral(5),
+                },
+            }]),
+        };
 
         assert_eq!(expected, program.unwrap().sequence);
     }
@@ -98,19 +102,21 @@ pub mod tests {
 
             assert_eq!(
                 program.unwrap().sequence,
-                vec![Stmt::Expression {
-                    expr: TypedExpr::new(Expr::Infix {
-                        op: operator,
-                        left: Box::new(TypedExpr {
-                            ty: Some(Type::I64),
-                            expr: Expr::IntegerLiteral(left)
-                        }),
-                        right: Box::new(TypedExpr {
-                            ty: Some(Type::I64),
-                            expr: Expr::IntegerLiteral(right)
+                Stmt::Sequence {
+                    statements: Box::new(vec![Stmt::Expression {
+                        expr: TypedExpr::new(Expr::Infix {
+                            op: operator,
+                            left: Box::new(TypedExpr {
+                                ty: Some(Type::I64),
+                                expr: Expr::IntegerLiteral(left)
+                            }),
+                            right: Box::new(TypedExpr {
+                                ty: Some(Type::I64),
+                                expr: Expr::IntegerLiteral(right)
+                            })
                         })
-                    })
-                }]
+                    }])
+                }
             );
         }
     }
