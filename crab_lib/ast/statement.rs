@@ -1,22 +1,22 @@
-use super::{ty::Type, typed_expression::TypedExpr};
+use super::{expression::Node, ty::Type};
 use std::fmt;
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Stmt {
     Declaration {
         ty: Type,
-        ident: TypedExpr,
-        value: TypedExpr,
+        ident: Node,
+        value: Node,
     },
     Expression {
-        expr: TypedExpr,
+        expr: Node,
     },
     While {
-        condition: Box<TypedExpr>,
+        condition: Box<Node>,
         body: Box<Stmt>,
     },
     If {
-        condition: Box<TypedExpr>,
+        condition: Box<Node>,
         body: Box<Stmt>,
         alternative: Option<Box<Stmt>>,
     },

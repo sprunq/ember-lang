@@ -1,7 +1,10 @@
 #![allow(unused_variables)]
 
 use crate::ast::{
-    ast_root::AstRoot, expression::Expr, statement::Stmt, ty::Type, typed_expression::TypedExpr,
+    ast_root::AstRoot,
+    expression::{Expr, Node},
+    statement::Stmt,
+    ty::Type,
 };
 use std::collections::HashMap;
 
@@ -24,7 +27,7 @@ impl TypeChecker {
                 env.insert(ident.to_string(), ty.clone());
                 let val_type = Self::check_expression(env, value, ty)?;
                 if *ty == val_type {
-                    value.ty = Some(val_type);
+                    value.inner.ty = Some(val_type);
                     Ok(Type::Void)
                 } else {
                     Err(TypeCheckError::TypesNotMatching(ty.clone(), val_type))
@@ -66,10 +69,10 @@ impl TypeChecker {
 
     fn check_expression(
         env: &mut HashMap<String, Type>,
-        expression: &mut TypedExpr,
+        expression: &mut Node,
         expected_type: &Type,
     ) -> Result<Type, TypeCheckError> {
-        match expression.expr.clone() {
+        match expression.inner.expr.clone() {
             Expr::Infix {
                 op,
                 mut left,
@@ -84,16 +87,16 @@ impl TypeChecker {
                         expected_type.clone(),
                     ));
                 }
-                expression.ty = Some(actual_t.clone());
+                expression.inner.ty = Some(actual_t.clone());
                 Ok(actual_t)
             }
-            Expr::Prefix { op, mut expr } => Self::check_expression(env, &mut *expr, expected_type),
-            Expr::Identifier(ident) => {
+            Expr::Prefix { op, mut expr } => Self::check_expression(env, &mut expr, expected_type),
+            Expr::Identifier(ident, pos) => {
                 let type_opt = env.get(ident.as_str());
                 match type_opt {
                     Some(ty) => {
                         if *ty == *expected_type || *expected_type == Type::Void {
-                            expression.ty = Some(ty.clone());
+                            expression.inner.ty = Some(ty.clone());
                             Ok(ty.clone())
                         } else {
                             Err(TypeCheckError::IdentifierTypeNotMatching(
@@ -105,17 +108,17 @@ impl TypeChecker {
                     None => Err(TypeCheckError::IdentifierNotFound(ident.to_string())),
                 }
             }
-            Expr::IntegerLiteral(_) => {
+            Expr::IntegerLiteral(_, pos) => {
                 if *expected_type == Type::I64 || *expected_type == Type::Void {
-                    expression.ty = Some(Type::I64);
+                    expression.inner.ty = Some(Type::I64);
                     Ok(Type::I64)
                 } else {
                     Err(TypeCheckError::Integer(expected_type.clone()))
                 }
             }
-            Expr::BooleanLiteral(_) => {
+            Expr::BooleanLiteral(_, pos) => {
                 if *expected_type == Type::Bool || *expected_type == Type::Void {
-                    expression.ty = Some(Type::Bool);
+                    expression.inner.ty = Some(Type::Bool);
                     Ok(Type::Bool)
                 } else {
                     Err(TypeCheckError::Boolean(expected_type.clone()))
@@ -127,7 +130,7 @@ impl TypeChecker {
                 mut expr,
             } => match env.get(&ident.to_string()) {
                 Some(ty) => {
-                    expression.ty = Some(ty.clone());
+                    expression.inner.ty = Some(ty.clone());
                     Self::check_expression(env, &mut expr, &ty.clone())
                 }
                 None => Err(TypeCheckError::IdentifierNotFound(ident.to_string())),

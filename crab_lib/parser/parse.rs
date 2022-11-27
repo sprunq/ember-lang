@@ -1,5 +1,6 @@
 use super::parse_error::ParseErr;
 use crate::ast::ast_root::AstRoot;
+use crate::ast::expression::Node;
 use crate::ast::typed_expression::TypedExpr;
 use crate::lexer::{lex::Lexer, token::Token};
 use crate::{
@@ -92,7 +93,7 @@ impl Parser {
         self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
 
         Ok(Stmt::If {
-            condition: Box::new(condition),
+            condition: Node::new_boxed(condition, 0..0),
             body: Box::new(consequence),
             alternative,
         })
@@ -108,7 +109,7 @@ impl Parser {
         self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
 
         Ok(Stmt::While {
-            condition: Box::new(condition),
+            condition: Node::new_boxed(condition, 0..0),
             body: Box::new(consequence),
         })
     }
@@ -143,7 +144,7 @@ impl Parser {
             match lit.parse::<i64>() {
                 Ok(value) => Ok(TypedExpr {
                     ty: Some(Type::I64),
-                    expr: Expr::IntegerLiteral(value),
+                    expr: Expr::IntegerLiteral(value, 0..0),
                 }),
                 Err(error) => Err(ParseErr::ParseIntError(self.current_token.clone(), error)),
             }
@@ -154,8 +155,8 @@ impl Parser {
 
     fn parse_boolean_expression(&mut self) -> Result<TypedExpr, ParseErr> {
         let value = match &self.current_token.token {
-            Token::True => Some(Expr::BooleanLiteral(true)),
-            Token::False => Some(Expr::BooleanLiteral(false)),
+            Token::True => Some(Expr::BooleanLiteral(true, 0..0)),
+            Token::False => Some(Expr::BooleanLiteral(false, 0..0)),
             _ => None,
         };
         match value {
@@ -235,7 +236,7 @@ impl Parser {
 
     fn parse_assign_expression(&mut self, left: TypedExpr) -> Result<TypedExpr, ParseErr> {
         let name = {
-            if let Expr::Identifier(ident) = left.expr {
+            if let Expr::Identifier(ident, _) = left.expr {
                 Ok(ident)
             } else {
                 Err(ParseErr::ExpectedIdentifierToken(
@@ -254,9 +255,9 @@ impl Parser {
         self.next_token();
         let value = self.parse_expr(Precedence::Lowest)?;
         Ok(TypedExpr::new(Expr::Assign {
-            ident: Box::new(TypedExpr::new(Expr::Identifier(name))),
+            ident: Node::new_boxed(TypedExpr::new(Expr::Identifier(name, 0..0)), 0..0),
             operand: operator,
-            expr: Box::new(value),
+            expr: Node::new_boxed(value, 0..0),
         }))
     }
 
@@ -278,8 +279,8 @@ impl Parser {
         self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
         Ok(Stmt::Declaration {
             ty,
-            ident: TypedExpr::new(Expr::Identifier(ident)),
-            value,
+            ident: Node::new(TypedExpr::new(Expr::Identifier(ident, 0..0)), 0..0),
+            value: Node::new(value, 0..0),
         })
     }
 
@@ -288,12 +289,15 @@ impl Parser {
         if self.peek_token.token == Token::Semicolon {
             self.next_token();
         }
-        Ok(Stmt::Expression { expr: expression })
+        Ok(Stmt::Expression {
+            expr: Node::new(expression, 0..0),
+        })
     }
 
     fn parse_identifier_expression(&mut self) -> Result<TypedExpr, ParseErr> {
-        match self.parse_identifier_string().map(Expr::Identifier) {
-            Ok(expr) => Ok(TypedExpr::new(expr)),
+        let s = self.parse_identifier_string();
+        match s {
+            Ok(st) => Ok(TypedExpr::new(Expr::Identifier(st, 0..0))),
             Err(err) => Err(err),
         }
     }
@@ -314,7 +318,7 @@ impl Parser {
         let right_expr = self.parse_expr(Precedence::Prefix)?;
         Ok(TypedExpr::new(Expr::Prefix {
             op: prefix_token,
-            expr: Box::new(right_expr),
+            expr: Node::new_boxed(right_expr, 0..0),
         }))
     }
 
@@ -326,8 +330,8 @@ impl Parser {
 
         Ok(TypedExpr::new(Expr::Infix {
             op: i,
-            left: Box::new(left),
-            right: Box::new(right),
+            left: Node::new_boxed(left, 0..0),
+            right: Node::new_boxed(right, 0..0),
         }))
     }
 

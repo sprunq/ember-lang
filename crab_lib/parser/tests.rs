@@ -2,7 +2,10 @@
 pub mod tests {
     use crate::{
         ast::{
-            expression::Expr, infix::InfixOp, statement::Stmt, ty::Type,
+            expression::{Expr, Node},
+            infix::InfixOp,
+            statement::Stmt,
+            ty::Type,
             typed_expression::TypedExpr,
         },
         lexer::lex::Lexer,
@@ -37,27 +40,45 @@ pub mod tests {
             statements: Box::new(vec![
                 Stmt::Declaration {
                     ty: Type::I64,
-                    ident: TypedExpr::new(Expr::Identifier("x".to_string())),
-                    value: TypedExpr {
-                        ty: Some(Type::I64),
-                        expr: Expr::IntegerLiteral(5),
-                    },
+                    ident: Node::new(
+                        TypedExpr::new(Expr::Identifier("x".to_string(), 0..0)),
+                        0..0,
+                    ),
+                    value: Node::new(
+                        TypedExpr {
+                            ty: Some(Type::I64),
+                            expr: Expr::IntegerLiteral(5, 0..0),
+                        },
+                        0..0,
+                    ),
                 },
                 Stmt::Declaration {
                     ty: Type::I64,
-                    ident: TypedExpr::new(Expr::Identifier("y".to_string())),
-                    value: TypedExpr {
-                        ty: Some(Type::I64),
-                        expr: Expr::IntegerLiteral(7),
-                    },
+                    ident: Node::new(
+                        TypedExpr::new(Expr::Identifier("y".to_string(), 0..0)),
+                        0..0,
+                    ),
+                    value: Node::new(
+                        TypedExpr {
+                            ty: Some(Type::I64),
+                            expr: Expr::IntegerLiteral(7, 0..0),
+                        },
+                        0..0,
+                    ),
                 },
                 Stmt::Declaration {
                     ty: Type::I64,
-                    ident: TypedExpr::new(Expr::Identifier("foobar".to_string())),
-                    value: TypedExpr {
-                        ty: None,
-                        expr: Expr::Identifier("y".to_string()),
-                    },
+                    ident: Node::new(
+                        TypedExpr::new(Expr::Identifier("foobar".to_string(), 0..0)),
+                        0..0,
+                    ),
+                    value: Node::new(
+                        TypedExpr {
+                            ty: None,
+                            expr: Expr::Identifier("y".to_string(), 0..0),
+                        },
+                        0..0,
+                    ),
                 },
             ]),
         };
@@ -73,10 +94,13 @@ pub mod tests {
         let program = parser.parse_program();
         let expected = Stmt::Sequence {
             statements: Box::new(vec![Stmt::Expression {
-                expr: TypedExpr {
-                    ty: Some(Type::I64),
-                    expr: Expr::IntegerLiteral(5),
-                },
+                expr: Node::new(
+                    TypedExpr {
+                        ty: Some(Type::I64),
+                        expr: Expr::IntegerLiteral(5, 0..0),
+                    },
+                    0..0,
+                ),
             }]),
         };
 
@@ -105,17 +129,26 @@ pub mod tests {
                 program.unwrap().sequence,
                 Stmt::Sequence {
                     statements: Box::new(vec![Stmt::Expression {
-                        expr: TypedExpr::new(Expr::Infix {
-                            op: operator,
-                            left: Box::new(TypedExpr {
-                                ty: Some(Type::I64),
-                                expr: Expr::IntegerLiteral(left)
+                        expr: Node::new(
+                            TypedExpr::new(Expr::Infix {
+                                op: operator,
+                                left: Node::new_boxed(
+                                    TypedExpr {
+                                        ty: Some(Type::I64),
+                                        expr: Expr::IntegerLiteral(left, 0..0)
+                                    },
+                                    0..0
+                                ),
+                                right: Node::new_boxed(
+                                    TypedExpr {
+                                        ty: Some(Type::I64),
+                                        expr: Expr::IntegerLiteral(right, 0..0)
+                                    },
+                                    0..0
+                                )
                             }),
-                            right: Box::new(TypedExpr {
-                                ty: Some(Type::I64),
-                                expr: Expr::IntegerLiteral(right)
-                            })
-                        })
+                            0..0
+                        )
                     }])
                 }
             );
