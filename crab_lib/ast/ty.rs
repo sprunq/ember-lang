@@ -1,8 +1,6 @@
-use std::fmt;
-
-use crate::{lexer::token::Token, typechecker::typechecker_error::TypeCheckError};
-
 use super::infix::InfixOp;
+use crate::lexer::token::Token;
+use std::fmt;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Type {
