@@ -1,3 +1,12 @@
-if (0 == true){
+i64 a = 0;
+bool b = true;
 
+while(b){
+    a += 10;
+    if (a < 10000){
+        i64 c = a / 20;
+        i64 d = c;
+    };
+    
+    a = a * -20;
 };
