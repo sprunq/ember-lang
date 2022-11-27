@@ -1,18 +1,16 @@
-use std::fmt;
+use std::{fmt, ops::Range};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct TokenInfo {
     pub token: Token,
-    pub start_idx: usize,
-    pub end_idx: usize,
+    pub span: Range<usize>,
 }
 
 impl TokenInfo {
     pub fn new(token: Token, start_idx: usize, end_idx: usize) -> Self {
         TokenInfo {
             token,
-            start_idx,
-            end_idx,
+            span: start_idx..end_idx,
         }
     }
 }

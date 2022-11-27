@@ -30,10 +30,14 @@ impl TypeChecker {
                     value.inner.ty = Some(val_type);
                     Ok(Type::Void)
                 } else {
-                    Err(TypeCheckError::TypesNotMatching(ty.clone(), val_type))
+                    Err(TypeCheckError::DeclarationTypesNotMatching(
+                        ty.clone(),
+                        val_type,
+                        ident.to_string(),
+                        ident.pos.start..value.pos.end,
+                    ))
                 }
             }
-
             Stmt::Expression { expr } => Self::check_expression(env, expr, &Type::Void),
             Stmt::While { condition, body } => {
                 let cond = Self::check_expression(env, &mut *condition, &Type::Bool)?;
@@ -78,13 +82,23 @@ impl TypeChecker {
                 mut left,
                 mut right,
             } => {
-                let l = Self::check_expression(env, &mut left, &Type::Void)?;
-                let r = Self::check_expression(env, &mut right, &Type::Void)?;
-                let actual_t = l.type_interaction(&op, &r)?;
+                let l = Self::check_expression(env, &mut left, expected_type)?;
+                let r = Self::check_expression(env, &mut right, expected_type)?;
+                let type_interaction_res = l.type_interaction(&op, &r);
+                if let None = type_interaction_res {
+                    return Err(TypeCheckError::IncompatibleTypesForOperand(
+                        op,
+                        l,
+                        r,
+                        left.pos.start..right.pos.end,
+                    ));
+                }
+                let actual_t = type_interaction_res.unwrap();
                 if actual_t != expected_type.clone() {
-                    return Err(TypeCheckError::TypesNotMatching(
+                    return Err(TypeCheckError::InfixTypesNotMatching(
                         actual_t,
                         expected_type.clone(),
+                        left.pos.start..right.pos.end,
                     ));
                 }
                 expression.inner.ty = Some(actual_t.clone());
@@ -94,47 +108,32 @@ impl TypeChecker {
             Expr::Identifier(ident, pos) => {
                 let type_opt = env.get(ident.as_str());
                 match type_opt {
-                    Some(ty) => {
-                        if *ty == *expected_type || *expected_type == Type::Void {
-                            expression.inner.ty = Some(ty.clone());
-                            Ok(ty.clone())
-                        } else {
-                            Err(TypeCheckError::IdentifierTypeNotMatching(
-                                expected_type.clone(),
-                                ty.clone(),
-                            ))
-                        }
-                    }
-                    None => Err(TypeCheckError::IdentifierNotFound(ident.to_string())),
+                    Some(ty) => Ok(ty.clone()),
+                    None => Err(TypeCheckError::IdentifierNotFound(ident.to_string(), pos)),
                 }
             }
-            Expr::IntegerLiteral(_, pos) => {
-                if *expected_type == Type::I64 || *expected_type == Type::Void {
-                    expression.inner.ty = Some(Type::I64);
-                    Ok(Type::I64)
-                } else {
-                    Err(TypeCheckError::Integer(expected_type.clone()))
-                }
-            }
-            Expr::BooleanLiteral(_, pos) => {
-                if *expected_type == Type::Bool || *expected_type == Type::Void {
-                    expression.inner.ty = Some(Type::Bool);
-                    Ok(Type::Bool)
-                } else {
-                    Err(TypeCheckError::Boolean(expected_type.clone()))
-                }
-            }
+            Expr::IntegerLiteral(_, pos) => Ok(Type::I64),
+            Expr::BooleanLiteral(_, pos) => Ok(Type::Bool),
             Expr::Assign {
-                ident,
+                mut ident,
                 operand,
                 mut expr,
-            } => match env.get(&ident.to_string()) {
-                Some(ty) => {
-                    expression.inner.ty = Some(ty.clone());
-                    Self::check_expression(env, &mut expr, &ty.clone())
+            } => {
+                let ident_type = Self::check_expression(env, &mut ident, expected_type)?;
+                let expr_type = Self::check_expression(env, &mut expr, &ident_type)?;
+                let type_interaction_res = ident_type.type_interaction(&operand, &expr_type);
+                if let None = type_interaction_res {
+                    return Err(TypeCheckError::IncompatibleTypesForOperand(
+                        operand,
+                        ident_type,
+                        expr_type,
+                        ident.pos.start..expr.pos.end,
+                    ));
                 }
-                None => Err(TypeCheckError::IdentifierNotFound(ident.to_string())),
-            },
+                let actual_t = type_interaction_res.unwrap();
+                expression.inner.ty = Some(actual_t.clone());
+                Ok(actual_t)
+            }
         }
     }
 }

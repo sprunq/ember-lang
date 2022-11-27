@@ -1,3 +1,5 @@
+use std::ops::Range;
+
 use super::parse_error::ParseErr;
 use crate::ast::ast_root::AstRoot;
 use crate::ast::expression::Node;
@@ -11,8 +13,8 @@ use crate::{
     lexer::token::TokenInfo,
 };
 
-type PrefixParseFn = fn(&mut Parser) -> Result<TypedExpr, ParseErr>;
-type InfixParseFn = fn(&mut Parser, TypedExpr) -> Result<TypedExpr, ParseErr>;
+type PrefixParseFn = fn(&mut Parser) -> Result<Node, ParseErr>;
+type InfixParseFn = fn(&mut Parser, Node) -> Result<Node, ParseErr>;
 
 pub struct Parser {
     lexer: Lexer,
@@ -93,7 +95,7 @@ impl Parser {
         self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
 
         Ok(Stmt::If {
-            condition: Node::new_boxed(condition, 0..0),
+            condition: Box::new(condition),
             body: Box::new(consequence),
             alternative,
         })
@@ -109,7 +111,7 @@ impl Parser {
         self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
 
         Ok(Stmt::While {
-            condition: Node::new_boxed(condition, 0..0),
+            condition: Box::new(condition),
             body: Box::new(consequence),
         })
     }
@@ -139,13 +141,16 @@ impl Parser {
         })
     }
 
-    fn parse_literal_expression(&mut self) -> Result<TypedExpr, ParseErr> {
+    fn parse_literal_expression(&mut self) -> Result<Node, ParseErr> {
         if let Token::Number(lit) = &self.current_token.token {
             match lit.parse::<i64>() {
-                Ok(value) => Ok(TypedExpr {
-                    ty: Some(Type::I64),
-                    expr: Expr::IntegerLiteral(value, 0..0),
-                }),
+                Ok(value) => Ok(Node::new(
+                    TypedExpr {
+                        ty: Some(Type::I64),
+                        expr: Expr::IntegerLiteral(value, self.current_token.span.clone()),
+                    },
+                    self.current_token.span.clone(),
+                )),
                 Err(error) => Err(ParseErr::ParseIntError(self.current_token.clone(), error)),
             }
         } else {
@@ -153,17 +158,20 @@ impl Parser {
         }
     }
 
-    fn parse_boolean_expression(&mut self) -> Result<TypedExpr, ParseErr> {
+    fn parse_boolean_expression(&mut self) -> Result<Node, ParseErr> {
         let value = match &self.current_token.token {
-            Token::True => Some(Expr::BooleanLiteral(true, 0..0)),
-            Token::False => Some(Expr::BooleanLiteral(false, 0..0)),
+            Token::True => Some(Expr::BooleanLiteral(true, self.current_token.span.clone())),
+            Token::False => Some(Expr::BooleanLiteral(false, self.current_token.span.clone())),
             _ => None,
         };
         match value {
-            Some(expr) => Ok(TypedExpr {
-                ty: Some(Type::Bool),
-                expr,
-            }),
+            Some(expr) => Ok(Node::new(
+                TypedExpr {
+                    ty: Some(Type::Bool),
+                    expr,
+                },
+                self.current_token.span.clone(),
+            )),
             None => Err(ParseErr::ExpectedBoolToken(self.current_token.clone())),
         }
     }
@@ -215,7 +223,7 @@ impl Parser {
         }
     }
 
-    fn parse_expr(&mut self, precedence: Precedence) -> Result<TypedExpr, ParseErr> {
+    fn parse_expr(&mut self, precedence: Precedence) -> Result<Node, ParseErr> {
         let prefix = self
             .get_prefix_fn()
             .ok_or_else(|| ParseErr::ExpectedPrefixToken(self.current_token.clone()))?;
@@ -234,10 +242,10 @@ impl Parser {
         Ok(left_expr)
     }
 
-    fn parse_assign_expression(&mut self, left: TypedExpr) -> Result<TypedExpr, ParseErr> {
-        let name = {
-            if let Expr::Identifier(ident, _) = left.expr {
-                Ok(ident)
+    fn parse_assign_expression(&mut self, left: Node) -> Result<Node, ParseErr> {
+        let identifier = {
+            if let Expr::Identifier(ident, pos) = left.inner.expr {
+                Ok((ident, pos))
             } else {
                 Err(ParseErr::ExpectedIdentifierToken(
                     self.current_token.clone(),
@@ -254,11 +262,18 @@ impl Parser {
         };
         self.next_token();
         let value = self.parse_expr(Precedence::Lowest)?;
-        Ok(TypedExpr::new(Expr::Assign {
-            ident: Node::new_boxed(TypedExpr::new(Expr::Identifier(name, 0..0)), 0..0),
-            operand: operator,
-            expr: Node::new_boxed(value, 0..0),
-        }))
+        let ident = Node::new_boxed(
+            TypedExpr::new(Expr::Identifier(identifier.0, identifier.1.clone())),
+            identifier.1,
+        );
+        Ok(Node::new(
+            TypedExpr::new(Expr::Assign {
+                ident: ident.clone(),
+                operand: operator,
+                expr: Box::new(value.clone()),
+            }),
+            ident.pos.start.clone()..value.pos.end.clone(),
+        ))
     }
 
     fn parse_type(&mut self) -> Result<Type, ParseErr> {
@@ -279,8 +294,11 @@ impl Parser {
         self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
         Ok(Stmt::Declaration {
             ty,
-            ident: Node::new(TypedExpr::new(Expr::Identifier(ident, 0..0)), 0..0),
-            value: Node::new(value, 0..0),
+            ident: Node::new(
+                TypedExpr::new(Expr::Identifier(ident.0, ident.1.clone())),
+                ident.1,
+            ),
+            value: value,
         })
     }
 
@@ -289,22 +307,23 @@ impl Parser {
         if self.peek_token.token == Token::Semicolon {
             self.next_token();
         }
-        Ok(Stmt::Expression {
-            expr: Node::new(expression, 0..0),
-        })
+        Ok(Stmt::Expression { expr: expression })
     }
 
-    fn parse_identifier_expression(&mut self) -> Result<TypedExpr, ParseErr> {
+    fn parse_identifier_expression(&mut self) -> Result<Node, ParseErr> {
         let s = self.parse_identifier_string();
         match s {
-            Ok(st) => Ok(TypedExpr::new(Expr::Identifier(st, 0..0))),
+            Ok(st) => Ok(Node::new(
+                TypedExpr::new(Expr::Identifier(st.0, st.1.clone())),
+                st.1,
+            )),
             Err(err) => Err(err),
         }
     }
 
-    fn parse_identifier_string(&self) -> Result<String, ParseErr> {
+    fn parse_identifier_string(&self) -> Result<(String, Range<usize>), ParseErr> {
         if let Token::Identifier(ident) = &self.current_token.token {
-            Ok(ident.to_string())
+            Ok((ident.to_string(), self.current_token.span.clone()))
         } else {
             Err(ParseErr::ExpectedIdentifierToken(
                 self.current_token.clone(),
@@ -312,30 +331,37 @@ impl Parser {
         }
     }
 
-    fn parse_prefix_expression(&mut self) -> Result<TypedExpr, ParseErr> {
+    fn parse_prefix_expression(&mut self) -> Result<Node, ParseErr> {
+        let start = self.current_token.span.start;
         let prefix_token = self.get_prefix_token(&self.current_token)?;
         self.next_token();
         let right_expr = self.parse_expr(Precedence::Prefix)?;
-        Ok(TypedExpr::new(Expr::Prefix {
-            op: prefix_token,
-            expr: Node::new_boxed(right_expr, 0..0),
-        }))
+        Ok(Node::new(
+            TypedExpr::new(Expr::Prefix {
+                op: prefix_token,
+                expr: Box::new(right_expr.clone()),
+            }),
+            start..right_expr.pos.end,
+        ))
     }
 
-    fn parse_infix_expression(&mut self, left: TypedExpr) -> Result<TypedExpr, ParseErr> {
+    fn parse_infix_expression(&mut self, left: Node) -> Result<Node, ParseErr> {
         let (precedence, infix) = self.get_infix_token(&self.current_token.token);
         let i = infix.ok_or_else(|| ParseErr::ExpectedInfixToken(self.current_token.clone()))?;
         self.next_token();
         let right = self.parse_expr(precedence)?;
 
-        Ok(TypedExpr::new(Expr::Infix {
-            op: i,
-            left: Node::new_boxed(left, 0..0),
-            right: Node::new_boxed(right, 0..0),
-        }))
+        Ok(Node::new(
+            TypedExpr::new(Expr::Infix {
+                op: i,
+                left: Box::new(left.clone()),
+                right: Box::new(right.clone()),
+            }),
+            left.pos.start..right.pos.end,
+        ))
     }
 
-    fn parse_grouped_expression(&mut self) -> Result<TypedExpr, ParseErr> {
+    fn parse_grouped_expression(&mut self) -> Result<Node, ParseErr> {
         self.next_token();
         let expr = self.parse_expr(Precedence::Lowest)?;
         self.expect_and_move(Token::RParenthesis, ParseErr::ExpectedRparen)?;

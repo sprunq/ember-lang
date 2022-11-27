@@ -58,7 +58,6 @@ pub fn run(options: CompilerOptions) {
     let typecheck_elapsed = now.elapsed();
 
     if let Err(error) = typecheck_result {
-        println!("{:#?}", error);
         let diagnostic = build_typecheck_error_diagnostic(error, file_id);
         term::emit(&mut writer.lock(), &config, &files, &diagnostic).unwrap();
         std::process::exit(0);

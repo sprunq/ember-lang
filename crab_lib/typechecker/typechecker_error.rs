@@ -1,17 +1,14 @@
+use std::ops::Range;
+
 use crate::ast::{infix::InfixOp, ty::Type};
 
 #[derive(Debug, Clone)]
 pub enum TypeCheckError {
-    PlaceHolder,
-    Assign,
-    Boolean(Type),
-    Integer(Type),
-    IdentifierNoType,
-    IdentifierTypeNotMatching(Type, Type),
-    InfixOperandsNotMatching,
-    IfContainsError,
-    WhiteContainsError,
-    IdentifierNotFound(String),
-    IncompatibleTypesForOperand(InfixOp, Type, Type),
-    TypesNotMatching(Type, Type),
+    Boolean(Type, Range<usize>),
+    Integer(Type, Range<usize>),
+    IdentifierTypeNotMatching(String, Type, Type, Range<usize>),
+    IdentifierNotFound(String, Range<usize>),
+    IncompatibleTypesForOperand(InfixOp, Type, Type, Range<usize>),
+    InfixTypesNotMatching(Type, Type, Range<usize>),
+    DeclarationTypesNotMatching(Type, Type, String, Range<usize>),
 }

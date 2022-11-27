@@ -20,29 +20,17 @@ impl Type {
         }
     }
 
-    pub fn type_interaction(
-        &self,
-        operand: &InfixOp,
-        other_type: &Type,
-    ) -> Result<Type, TypeCheckError> {
+    pub fn type_interaction(&self, operand: &InfixOp, other_type: &Type) -> Option<Type> {
         match (self, other_type) {
             (Type::I64, Type::I64) => match operand {
-                InfixOp::Eq | InfixOp::NotEq | InfixOp::Lt | InfixOp::Gt => Ok(Type::Bool),
-                _ => Ok(Type::I64),
+                InfixOp::Eq | InfixOp::NotEq | InfixOp::Lt | InfixOp::Gt => Some(Type::Bool),
+                _ => Some(Type::I64),
             },
             (Type::Bool, Type::Bool) => match operand {
-                InfixOp::Eq | InfixOp::NotEq => Ok(Type::Bool),
-                _ => Err(TypeCheckError::IncompatibleTypesForOperand(
-                    operand.to_owned(),
-                    self.to_owned(),
-                    other_type.to_owned(),
-                )),
+                InfixOp::Eq | InfixOp::NotEq => Some(Type::Bool),
+                _ => None,
             },
-            _ => Err(TypeCheckError::IncompatibleTypesForOperand(
-                operand.to_owned(),
-                self.to_owned(),
-                other_type.to_owned(),
-            )),
+            _ => None,
         }
     }
 }
