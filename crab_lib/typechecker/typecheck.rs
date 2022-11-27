@@ -42,12 +42,12 @@ impl TypeChecker {
             Stmt::Expression { expr } => self.check_expression(env, expr, None).err(),
             Stmt::While { condition, body } => {
                 let cond = self.check_expression(env, *condition, Some(Type::Bool));
-                let b = self.check_statement(env, *body);
+                let bod = self.check_statement(env, *body);
 
                 if cond.is_err() {
                     return cond.err();
-                } else if b.is_some() {
-                    return b;
+                } else if bod.is_some() {
+                    return bod;
                 } else {
                     None
                 }
@@ -77,8 +77,9 @@ impl TypeChecker {
                 }
             }
             Stmt::Sequence { statements } => {
+                let mut extended_env = env.clone();
                 for stmt in statements.into_iter() {
-                    let x = self.check_statement(env, stmt);
+                    let x = self.check_statement(&mut extended_env, stmt);
                     if x.is_some() {
                         return x;
                     }

@@ -227,4 +227,15 @@ pub mod tests {
         ";
         expect_res(input, false);
     }
+
+    #[test]
+    fn test_scoped_ident() {
+        let input = "
+        if(true){
+            i64 c = 4;
+        };
+        i64 d = c;
+        ";
+        expect_res(input, false);
+    }
 }
