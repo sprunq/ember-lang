@@ -24,9 +24,9 @@ impl TypeChecker {
                 env.insert(ident, ty.clone());
                 let val_type = Self::check_expression(env, value, ty.clone())?;
                 if ty == val_type {
-                    return Ok(Type::Void);
+                    Ok(Type::Void)
                 } else {
-                    return Err(TypeCheckError::TypesNotMatching(ty, val_type));
+                    Err(TypeCheckError::TypesNotMatching(ty, val_type))
                 }
             }
 
@@ -45,9 +45,11 @@ impl TypeChecker {
                 let bod = Self::check_statement(env, *body)?;
                 let alt = Self::check_statement(
                     env,
-                    *alternative.unwrap_or(Box::new(Stmt::Sequence {
-                        statements: Box::new(Vec::new()),
-                    })),
+                    *alternative.unwrap_or_else(|| {
+                        Box::new(Stmt::Sequence {
+                            statements: Box::new(Vec::new()),
+                        })
+                    }),
                 )?;
                 Ok(Type::Void)
             }

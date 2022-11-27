@@ -161,7 +161,7 @@ impl Parser {
         match value {
             Some(expr) => Ok(TypedExpr {
                 ty: Some(Type::Bool),
-                expr: expr,
+                expr,
             }),
             None => Err(ParseErr::ExpectedBoolToken(self.current_token.clone())),
         }

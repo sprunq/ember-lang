@@ -48,7 +48,7 @@ impl fmt::Display for Stmt {
                 Ok(())
             }
             Stmt::Sequence { statements } => {
-                for stmt in statements.to_owned().into_iter() {
+                for stmt in statements.iter() {
                     write!(f, "{}", stmt)?;
                 }
                 Ok(())
