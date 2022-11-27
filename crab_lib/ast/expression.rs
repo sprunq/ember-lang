@@ -1,24 +1,30 @@
-use super::{infix::Infix, prefix::Prefix, typed_expression::TypedExpr};
-use std::fmt;
+use super::{infix::InfixOp, prefix::PrefixOp, typed_expression::TypedExpr};
+use std::{fmt, ops::Range};
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct Node {
+    pub pos: Range<usize>,
+    pub inner: Expr,
+}
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expr {
     Infix {
-        op: Infix,
+        op: InfixOp,
         left: Box<TypedExpr>,
         right: Box<TypedExpr>,
     },
     Prefix {
-        op: Prefix,
+        op: PrefixOp,
         expr: Box<TypedExpr>,
     },
     Identifier(String),
     IntegerLiteral(i64),
     BooleanLiteral(bool),
     Assign {
-        ident: String,
+        ident: Box<TypedExpr>,
         // =, +=, *=, ...
-        operand: Infix,
+        operand: InfixOp,
         expr: Box<TypedExpr>,
     },
 }

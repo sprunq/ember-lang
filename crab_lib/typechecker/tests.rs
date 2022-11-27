@@ -8,8 +8,8 @@ pub mod tests {
         let parse_res = parser.parse_program();
 
         match parse_res {
-            Ok(program) => {
-                let res = TypeChecker::typecheck(program);
+            Ok(mut program) => {
+                let res = TypeChecker::typecheck(&mut program);
                 if res.is_err() {
                     println!("{:#?}", res);
                 }

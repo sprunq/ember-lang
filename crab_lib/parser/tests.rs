@@ -2,7 +2,8 @@
 pub mod tests {
     use crate::{
         ast::{
-            expression::Expr, infix::Infix, statement::Stmt, ty::Type, typed_expression::TypedExpr,
+            expression::Expr, infix::InfixOp, statement::Stmt, ty::Type,
+            typed_expression::TypedExpr,
         },
         lexer::lex::Lexer,
         parser::parse::Parser,
@@ -36,7 +37,7 @@ pub mod tests {
             statements: Box::new(vec![
                 Stmt::Declaration {
                     ty: Type::I64,
-                    ident: "x".to_string(),
+                    ident: TypedExpr::new(Expr::Identifier("x".to_string())),
                     value: TypedExpr {
                         ty: Some(Type::I64),
                         expr: Expr::IntegerLiteral(5),
@@ -44,7 +45,7 @@ pub mod tests {
                 },
                 Stmt::Declaration {
                     ty: Type::I64,
-                    ident: "y".to_string(),
+                    ident: TypedExpr::new(Expr::Identifier("y".to_string())),
                     value: TypedExpr {
                         ty: Some(Type::I64),
                         expr: Expr::IntegerLiteral(7),
@@ -52,7 +53,7 @@ pub mod tests {
                 },
                 Stmt::Declaration {
                     ty: Type::I64,
-                    ident: "foobar".to_string(),
+                    ident: TypedExpr::new(Expr::Identifier("foobar".to_string())),
                     value: TypedExpr {
                         ty: None,
                         expr: Expr::Identifier("y".to_string()),
@@ -85,14 +86,14 @@ pub mod tests {
     #[test]
     fn test_infix_expression() {
         let tests = vec![
-            ("5 + 5;", 5, Infix::Plus, 5),
-            ("5 - 5;", 5, Infix::Minus, 5),
-            ("5 * 5;", 5, Infix::Asterisk, 5),
-            ("5 / 5;", 5, Infix::Slash, 5),
-            ("5 > 5;", 5, Infix::Gt, 5),
-            ("5 < 5;", 5, Infix::Lt, 5),
-            ("5 == 5;", 5, Infix::Eq, 5),
-            ("5 != 5;", 5, Infix::NotEq, 5),
+            ("5 + 5;", 5, InfixOp::Plus, 5),
+            ("5 - 5;", 5, InfixOp::Minus, 5),
+            ("5 * 5;", 5, InfixOp::Asterisk, 5),
+            ("5 / 5;", 5, InfixOp::Slash, 5),
+            ("5 > 5;", 5, InfixOp::Gt, 5),
+            ("5 < 5;", 5, InfixOp::Lt, 5),
+            ("5 == 5;", 5, InfixOp::Eq, 5),
+            ("5 != 5;", 5, InfixOp::NotEq, 5),
         ];
         for (input, left, operator, right) in tests {
             let lexer = Lexer::new(input.to_owned());

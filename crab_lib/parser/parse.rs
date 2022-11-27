@@ -1,11 +1,11 @@
 use super::parse_error::ParseErr;
-use crate::ast::program::Program;
+use crate::ast::ast_root::AstRoot;
 use crate::ast::typed_expression::TypedExpr;
 use crate::lexer::{lex::Lexer, token::Token};
 use crate::{
     ast::{
-        expression::Expr, infix::Infix, precedence::Precedence, prefix::Prefix, statement::Stmt,
-        ty::Type,
+        expression::Expr, infix::InfixOp, precedence::Precedence, prefix::PrefixOp,
+        statement::Stmt, ty::Type,
     },
     lexer::token::TokenInfo,
 };
@@ -52,14 +52,14 @@ impl Parser {
         Ok(())
     }
 
-    pub fn parse_program(&mut self) -> Result<Program, ParseErr> {
+    pub fn parse_program(&mut self) -> Result<AstRoot, ParseErr> {
         let mut statements = vec![];
         while self.current_token.token != Token::Eof {
             let statement = self.parse_statement()?;
             statements.push(statement);
             self.next_token();
         }
-        Ok(Program {
+        Ok(AstRoot {
             sequence: Stmt::Sequence {
                 statements: Box::new(statements),
             },
@@ -186,30 +186,30 @@ impl Parser {
         }
     }
 
-    fn get_prefix_token(&self, token: &TokenInfo) -> Result<Prefix, ParseErr> {
+    fn get_prefix_token(&self, token: &TokenInfo) -> Result<PrefixOp, ParseErr> {
         match token.token {
-            Token::Minus => Ok(Prefix::Minus),
+            Token::Minus => Ok(PrefixOp::Minus),
             _ => Err(ParseErr::ExpectedPrefixToken(token.clone())),
         }
     }
 
-    fn get_infix_token(&self, token: &Token) -> (Precedence, Option<Infix>) {
+    fn get_infix_token(&self, token: &Token) -> (Precedence, Option<InfixOp>) {
         match token {
-            Token::Equal => (Precedence::Equals, Some(Infix::Eq)),
-            Token::NotEqual => (Precedence::Equals, Some(Infix::NotEq)),
-            Token::Lt => (Precedence::LessGreater, Some(Infix::Lt)),
-            Token::Gt => (Precedence::LessGreater, Some(Infix::Gt)),
-            Token::Plus => (Precedence::Sum, Some(Infix::Plus)),
-            Token::Minus => (Precedence::Sum, Some(Infix::Minus)),
-            Token::Slash => (Precedence::Product, Some(Infix::Slash)),
-            Token::Asterisk => (Precedence::Product, Some(Infix::Asterisk)),
+            Token::Equal => (Precedence::Equals, Some(InfixOp::Eq)),
+            Token::NotEqual => (Precedence::Equals, Some(InfixOp::NotEq)),
+            Token::Lt => (Precedence::LessGreater, Some(InfixOp::Lt)),
+            Token::Gt => (Precedence::LessGreater, Some(InfixOp::Gt)),
+            Token::Plus => (Precedence::Sum, Some(InfixOp::Plus)),
+            Token::Minus => (Precedence::Sum, Some(InfixOp::Minus)),
+            Token::Slash => (Precedence::Product, Some(InfixOp::Slash)),
+            Token::Asterisk => (Precedence::Product, Some(InfixOp::Asterisk)),
             Token::LParenthesis => (Precedence::Call, None),
             Token::LBracket => (Precedence::Index, None),
-            Token::Assign => (Precedence::Assign, Some(Infix::Assign)),
-            Token::PlusEquals => (Precedence::Assign, Some(Infix::PlusEquals)),
-            Token::MinusEquals => (Precedence::Assign, Some(Infix::MinusEquals)),
-            Token::SlashEuqals => (Precedence::Assign, Some(Infix::SlashEuqals)),
-            Token::AsteriskEquals => (Precedence::Assign, Some(Infix::AsteriskEquals)),
+            Token::Assign => (Precedence::Assign, Some(InfixOp::Assign)),
+            Token::PlusEquals => (Precedence::Assign, Some(InfixOp::PlusEquals)),
+            Token::MinusEquals => (Precedence::Assign, Some(InfixOp::MinusEquals)),
+            Token::SlashEuqals => (Precedence::Assign, Some(InfixOp::SlashEuqals)),
+            Token::AsteriskEquals => (Precedence::Assign, Some(InfixOp::AsteriskEquals)),
             _ => (Precedence::Lowest, None),
         }
     }
@@ -244,17 +244,17 @@ impl Parser {
             }
         }?;
         let operator = match self.current_token.token {
-            Token::Assign => Infix::Assign,
-            Token::PlusEquals => Infix::PlusEquals,
-            Token::MinusEquals => Infix::MinusEquals,
-            Token::AsteriskEquals => Infix::AsteriskEquals,
-            Token::SlashEuqals => Infix::SlashEuqals,
+            Token::Assign => InfixOp::Assign,
+            Token::PlusEquals => InfixOp::PlusEquals,
+            Token::MinusEquals => InfixOp::MinusEquals,
+            Token::AsteriskEquals => InfixOp::AsteriskEquals,
+            Token::SlashEuqals => InfixOp::SlashEuqals,
             _ => return Err(ParseErr::UnsupportedInfixToken(self.current_token.clone())),
         };
         self.next_token();
         let value = self.parse_expr(Precedence::Lowest)?;
         Ok(TypedExpr::new(Expr::Assign {
-            ident: name,
+            ident: Box::new(TypedExpr::new(Expr::Identifier(name))),
             operand: operator,
             expr: Box::new(value),
         }))
@@ -276,7 +276,11 @@ impl Parser {
         self.next_token();
         let value = self.parse_expr(Precedence::Lowest)?;
         self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
-        Ok(Stmt::Declaration { ty, ident, value })
+        Ok(Stmt::Declaration {
+            ty,
+            ident: TypedExpr::new(Expr::Identifier(ident)),
+            value,
+        })
     }
 
     fn parse_expr_stmt(&mut self) -> Result<Stmt, ParseErr> {

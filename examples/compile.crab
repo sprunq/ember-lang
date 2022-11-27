@@ -4,5 +4,3 @@ i64 b = 1;
 if(true){
     i64 c = a+b;
 };
-
-i64 d = c;

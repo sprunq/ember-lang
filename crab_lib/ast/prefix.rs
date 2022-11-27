@@ -1,16 +1,16 @@
 use std::fmt;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Prefix {
+pub enum PrefixOp {
     Bang,
     Minus,
 }
 
-impl fmt::Display for Prefix {
+impl fmt::Display for PrefixOp {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Prefix::Bang => write!(f, "!"),
-            Prefix::Minus => write!(f, "-"),
+            PrefixOp::Bang => write!(f, "!"),
+            PrefixOp::Minus => write!(f, "-"),
         }
     }
 }

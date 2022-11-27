@@ -1,7 +1,7 @@
 use std::fmt;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
-pub enum Infix {
+pub enum InfixOp {
     Eq,
     NotEq,
     Lt,
@@ -17,22 +17,22 @@ pub enum Infix {
     AsteriskEquals,
 }
 
-impl fmt::Display for Infix {
+impl fmt::Display for InfixOp {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Infix::Eq => write!(f, "=="),
-            Infix::NotEq => write!(f, "!="),
-            Infix::Lt => write!(f, "<"),
-            Infix::Gt => write!(f, ">"),
-            Infix::Plus => write!(f, "+"),
-            Infix::Minus => write!(f, "-"),
-            Infix::Asterisk => write!(f, "*"),
-            Infix::Slash => write!(f, "/"),
-            Infix::Assign => write!(f, "="),
-            Infix::PlusEquals => write!(f, "+="),
-            Infix::MinusEquals => write!(f, "-="),
-            Infix::SlashEuqals => write!(f, "/="),
-            Infix::AsteriskEquals => write!(f, "*="),
+            InfixOp::Eq => write!(f, "=="),
+            InfixOp::NotEq => write!(f, "!="),
+            InfixOp::Lt => write!(f, "<"),
+            InfixOp::Gt => write!(f, ">"),
+            InfixOp::Plus => write!(f, "+"),
+            InfixOp::Minus => write!(f, "-"),
+            InfixOp::Asterisk => write!(f, "*"),
+            InfixOp::Slash => write!(f, "/"),
+            InfixOp::Assign => write!(f, "="),
+            InfixOp::PlusEquals => write!(f, "+="),
+            InfixOp::MinusEquals => write!(f, "-="),
+            InfixOp::SlashEuqals => write!(f, "/="),
+            InfixOp::AsteriskEquals => write!(f, "*="),
         }
     }
 }

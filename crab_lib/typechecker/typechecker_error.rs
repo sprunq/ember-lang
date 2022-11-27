@@ -1,4 +1,4 @@
-use crate::ast::{infix::Infix, ty::Type};
+use crate::ast::{infix::InfixOp, ty::Type};
 
 #[derive(Debug, Clone)]
 pub enum TypeCheckError {
@@ -12,6 +12,6 @@ pub enum TypeCheckError {
     IfContainsError,
     WhiteContainsError,
     IdentifierNotFound(String),
-    IncompatibleTypesForOperand(Infix, Type, Type),
+    IncompatibleTypesForOperand(InfixOp, Type, Type),
     TypesNotMatching(Type, Type),
 }

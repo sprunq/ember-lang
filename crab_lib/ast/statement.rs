@@ -5,7 +5,7 @@ use std::fmt;
 pub enum Stmt {
     Declaration {
         ty: Type,
-        ident: String,
+        ident: TypedExpr,
         value: TypedExpr,
     },
     Expression {

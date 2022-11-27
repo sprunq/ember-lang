@@ -2,7 +2,7 @@ use std::fmt;
 
 use crate::{lexer::token::Token, typechecker::typechecker_error::TypeCheckError};
 
-use super::infix::Infix;
+use super::infix::InfixOp;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Type {
@@ -22,16 +22,16 @@ impl Type {
 
     pub fn type_interaction(
         &self,
-        operand: &Infix,
+        operand: &InfixOp,
         other_type: &Type,
     ) -> Result<Type, TypeCheckError> {
         match (self, other_type) {
             (Type::I64, Type::I64) => match operand {
-                Infix::Eq | Infix::NotEq | Infix::Lt | Infix::Gt => Ok(Type::Bool),
+                InfixOp::Eq | InfixOp::NotEq | InfixOp::Lt | InfixOp::Gt => Ok(Type::Bool),
                 _ => Ok(Type::I64),
             },
             (Type::Bool, Type::Bool) => match operand {
-                Infix::Eq | Infix::NotEq => Ok(Type::Bool),
+                InfixOp::Eq | InfixOp::NotEq => Ok(Type::Bool),
                 _ => Err(TypeCheckError::IncompatibleTypesForOperand(
                     operand.to_owned(),
                     self.to_owned(),
