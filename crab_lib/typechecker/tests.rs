@@ -11,10 +11,10 @@ pub mod tests {
             Ok(program) => {
                 let mut checker = TypeChecker::new();
                 let res = checker.typecheck(program);
-                if res.is_some() {
+                if res.is_err() {
                     println!("{:#?}", res);
                 }
-                assert_eq!(res.is_none(), expected);
+                assert_eq!(res.is_ok(), expected);
             }
             Err(err) => panic!("Got error: {:?}", err),
         }

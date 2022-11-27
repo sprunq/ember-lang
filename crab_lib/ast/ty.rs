@@ -8,6 +8,7 @@ use super::infix::Infix;
 pub enum Type {
     I64,
     Bool,
+    Void,
 }
 
 impl Type {
@@ -51,6 +52,7 @@ impl fmt::Display for Type {
         match &self {
             Type::I64 => write!(f, "i64"),
             Type::Bool => write!(f, "bool"),
+            Type::Void => write!(f, "void"),
         }
     }
 }

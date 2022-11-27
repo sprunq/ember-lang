@@ -4,10 +4,10 @@ use crate::ast::{infix::Infix, ty::Type};
 pub enum TypeCheckError {
     PlaceHolder,
     Assign,
-    Boolean(Option<Type>),
-    Integer(Option<Type>),
+    Boolean(Type),
+    Integer(Type),
     IdentifierNoType,
-    IdentifierTypeNotMatching(Option<Type>, Type),
+    IdentifierTypeNotMatching(Type, Type),
     InfixOperandsNotMatching,
     IfContainsError,
     WhiteContainsError,
