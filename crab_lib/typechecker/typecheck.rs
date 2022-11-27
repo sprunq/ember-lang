@@ -1,31 +1,32 @@
 #![allow(unused_variables)]
 
 use crate::ast::{
-    expression::Expr, infix::Infix, program::Program, sequence::Sequence, statement::Stmt,
-    ty::Type, typed_expression::TypedExpr,
+    expression::Expr, program::Program, sequence::Sequence, statement::Stmt, ty::Type,
+    typed_expression::TypedExpr,
 };
 use std::collections::HashMap;
 
 use super::typechecker_error::TypeCheckError;
 
-pub struct TypeChecker {
-    environment: HashMap<String, Type>,
-}
+pub struct TypeChecker {}
 
 impl TypeChecker {
     pub fn new() -> Self {
-        TypeChecker {
-            environment: HashMap::new(),
-        }
+        TypeChecker {}
     }
 
     pub fn typecheck(&mut self, program: Program) -> Option<TypeCheckError> {
-        self.check_statements(program.sequence)
+        let mut env = HashMap::new();
+        self.check_statements(&mut env, program.sequence)
     }
 
-    fn check_statements(&mut self, sequence: Vec<Stmt>) -> Option<TypeCheckError> {
+    fn check_statements(
+        &mut self,
+        env: &mut HashMap<String, Type>,
+        sequence: Vec<Stmt>,
+    ) -> Option<TypeCheckError> {
         for stmt in sequence {
-            let x = self.check_statement(stmt);
+            let x = self.check_statement(env, stmt);
             if x.is_some() {
                 return x;
             }
@@ -33,17 +34,30 @@ impl TypeChecker {
         None
     }
 
-    fn check_statement(&mut self, stmt: Stmt) -> Option<TypeCheckError> {
+    fn check_statement(
+        &mut self,
+        env: &mut HashMap<String, Type>,
+        stmt: Stmt,
+    ) -> Option<TypeCheckError> {
         match stmt {
             Stmt::Declaration { ty, ident, value } => {
-                self.environment.insert(ident, ty.clone());
-                self.check_expression(value, Some(ty)).err()
+                env.insert(ident, ty.clone());
+                match self.check_expression(env, value, Some(ty.clone())) {
+                    Err(e) => return Some(e),
+                    Ok(t) => {
+                        if ty == t {
+                            return None;
+                        } else {
+                            return Some(TypeCheckError::TypesNotMatching(ty, t));
+                        }
+                    }
+                }
             }
 
-            Stmt::Expression { expr } => self.check_expression(expr, None).err(),
+            Stmt::Expression { expr } => self.check_expression(env, expr, None).err(),
             Stmt::While { condition, body } => {
-                let cond = self.check_expression(*condition, Some(Type::Bool));
-                let b = self.check_statements(body.statements);
+                let cond = self.check_expression(env, *condition, Some(Type::Bool));
+                let b = self.check_statements(env, body.statements);
 
                 if cond.is_err() {
                     return cond.err();
@@ -58,9 +72,10 @@ impl TypeChecker {
                 body,
                 alternative,
             } => {
-                let cond = self.check_expression(*condition, Some(Type::Bool));
-                let bod = self.check_statements(body.statements);
-                let alt = self.check_statements(alternative.unwrap_or(Sequence::new()).statements);
+                let cond = self.check_expression(env, *condition, Some(Type::Bool));
+                let bod = self.check_statements(env, body.statements);
+                let alt =
+                    self.check_statements(env, alternative.unwrap_or(Sequence::new()).statements);
 
                 if cond.is_err() {
                     return cond.err();
@@ -77,25 +92,25 @@ impl TypeChecker {
 
     fn check_expression(
         &self,
+        env: &HashMap<String, Type>,
         expression: TypedExpr,
         expected_type: Option<Type>,
     ) -> Result<Type, TypeCheckError> {
         match expression.expr {
             Expr::Infix { op, left, right } => {
-                let l = self.check_expression(*left, None)?;
-                let r = self.check_expression(*right, None)?;
-
-                match (&l, &r) {
-                    (Type::I64, Type::I64) | (Type::Bool, Type::Bool) => match op {
-                        Infix::Eq | Infix::NotEq | Infix::Lt | Infix::Gt => Ok(Type::Bool),
-                        _ => Ok(l),
-                    },
-                    _ => Err(TypeCheckError::InfixOperandsNotMatching),
+                let l = self.check_expression(env, *left, None)?;
+                let r = self.check_expression(env, *right, None)?;
+                let actual_t = l.type_interaction(&op, &r)?;
+                if let Some(expected_t) = expected_type {
+                    if actual_t != expected_t {
+                        return Err(TypeCheckError::TypesNotMatching(actual_t, expected_t));
+                    }
                 }
+                Ok(actual_t)
             }
-            Expr::Prefix { op, expr } => self.check_expression(*expr, expected_type),
+            Expr::Prefix { op, expr } => self.check_expression(env, *expr, expected_type),
             Expr::Identifier(ident) => {
-                let type_opt = self.environment.get(&ident);
+                let type_opt = env.get(&ident);
                 match type_opt {
                     Some(ty) => {
                         if Some(ty) == expected_type.as_ref() || expected_type == None {
@@ -128,8 +143,8 @@ impl TypeChecker {
                 ident,
                 operand,
                 expr,
-            } => match self.environment.get(&ident) {
-                Some(ty) => self.check_expression(*expr, Some(ty.clone())),
+            } => match env.get(&ident) {
+                Some(ty) => self.check_expression(env, *expr, Some(ty.clone())),
                 None => Err(TypeCheckError::IdentifierNotFound(ident)),
             },
         }
