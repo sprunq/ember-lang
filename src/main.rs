@@ -54,8 +54,7 @@ pub fn run(options: CompilerOptions) {
     }
 
     let now = Instant::now();
-    let mut typechecker = TypeChecker::new();
-    let typecheck_result = typechecker.typecheck(ast);
+    let typecheck_result = TypeChecker::typecheck(ast);
     let typecheck_elapsed = now.elapsed();
 
     if let Err(error) = typecheck_result {

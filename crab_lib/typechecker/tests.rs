@@ -9,8 +9,7 @@ pub mod tests {
 
         match parse_res {
             Ok(program) => {
-                let mut checker = TypeChecker::new();
-                let res = checker.typecheck(program);
+                let res = TypeChecker::typecheck(program);
                 if res.is_err() {
                     println!("{:#?}", res);
                 }
