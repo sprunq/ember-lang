@@ -47,25 +47,20 @@ pub fn run(options: CompilerOptions) {
         std::process::exit(0);
     }
 
-    let mut ast = parse_res.unwrap();
+    let ast = parse_res.unwrap();
     if options.emit_ast {
         fs::create_dir_all(".\\emit").expect("Failed to create directory");
         fs::write(".\\emit\\ast.txt", format!("{ast:#?}")).expect("Unable to write file");
     }
 
     let now = Instant::now();
-    let typecheck_result = TypeChecker::typecheck(&mut ast);
+    let typecheck_result = TypeChecker::typecheck(&ast);
     let typecheck_elapsed = now.elapsed();
 
     if let Err(error) = typecheck_result {
         let diagnostic = build_typecheck_error_diagnostic(error, file_id);
         term::emit(&mut writer.lock(), &config, &files, &diagnostic).unwrap();
         std::process::exit(0);
-    }
-
-    if options.emit_ast {
-        fs::create_dir_all(".\\emit").expect("Failed to create directory");
-        fs::write(".\\emit\\enriched_ast.txt", format!("{ast:#?}")).expect("Unable to write file");
     }
 
     if options.measure_performance {
