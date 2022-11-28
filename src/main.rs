@@ -64,8 +64,8 @@ pub fn run(options: CompilerOptions) {
     }
 
     if options.measure_performance {
-        println!("\nExection times:");
-        println!("Parsing time: {:.2?}", parsing_elapsed);
-        println!("Typecheck time: {:.2?}", typecheck_elapsed);
+        println!("\nPerformance:");
+        println!("- Parsing \t{parsing_elapsed:.2?}");
+        println!("- Typecheck \t{typecheck_elapsed:.2?}");
     }
 }

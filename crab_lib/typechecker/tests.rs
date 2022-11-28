@@ -237,4 +237,23 @@ pub mod tests {
         ";
         expect_res(input, false);
     }
+
+    #[test]
+    fn test_compex_if() {
+        let input = "
+        i64 a = 0;
+        bool b = true;
+        bool c = b;
+        // comment
+        while(b){
+            a += 10;
+            if(c != ((10000 == a) != b == (0 < -1))){
+                i64 e = a / 20;
+                i64 d = e;
+            };
+            a = a * -20;
+        };
+        ";
+        expect_res(input, false);
+    }
 }

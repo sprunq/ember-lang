@@ -79,6 +79,11 @@ impl Lexer {
                 tok = if self.peek_char() == '=' {
                     self.read_char();
                     Token::SlashEuqals
+                } else if self.peek_char() == '/' {
+                    while self.peek_char() != '\n' {
+                        self.read_char();
+                    }
+                    return self.next_token();
                 } else {
                     Token::Slash
                 }
