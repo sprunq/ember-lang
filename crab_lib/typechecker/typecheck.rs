@@ -1,10 +1,8 @@
 #![allow(unused_variables)]
 
 use crate::ast::{
-    ast_root::AstRoot,
-    expression::{Expr, Node},
-    statement::Stmt,
-    ty::Type,
+    ast_node::AstNode, ast_root::AstRoot, expression::Expr, statement::Stmt, ty::Type,
+    typed_expression::TypedExpr,
 };
 use std::collections::HashMap;
 
@@ -53,7 +51,7 @@ impl TypeChecker {
                 let bod = Self::check_statement(env, &mut *body)?;
                 let alt = Self::check_statement(
                     env,
-                    &mut alternative.to_owned().unwrap_or({
+                    &mut alternative.to_owned().unwrap_or_else(|| {
                         Box::new(Stmt::Sequence {
                             statements: Box::new(Vec::new()),
                         })
@@ -63,7 +61,7 @@ impl TypeChecker {
             }
             Stmt::Sequence { statements } => {
                 let mut extended_env = env.clone();
-                for mut stmt in statements.to_owned().into_iter() {
+                for mut stmt in statements.iter().cloned() {
                     Self::check_statement(&mut extended_env, &mut stmt)?;
                 }
                 Ok(Type::Void)
@@ -73,7 +71,7 @@ impl TypeChecker {
 
     fn check_expression(
         env: &mut HashMap<String, Type>,
-        expression: &mut Node,
+        expression: &mut AstNode<TypedExpr>,
         expected_type: &Type,
     ) -> Result<Type, TypeCheckError> {
         match expression.inner.expr.clone() {
@@ -84,10 +82,10 @@ impl TypeChecker {
             } => {
                 let l = Self::check_expression(env, &mut left, expected_type)?;
                 let r = Self::check_expression(env, &mut right, expected_type)?;
-                let type_interaction_res = l.type_interaction(&op, &r);
-                if let None = type_interaction_res {
+                let type_interaction_res = l.type_interaction(&op.inner, &r);
+                if type_interaction_res.is_none() {
                     return Err(TypeCheckError::IncompatibleTypesForOperand(
-                        op,
+                        op.inner,
                         l,
                         r,
                         left.pos.start..right.pos.end,
@@ -105,15 +103,18 @@ impl TypeChecker {
                 Ok(actual_t)
             }
             Expr::Prefix { op, mut expr } => Self::check_expression(env, &mut expr, expected_type),
-            Expr::Identifier(ident, pos) => {
-                let type_opt = env.get(ident.as_str());
+            Expr::Identifier(ident) => {
+                let type_opt = env.get(ident.inner.as_str());
                 match type_opt {
                     Some(ty) => Ok(ty.clone()),
-                    None => Err(TypeCheckError::IdentifierNotFound(ident.to_string(), pos)),
+                    None => Err(TypeCheckError::IdentifierNotFound(
+                        ident.to_string(),
+                        ident.pos,
+                    )),
                 }
             }
-            Expr::IntegerLiteral(_, pos) => Ok(Type::I64),
-            Expr::BooleanLiteral(_, pos) => Ok(Type::Bool),
+            Expr::IntegerLiteral(_) => Ok(Type::I64),
+            Expr::BooleanLiteral(_) => Ok(Type::Bool),
             Expr::Assign {
                 mut ident,
                 operand,
@@ -121,10 +122,10 @@ impl TypeChecker {
             } => {
                 let ident_type = Self::check_expression(env, &mut ident, expected_type)?;
                 let expr_type = Self::check_expression(env, &mut expr, &ident_type)?;
-                let type_interaction_res = ident_type.type_interaction(&operand, &expr_type);
-                if let None = type_interaction_res {
+                let type_interaction_res = ident_type.type_interaction(&operand.inner, &expr_type);
+                if type_interaction_res.is_none() {
                     return Err(TypeCheckError::IncompatibleTypesForOperand(
-                        operand,
+                        operand.inner,
                         ident_type,
                         expr_type,
                         ident.pos.start..expr.pos.end,

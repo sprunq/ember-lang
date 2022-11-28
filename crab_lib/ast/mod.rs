@@ -1,3 +1,4 @@
+pub mod ast_node;
 pub mod ast_root;
 pub mod expression;
 pub mod infix;

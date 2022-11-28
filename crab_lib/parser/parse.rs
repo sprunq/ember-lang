@@ -1,8 +1,6 @@
-use std::ops::Range;
-
 use super::parse_error::ParseErr;
+use crate::ast::ast_node::AstNode;
 use crate::ast::ast_root::AstRoot;
-use crate::ast::expression::Node;
 use crate::ast::typed_expression::TypedExpr;
 use crate::lexer::{lex::Lexer, token::Token};
 use crate::{
@@ -12,9 +10,10 @@ use crate::{
     },
     lexer::token::TokenInfo,
 };
+use std::ops::Range;
 
-type PrefixParseFn = fn(&mut Parser) -> Result<Node, ParseErr>;
-type InfixParseFn = fn(&mut Parser, Node) -> Result<Node, ParseErr>;
+type PrefixParseFn = fn(&mut Parser) -> Result<AstNode<TypedExpr>, ParseErr>;
+type InfixParseFn = fn(&mut Parser, AstNode<TypedExpr>) -> Result<AstNode<TypedExpr>, ParseErr>;
 
 pub struct Parser {
     lexer: Lexer,
@@ -141,13 +140,16 @@ impl Parser {
         })
     }
 
-    fn parse_literal_expression(&mut self) -> Result<Node, ParseErr> {
+    fn parse_literal_expression(&mut self) -> Result<AstNode<TypedExpr>, ParseErr> {
         if let Token::Number(lit) = &self.current_token.token {
             match lit.parse::<i64>() {
-                Ok(value) => Ok(Node::new(
+                Ok(value) => Ok(AstNode::new(
                     TypedExpr {
                         ty: Some(Type::I64),
-                        expr: Expr::IntegerLiteral(value, self.current_token.span.clone()),
+                        expr: Expr::IntegerLiteral(AstNode::<i64>::new(
+                            value,
+                            self.current_token.span.clone(),
+                        )),
                     },
                     self.current_token.span.clone(),
                 )),
@@ -158,14 +160,20 @@ impl Parser {
         }
     }
 
-    fn parse_boolean_expression(&mut self) -> Result<Node, ParseErr> {
+    fn parse_boolean_expression(&mut self) -> Result<AstNode<TypedExpr>, ParseErr> {
         let value = match &self.current_token.token {
-            Token::True => Some(Expr::BooleanLiteral(true, self.current_token.span.clone())),
-            Token::False => Some(Expr::BooleanLiteral(false, self.current_token.span.clone())),
+            Token::True => Some(Expr::BooleanLiteral(AstNode::<bool>::new(
+                true,
+                self.current_token.span.clone(),
+            ))),
+            Token::False => Some(Expr::BooleanLiteral(AstNode::<bool>::new(
+                false,
+                self.current_token.span.clone(),
+            ))),
             _ => None,
         };
         match value {
-            Some(expr) => Ok(Node::new(
+            Some(expr) => Ok(AstNode::new(
                 TypedExpr {
                     ty: Some(Type::Bool),
                     expr,
@@ -223,7 +231,7 @@ impl Parser {
         }
     }
 
-    fn parse_expr(&mut self, precedence: Precedence) -> Result<Node, ParseErr> {
+    fn parse_expr(&mut self, precedence: Precedence) -> Result<AstNode<TypedExpr>, ParseErr> {
         let prefix = self
             .get_prefix_fn()
             .ok_or_else(|| ParseErr::ExpectedPrefixToken(self.current_token.clone()))?;
@@ -242,10 +250,13 @@ impl Parser {
         Ok(left_expr)
     }
 
-    fn parse_assign_expression(&mut self, left: Node) -> Result<Node, ParseErr> {
+    fn parse_assign_expression(
+        &mut self,
+        left: AstNode<TypedExpr>,
+    ) -> Result<AstNode<TypedExpr>, ParseErr> {
         let identifier = {
-            if let Expr::Identifier(ident, pos) = left.inner.expr {
-                Ok((ident, pos))
+            if let Expr::Identifier(ident) = left.inner.expr {
+                Ok(ident)
             } else {
                 Err(ParseErr::ExpectedIdentifierToken(
                     self.current_token.clone(),
@@ -260,19 +271,20 @@ impl Parser {
             Token::SlashEuqals => InfixOp::SlashEuqals,
             _ => return Err(ParseErr::UnsupportedInfixToken(self.current_token.clone())),
         };
+        let operator_pos = self.current_token.span.clone();
         self.next_token();
         let value = self.parse_expr(Precedence::Lowest)?;
-        let ident = Node::new_boxed(
-            TypedExpr::new(Expr::Identifier(identifier.0, identifier.1.clone())),
-            identifier.1,
+        let ident = AstNode::new_boxed(
+            TypedExpr::new(Expr::Identifier(identifier.clone())),
+            identifier.pos,
         );
-        Ok(Node::new(
+        Ok(AstNode::new(
             TypedExpr::new(Expr::Assign {
                 ident: ident.clone(),
-                operand: operator,
+                operand: AstNode::<InfixOp>::new(operator, operator_pos),
                 expr: Box::new(value.clone()),
             }),
-            ident.pos.start.clone()..value.pos.end.clone(),
+            ident.pos.start..value.pos.end,
         ))
     }
 
@@ -294,11 +306,14 @@ impl Parser {
         self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
         Ok(Stmt::Declaration {
             ty,
-            ident: Node::new(
-                TypedExpr::new(Expr::Identifier(ident.0, ident.1.clone())),
+            ident: AstNode::new(
+                TypedExpr::new(Expr::Identifier(AstNode::<String>::new(
+                    ident.0,
+                    ident.1.clone(),
+                ))),
                 ident.1,
             ),
-            value: value,
+            value,
         })
     }
 
@@ -310,11 +325,11 @@ impl Parser {
         Ok(Stmt::Expression { expr: expression })
     }
 
-    fn parse_identifier_expression(&mut self) -> Result<Node, ParseErr> {
+    fn parse_identifier_expression(&mut self) -> Result<AstNode<TypedExpr>, ParseErr> {
         let s = self.parse_identifier_string();
         match s {
-            Ok(st) => Ok(Node::new(
-                TypedExpr::new(Expr::Identifier(st.0, st.1.clone())),
+            Ok(st) => Ok(AstNode::new(
+                TypedExpr::new(Expr::Identifier(AstNode::<String>::new(st.0, st.1.clone()))),
                 st.1,
             )),
             Err(err) => Err(err),
@@ -331,29 +346,33 @@ impl Parser {
         }
     }
 
-    fn parse_prefix_expression(&mut self) -> Result<Node, ParseErr> {
-        let start = self.current_token.span.start;
+    fn parse_prefix_expression(&mut self) -> Result<AstNode<TypedExpr>, ParseErr> {
+        let prefix_pos = self.current_token.span.clone();
         let prefix_token = self.get_prefix_token(&self.current_token)?;
         self.next_token();
         let right_expr = self.parse_expr(Precedence::Prefix)?;
-        Ok(Node::new(
+        Ok(AstNode::new(
             TypedExpr::new(Expr::Prefix {
-                op: prefix_token,
+                op: AstNode::<PrefixOp>::new(prefix_token, prefix_pos.clone()),
                 expr: Box::new(right_expr.clone()),
             }),
-            start..right_expr.pos.end,
+            prefix_pos.start..right_expr.pos.end,
         ))
     }
 
-    fn parse_infix_expression(&mut self, left: Node) -> Result<Node, ParseErr> {
+    fn parse_infix_expression(
+        &mut self,
+        left: AstNode<TypedExpr>,
+    ) -> Result<AstNode<TypedExpr>, ParseErr> {
         let (precedence, infix) = self.get_infix_token(&self.current_token.token);
         let i = infix.ok_or_else(|| ParseErr::ExpectedInfixToken(self.current_token.clone()))?;
+        let infix_pos = self.current_token.span.clone();
         self.next_token();
         let right = self.parse_expr(precedence)?;
 
-        Ok(Node::new(
+        Ok(AstNode::new(
             TypedExpr::new(Expr::Infix {
-                op: i,
+                op: AstNode::<InfixOp>::new(i, infix_pos),
                 left: Box::new(left.clone()),
                 right: Box::new(right.clone()),
             }),
@@ -361,7 +380,7 @@ impl Parser {
         ))
     }
 
-    fn parse_grouped_expression(&mut self) -> Result<Node, ParseErr> {
+    fn parse_grouped_expression(&mut self) -> Result<AstNode<TypedExpr>, ParseErr> {
         self.next_token();
         let expr = self.parse_expr(Precedence::Lowest)?;
         self.expect_and_move(Token::RParenthesis, ParseErr::ExpectedRparen)?;

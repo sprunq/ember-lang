@@ -1,46 +1,25 @@
-use super::{infix::InfixOp, prefix::PrefixOp, typed_expression::TypedExpr};
-use std::{fmt, ops::Range};
-
-#[derive(Debug, PartialEq, Clone)]
-pub struct Node {
-    pub pos: Range<usize>,
-    pub inner: TypedExpr,
-}
-impl Node {
-    pub fn new(expr: TypedExpr, pos: Range<usize>) -> Self {
-        Self { pos, inner: expr }
-    }
-
-    pub fn new_boxed(expr: TypedExpr, pos: Range<usize>) -> Box<Self> {
-        Box::new(Node::new(expr, pos))
-    }
-}
-
-impl fmt::Display for Node {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.inner)
-    }
-}
+use super::{ast_node::AstNode, infix::InfixOp, prefix::PrefixOp, typed_expression::TypedExpr};
+use std::fmt;
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expr {
     Infix {
-        op: InfixOp,
-        left: Box<Node>,
-        right: Box<Node>,
+        op: AstNode<InfixOp>,
+        left: Box<AstNode<TypedExpr>>,
+        right: Box<AstNode<TypedExpr>>,
     },
     Prefix {
-        op: PrefixOp,
-        expr: Box<Node>,
+        op: AstNode<PrefixOp>,
+        expr: Box<AstNode<TypedExpr>>,
     },
-    Identifier(String, Range<usize>),
-    IntegerLiteral(i64, Range<usize>),
-    BooleanLiteral(bool, Range<usize>),
+    Identifier(AstNode<String>),
+    IntegerLiteral(AstNode<i64>),
+    BooleanLiteral(AstNode<bool>),
     Assign {
-        ident: Box<Node>,
+        ident: Box<AstNode<TypedExpr>>,
         // =, +=, *=, ...
-        operand: InfixOp,
-        expr: Box<Node>,
+        operand: AstNode<InfixOp>,
+        expr: Box<AstNode<TypedExpr>>,
     },
 }
 
@@ -48,9 +27,9 @@ impl fmt::Display for Expr {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Expr::Infix { op, left, right } => write!(f, "({left} {op} {right})"),
-            Expr::Identifier(ident, _) => write!(f, "{ident}"),
-            Expr::IntegerLiteral(int, _) => write!(f, "{int}"),
-            Expr::BooleanLiteral(bool, _) => write!(f, "{}", bool),
+            Expr::Identifier(ident) => write!(f, "{ident}"),
+            Expr::IntegerLiteral(int) => write!(f, "{int}"),
+            Expr::BooleanLiteral(bool) => write!(f, "{}", bool),
             Expr::Prefix { op, expr } => write!(f, "({op}{expr})"),
             Expr::Assign {
                 ident,

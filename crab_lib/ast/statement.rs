@@ -1,22 +1,22 @@
-use super::{expression::Node, ty::Type};
+use super::{ast_node::AstNode, ty::Type, typed_expression::TypedExpr};
 use std::fmt;
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Stmt {
     Declaration {
         ty: Type,
-        ident: Node,
-        value: Node,
+        ident: AstNode<TypedExpr>,
+        value: AstNode<TypedExpr>,
     },
     Expression {
-        expr: Node,
+        expr: AstNode<TypedExpr>,
     },
     While {
-        condition: Box<Node>,
+        condition: Box<AstNode<TypedExpr>>,
         body: Box<Stmt>,
     },
     If {
-        condition: Box<Node>,
+        condition: Box<AstNode<TypedExpr>>,
         body: Box<Stmt>,
         alternative: Option<Box<Stmt>>,
     },

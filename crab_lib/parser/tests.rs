@@ -2,10 +2,7 @@
 pub mod tests {
     use crate::{
         ast::{
-            expression::{Expr, Node},
-            infix::InfixOp,
-            statement::Stmt,
-            ty::Type,
+            ast_node::AstNode, expression::Expr, infix::InfixOp, statement::Stmt, ty::Type,
             typed_expression::TypedExpr,
         },
         lexer::lex::Lexer,
@@ -45,20 +42,23 @@ pub mod tests {
                 program.unwrap().sequence,
                 Stmt::Sequence {
                     statements: Box::new(vec![Stmt::Expression {
-                        expr: Node::new(
+                        expr: AstNode::new(
                             TypedExpr::new(Expr::Infix {
-                                op: operator,
-                                left: Node::new_boxed(
+                                op: AstNode::<InfixOp>::new(operator, 2..3),
+                                left: AstNode::new_boxed(
                                     TypedExpr {
                                         ty: Some(Type::I64),
-                                        expr: Expr::IntegerLiteral(left, 0..1)
+                                        expr: Expr::IntegerLiteral(AstNode::<i64>::new(left, 0..1))
                                     },
                                     0..1
                                 ),
-                                right: Node::new_boxed(
+                                right: AstNode::new_boxed(
                                     TypedExpr {
                                         ty: Some(Type::I64),
-                                        expr: Expr::IntegerLiteral(right, 4..5)
+                                        expr: Expr::IntegerLiteral(AstNode::<i64>::new(
+                                            right,
+                                            4..5
+                                        ))
                                     },
                                     4..5
                                 )
@@ -87,20 +87,23 @@ pub mod tests {
                 program.unwrap().sequence,
                 Stmt::Sequence {
                     statements: Box::new(vec![Stmt::Expression {
-                        expr: Node::new(
+                        expr: AstNode::new(
                             TypedExpr::new(Expr::Infix {
-                                op: operator,
-                                left: Node::new_boxed(
+                                op: AstNode::<InfixOp>::new(operator, 2..4),
+                                left: AstNode::new_boxed(
                                     TypedExpr {
                                         ty: Some(Type::I64),
-                                        expr: Expr::IntegerLiteral(left, 0..1)
+                                        expr: Expr::IntegerLiteral(AstNode::<i64>::new(left, 0..1))
                                     },
                                     0..1
                                 ),
-                                right: Node::new_boxed(
+                                right: AstNode::new_boxed(
                                     TypedExpr {
                                         ty: Some(Type::I64),
-                                        expr: Expr::IntegerLiteral(right, 5..6)
+                                        expr: Expr::IntegerLiteral(AstNode::<i64>::new(
+                                            right,
+                                            5..6
+                                        ))
                                     },
                                     5..6
                                 )
