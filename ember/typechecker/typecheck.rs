@@ -96,7 +96,7 @@ impl<'source> TypeChecker<'source> {
             Expr::Infix { op, left, right } => {
                 let l = self.check_expression(env, left, expected_type)?;
                 let r = self.check_expression(env, right, expected_type)?;
-                let type_interaction_res = l.type_interaction(&op.inner, &r);
+                let type_interaction_res = l.type_interaction(op.inner, r);
                 if type_interaction_res.is_none() {
                     return Err(TypeCheckError::IncompatibleTypesForOperand {
                         op: op.inner.to_owned(),
@@ -153,7 +153,7 @@ impl<'source> TypeChecker<'source> {
             } => {
                 let ident_type = self.check_expression(env, ident, expected_type)?;
                 let expr_type = self.check_expression(env, expr, ident_type)?;
-                let type_interaction_res = ident_type.type_interaction(&operand.inner, &expr_type);
+                let type_interaction_res = ident_type.type_interaction(operand.inner, expr_type);
                 if type_interaction_res.is_none() {
                     return Err(TypeCheckError::IncompatibleTypesForOperand {
                         op: operand.inner.to_owned(),

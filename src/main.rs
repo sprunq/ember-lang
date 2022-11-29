@@ -17,7 +17,7 @@ pub struct CompilerOptions {
 
 fn main() {
     let options = CompilerOptions {
-        path: String::from(".\\examples\\compile.crab"),
+        path: String::from(".\\examples\\input.em"),
         measure_performance: true,
         emit_ast: true,
         emit_tokens: true,

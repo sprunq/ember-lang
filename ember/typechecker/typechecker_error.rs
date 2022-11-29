@@ -4,14 +4,6 @@ use crate::ast::{infix::InfixOp, ty::Type};
 
 #[derive(Debug, Clone)]
 pub enum TypeCheckError {
-    Boolean {
-        value: Type,
-        pos: Range<usize>,
-    },
-    Integer {
-        val: Type,
-        pos: Range<usize>,
-    },
     IdentifierTypeNotMatching {
         ident: String,
         ident_type: Type,

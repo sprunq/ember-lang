@@ -6,18 +6,6 @@ pub fn build_typecheck_error_diagnostic(
     file_id: usize,
 ) -> Diagnostic<usize> {
     match error {
-        TypeCheckError::Boolean { value, pos } => Diagnostic::error()
-            .with_message("Expected Boolean")
-            .with_code("T001")
-            .with_labels(vec![Label::primary(file_id, pos)
-                .with_message(format!("expected a boolean type but got {value}"))]),
-
-        TypeCheckError::Integer { val, pos } => Diagnostic::error()
-            .with_message("Expected Integer")
-            .with_code("T001")
-            .with_labels(vec![Label::primary(file_id, pos)
-                .with_message(format!("expected an integer type but got {val}"))]),
-
         TypeCheckError::IdentifierTypeNotMatching {
             ident,
             ident_type,

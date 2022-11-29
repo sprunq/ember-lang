@@ -18,7 +18,7 @@ impl Type {
         }
     }
 
-    pub fn type_interaction(&self, operand: &InfixOp, other_type: &Type) -> Option<Type> {
+    pub fn type_interaction(&self, operand: InfixOp, other_type: Type) -> Option<Type> {
         match (self, other_type) {
             (Type::I64, Type::I64) => match operand {
                 InfixOp::Eq | InfixOp::NotEq | InfixOp::Lt | InfixOp::Gt => Some(Type::Bool),
