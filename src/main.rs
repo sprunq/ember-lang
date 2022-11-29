@@ -80,5 +80,9 @@ pub fn run(options: CompilerOptions) {
         println!("- Lexing \t{lexing_elapsed:.2?}");
         println!("- Parsing \t{parsing_elapsed:.2?}");
         println!("- Typecheck \t{typecheck_elapsed:.2?}");
+        println!(
+            "- Total \t{:.5?}s",
+            (lexing_elapsed + parsing_elapsed + typecheck_elapsed).as_secs_f64()
+        );
     }
 }
