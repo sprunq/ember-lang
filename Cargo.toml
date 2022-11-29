@@ -9,3 +9,6 @@ path = "ember/lib.rs"
 
 [dependencies]
 codespan-reporting = "0.11.1"
+
+[profile.release]
+debug = true

@@ -33,14 +33,14 @@ impl fmt::Display for Stmt {
             }
             Stmt::Expression { expr } => write!(f, "{expr};"),
             Stmt::While { condition, body } => {
-                write!(f, "while ({condition}){{{body}}};")
+                write!(f, "while({condition}){{{body}}};")
             }
             Stmt::If {
                 condition,
                 body,
                 alternative,
             } => {
-                write!(f, "if {condition} {{ {body} }}")?;
+                write!(f, "if{condition} {{ {body} }}")?;
                 if let Some(alt) = alternative {
                     write!(f, " else {{ {alt} }}")?;
                 }
