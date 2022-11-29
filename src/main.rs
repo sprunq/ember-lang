@@ -1,11 +1,11 @@
 use codespan_reporting::files::SimpleFiles;
 use codespan_reporting::term;
 use codespan_reporting::term::termcolor::{ColorChoice, StandardStream};
-use crab_lib::diagnostic_converter::convert_parse::build_parse_error_diagnostic;
-use crab_lib::diagnostic_converter::convert_typecheck::build_typecheck_error_diagnostic;
-use crab_lib::lexer::lex::Lexer;
-use crab_lib::parser::parse::Parser;
-use crab_lib::typechecker::typecheck::TypeChecker;
+use ember::diagnostic_converter::convert_parse::build_parse_error_diagnostic;
+use ember::diagnostic_converter::convert_typecheck::build_typecheck_error_diagnostic;
+use ember::lexer::lex::Lexer;
+use ember::parser::parse::Parser;
+use ember::typechecker::typecheck::TypeChecker;
 use std::{fs, time::Instant};
 
 pub struct CompilerOptions {

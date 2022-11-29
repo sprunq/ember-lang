@@ -1,11 +1,11 @@
 [package]
-name = "crab-lang"
+name = "ember"
 version = "0.1.0"
 edition = "2021"
 
 [lib]
-name = "crab_lib"
-path = "crab_lib/lib.rs"
+name = "ember"
+path = "ember/lib.rs"
 
 [dependencies]
 codespan-reporting = "0.11.1"
