@@ -7,10 +7,8 @@ edition = "2021"
 name = "crab_lib"
 path = "crab_lib/lib.rs"
 
-
 [dependencies]
 codespan-reporting = "0.11.1"
-str_indices = "0.4.0"
 
 [profile.release]
 debug = true
