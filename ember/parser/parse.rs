@@ -12,7 +12,7 @@ use std::ops::Range;
 type InfixFunctionType<'source> = Option<
     for<'r> fn(&'r mut Parser<'source>, AstNode<TypedExpr>) -> Result<AstNode<TypedExpr>, ParseErr>,
 >;
-type ParseFunctionType<'source> =
+type PrefixFunctionType<'source> =
     Option<for<'r> fn(&'r mut Parser<'source>) -> Result<AstNode<TypedExpr>, ParseErr>>;
 
 pub struct Parser<'source> {
@@ -125,7 +125,7 @@ impl<'source> Parser<'source> {
         })
     }
 
-    fn get_prefix_fn(&self) -> ParseFunctionType<'source> {
+    fn get_prefix_fn(&self) -> PrefixFunctionType<'source> {
         match &self.current_token.token {
             Token::Identifier => Some(Parser::parse_identifier_expression),
             Token::Minus => Some(Parser::parse_prefix_expression),
