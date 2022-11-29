@@ -1,5 +1,3 @@
-#![allow(unused_variables)]
-
 use crate::ast::{
     ast_node::AstNode, ast_root::AstRoot, expression::Expr, statement::Stmt, ty::Type,
     typed_expression::TypedExpr,
@@ -41,7 +39,7 @@ impl<'source> TypeChecker<'source> {
                 }
                 env.insert(
                     self.input[ident.pos.clone()].to_string(),
-                    (ty.clone(), ident.pos.clone()),
+                    (*ty, ident.pos.clone()),
                 );
                 let val_type = self.check_expression(env, value, *ty)?;
                 if *ty == val_type {
@@ -57,8 +55,8 @@ impl<'source> TypeChecker<'source> {
             }
             Stmt::Expression { expr } => self.check_expression(env, expr, Type::Void),
             Stmt::While { condition, body } => {
-                let cond = self.check_expression(env, condition, Type::Bool)?;
-                let bod = self.check_statement(env, body)?;
+                self.check_expression(env, condition, Type::Bool)?;
+                self.check_statement(env, body)?;
                 Ok(Type::Void)
             }
             Stmt::If {
@@ -66,9 +64,9 @@ impl<'source> TypeChecker<'source> {
                 body,
                 alternative,
             } => {
-                let cond = self.check_expression(env, &*condition, Type::Bool)?;
-                let bod = self.check_statement(env, body)?;
-                let alt = self.check_statement(
+                self.check_expression(env, condition, Type::Bool)?;
+                self.check_statement(env, body)?;
+                self.check_statement(
                     env,
                     &alternative.to_owned().unwrap_or_else(|| {
                         Box::new(Stmt::Sequence {
@@ -96,8 +94,8 @@ impl<'source> TypeChecker<'source> {
     ) -> Result<Type, TypeCheckError> {
         match &expression.inner.expr {
             Expr::Infix { op, left, right } => {
-                let l = self.check_expression(env, &left, expected_type)?;
-                let r = self.check_expression(env, &right, expected_type)?;
+                let l = self.check_expression(env, left, expected_type)?;
+                let r = self.check_expression(env, right, expected_type)?;
                 let type_interaction_res = l.type_interaction(&op.inner, &r);
                 if type_interaction_res.is_none() {
                     return Err(TypeCheckError::IncompatibleTypesForOperand {
@@ -117,7 +115,7 @@ impl<'source> TypeChecker<'source> {
                 }
                 Ok(actual_t)
             }
-            Expr::Prefix { op, expr } => self.check_expression(env, expr, expected_type),
+            Expr::Prefix { op: _, expr } => self.check_expression(env, expr, expected_type),
             Expr::Identifier(ident) => {
                 let type_opt = env.get(&self.input[ident.pos.clone()]);
                 match type_opt {
@@ -153,8 +151,8 @@ impl<'source> TypeChecker<'source> {
                 operand,
                 expr,
             } => {
-                let ident_type = self.check_expression(env, &ident, expected_type)?;
-                let expr_type = self.check_expression(env, &expr, ident_type)?;
+                let ident_type = self.check_expression(env, ident, expected_type)?;
+                let expr_type = self.check_expression(env, expr, ident_type)?;
                 let type_interaction_res = ident_type.type_interaction(&operand.inner, &expr_type);
                 if type_interaction_res.is_none() {
                     return Err(TypeCheckError::IncompatibleTypesForOperand {

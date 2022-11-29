@@ -12,6 +12,12 @@ use crate::{
 };
 use std::ops::Range;
 
+type InfixFunctionType<'source> = Option<
+    for<'r> fn(&'r mut Parser<'source>, AstNode<TypedExpr>) -> Result<AstNode<TypedExpr>, ParseErr>,
+>;
+type ParseFunctionType<'source> =
+    Option<for<'r> fn(&'r mut Parser<'source>) -> Result<AstNode<TypedExpr>, ParseErr>>;
+
 pub struct Parser<'source> {
     pub tokens: Vec<TokenInfo>,
     source: &'source str,
@@ -122,9 +128,7 @@ impl<'source> Parser<'source> {
         })
     }
 
-    fn get_prefix_fn(
-        &self,
-    ) -> Option<for<'r> fn(&'r mut Parser<'source>) -> Result<AstNode<TypedExpr>, ParseErr>> {
+    fn get_prefix_fn(&self) -> ParseFunctionType<'source> {
         match &self.current_token.token {
             Token::Identifier => Some(Parser::parse_identifier_expression),
             Token::Minus => Some(Parser::parse_prefix_expression),
@@ -196,14 +200,7 @@ impl<'source> Parser<'source> {
         }
     }
 
-    fn get_infix_fn(
-        &mut self,
-    ) -> Option<
-        for<'r> fn(
-            &'r mut Parser<'source>,
-            AstNode<TypedExpr>,
-        ) -> Result<AstNode<TypedExpr>, ParseErr>,
-    > {
+    fn get_infix_fn(&mut self) -> InfixFunctionType<'source> {
         match &self.peek_token.token {
             Token::Plus
             | Token::Minus
@@ -294,13 +291,13 @@ impl<'source> Parser<'source> {
         let operator_pos = self.current_token.span.clone();
         self.next_token();
         let value = self.parse_expr(Precedence::Lowest)?;
-        let end_pos = value.pos.end.clone();
+        let end_pos = value.pos.end;
         let pos = identifier.pos.clone();
         let ident = AstNode::new_boxed(TypedExpr::new(Expr::Identifier(identifier)), pos);
         let ident_pos = ident.pos.start;
         Ok(AstNode::new(
             TypedExpr::new(Expr::Assign {
-                ident: ident,
+                ident,
                 operand: AstNode::<InfixOp>::new(operator, operator_pos),
                 expr: Box::new(value),
             }),
