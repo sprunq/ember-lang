@@ -3,10 +3,10 @@ use std::str::Chars;
 use super::token::{self, Token, TokenInfo};
 
 pub struct Lexer {
-    pub input: Chars<'static>,
-    position: usize,      // current position in input (points to current char)
-    read_position: usize, // current reading position in input (after current char)
-    character: char,      // current char under examination
+    pub input: Chars<'static>, // uh oh. leaked string...
+    position: usize,           // current position in input (points to current char)
+    read_position: usize,      // current reading position in input (after current char)
+    character: char,           // current char under examination
 }
 
 fn string_to_static_str(s: String) -> &'static str {
