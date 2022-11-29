@@ -39,7 +39,7 @@ pub fn run(options: CompilerOptions) {
     let input = file.source().clone();
 
     let now = Instant::now();
-    let tokens = Lexer::tokenize_all_collect(file.source());
+    let tokens = Lexer::new_file(file.source(), file_id).collect();
     let lexing_elapsed = now.elapsed();
 
     if options.emit_tokens {

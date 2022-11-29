@@ -13,8 +13,8 @@ use crate::{
 use std::ops::Range;
 
 pub struct Parser<'source> {
+    pub tokens: Vec<TokenInfo>,
     source: &'source str,
-    tokens: Vec<TokenInfo>,
     current_token: TokenInfo,
     peek_token: TokenInfo,
     token_idx: usize,
@@ -23,8 +23,8 @@ pub struct Parser<'source> {
 impl<'source> Parser<'source> {
     pub fn new(tokens: Vec<TokenInfo>, source: &'source str) -> Self {
         let mut parser = Parser {
-            current_token: TokenInfo::new(Token::Illegal, 0, 0),
-            peek_token: TokenInfo::new(Token::Illegal, 0, 0),
+            current_token: TokenInfo::new(Token::Illegal, 0..0, 0),
+            peek_token: TokenInfo::new(Token::Illegal, 0..0, 0),
             source,
             tokens,
             token_idx: 0,
@@ -40,7 +40,7 @@ impl<'source> Parser<'source> {
         self.peek_token = if let Some(token) = self.tokens.get(self.token_idx) {
             token.to_owned()
         } else {
-            TokenInfo::new(Token::Eof, 0, 0)
+            TokenInfo::new(Token::Eof, 0..0, 0)
         };
         self.token_idx += 1;
     }

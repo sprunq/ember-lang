@@ -3,7 +3,7 @@ pub mod tests {
     use crate::{lexer::lex::Lexer, parser::parse::Parser, typechecker::typecheck::TypeChecker};
 
     pub fn expect_res(input: &str, expected: bool) {
-        let mut parser = Parser::new(Lexer::tokenize_all_collect(input), input);
+        let mut parser = Parser::new(Lexer::new(input).collect(), input);
         let parse_res = parser.parse_program();
         match parse_res {
             Ok(mut program) => {

@@ -3,10 +3,10 @@ use std::str::Chars;
 
 pub struct Lexer<'source> {
     pub input: &'source str,
-    pub iter: Chars<'source>, // uh oh. leaked string...
-    position: usize,          // current position in input (points to current char)
-    read_position: usize,     // current reading position in input (after current char)
-    character: char,          // current char under examination
+    pub iter: Chars<'source>,
+    pub file_id: usize,
+    position: usize, // current position in input (points to current char)
+    character: char, // current char under examination
 }
 
 impl<'source> Iterator for Lexer<'source> {
@@ -23,20 +23,20 @@ impl<'source> Iterator for Lexer<'source> {
 
 impl<'source> Lexer<'source> {
     pub fn new(input: &'source str) -> Self {
-        let mut lexer = Lexer {
-            character: '\u{0}',
-            read_position: 0,
+        let mut iter = input.chars();
+        Self {
+            character: iter.next().unwrap_or('\0'),
             position: 0,
+            file_id: 0,
             input,
-            iter: input.chars(),
-        };
-        lexer.read_char();
-        lexer
+            iter,
+        }
     }
 
-    pub fn tokenize_all_collect(data: &'source str) -> Vec<TokenInfo> {
-        let lex = Lexer::new(&data);
-        lex.collect()
+    pub fn new_file(input: &'source str, file_id: usize) -> Self {
+        let mut lex = Self::new(input);
+        lex.file_id = file_id;
+        lex
     }
 
     pub fn next_token(&mut self) -> TokenInfo {
@@ -119,17 +119,17 @@ impl<'source> Lexer<'source> {
             _ => {
                 if Self::is_letter(self.character) && self.character != '_' {
                     let ident = self.read_identifier();
-                    return TokenInfo::new(token::lookup_ident(&ident), start_pos, self.position);
+                    return TokenInfo::new(token::lookup_ident(ident), start_pos..self.position, 0);
                 } else if Self::is_digit(self.character) {
-                    self.read_number();
-                    return TokenInfo::new(Token::Number, start_pos, self.position);
+                    self.consume_number();
+                    return TokenInfo::new(Token::Number, start_pos..self.position, 0);
                 } else {
                     tok = Token::Illegal
                 }
             }
         };
         self.read_char();
-        TokenInfo::new(tok, start_pos, self.position)
+        TokenInfo::new(tok, start_pos..self.position, 0)
     }
 
     fn skip_whitespace(&mut self) {
@@ -146,39 +146,27 @@ impl<'source> Lexer<'source> {
         character.is_alphabetic() || character == '_'
     }
 
-    pub fn read_identifier(&mut self) -> String {
-        let mut ident = String::from("");
+    pub fn read_identifier(&mut self) -> &'source str {
+        let start_pos = self.position;
         while Self::is_letter(self.character) || Self::is_digit(self.character) {
-            ident.push(self.character);
             self.read_char();
         }
-        ident
+        let end_pos = self.position;
+        &self.input[start_pos..end_pos]
     }
 
-    fn read_number(&mut self) -> String {
-        let mut ident = String::from("");
+    fn consume_number(&mut self) {
         while Self::is_digit(self.character) || self.character == '.' {
-            ident.push(self.character);
             self.read_char();
         }
-        ident
     }
 
     fn read_char(&mut self) {
-        self.character = if let Some(ch) = self.iter.next() {
-            ch
-        } else {
-            '\0'
-        };
-        self.position = self.read_position;
-        self.read_position += 1;
+        self.character = self.iter.next().unwrap_or('\0');
+        self.position += 1;
     }
 
     fn peek_char(&mut self) -> char {
-        if let Some(ch) = self.iter.clone().next() {
-            ch
-        } else {
-            '\0'
-        }
+        self.iter.clone().next().unwrap_or('\0')
     }
 }

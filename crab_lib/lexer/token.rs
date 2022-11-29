@@ -4,13 +4,15 @@ use std::{fmt, ops::Range};
 pub struct TokenInfo {
     pub token: Token,
     pub span: Range<usize>,
+    pub file_id: usize,
 }
 
 impl TokenInfo {
-    pub fn new(token: Token, start_idx: usize, end_idx: usize) -> Self {
+    pub fn new(token: Token, span: Range<usize>, file_id: usize) -> Self {
         TokenInfo {
             token,
-            span: start_idx..end_idx,
+            span,
+            file_id,
         }
     }
 }

@@ -1,9 +1,12 @@
 #[cfg(test)]
 pub mod tests {
-    use crate::lexer::{lex::Lexer, token::Token};
+    use crate::lexer::{
+        lex::Lexer,
+        token::{Token, TokenInfo},
+    };
 
-    fn assert_lex_against(input: String, expected: Vec<Token>) {
-        let lexer = Lexer::tokenize_all_collect(&input);
+    fn assert_lex_against(input: &str, expected: Vec<Token>) {
+        let lexer: Vec<TokenInfo> = Lexer::new(input).collect();
         let mut idx = 0;
         for expected_token in expected.iter() {
             let actual_token = lexer[idx].token.clone();
@@ -21,8 +24,7 @@ pub mod tests {
         let input = r#"
         i64 five = 5;
         i64 ten = 10;
-        "#
-        .to_string();
+        "#;
         let expected = vec![
             Token::I64,
             Token::Identifier,
@@ -43,8 +45,7 @@ pub mod tests {
         let input = r#"
         +-/*5;
         5 < 10 > 5;
-        "#
-        .to_string();
+        "#;
         let expected = vec![
             Token::Plus,
             Token::Minus,
@@ -68,8 +69,7 @@ pub mod tests {
         let input = r#"
         10 == 10;
         10 != 9;
-        "#
-        .to_string();
+        "#;
         let expected = vec![
             Token::Number,
             Token::Equal,
