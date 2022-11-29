@@ -13,10 +13,6 @@ impl TokenInfo {
             span: start_idx..end_idx,
         }
     }
-
-    pub fn get_str(self, source: &str) -> &str {
-        &source[self.span]
-    }
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]

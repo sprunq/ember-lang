@@ -57,6 +57,10 @@ impl<'source> Parser<'source> {
         Ok(())
     }
 
+    pub fn get_str(&self, span: Range<usize>) -> &'source str {
+        &self.source[span]
+    }
+
     pub fn parse_program(&mut self) -> Result<AstRoot, ParseErr> {
         let mut statements = vec![];
         while self.current_token.token != Token::Eof {
@@ -147,23 +151,21 @@ impl<'source> Parser<'source> {
 
     fn parse_literal_expression(&mut self) -> Result<AstNode<TypedExpr>, ParseErr> {
         if let Token::Number = &self.current_token.token {
-            match self
-                .current_token
-                .clone()
-                .get_str(self.source)
-                .parse::<i64>()
-            {
+            match &self.get_str(self.current_token.span.clone()).parse::<i64>() {
                 Ok(value) => Ok(AstNode::new(
                     TypedExpr {
                         ty: Some(Type::I64),
                         expr: Expr::IntegerLiteral(AstNode::<i64>::new(
-                            value,
+                            *value,
                             self.current_token.span.clone(),
                         )),
                     },
                     self.current_token.span.clone(),
                 )),
-                Err(error) => Err(ParseErr::ParseIntError(self.current_token.clone(), error)),
+                Err(error) => Err(ParseErr::ParseIntError(
+                    self.current_token.clone(),
+                    error.clone(),
+                )),
             }
         } else {
             Err(ParseErr::ExpectedLiteral(self.current_token.clone()))
@@ -357,7 +359,7 @@ impl<'source> Parser<'source> {
     fn parse_identifier_string(&self) -> Result<(String, Range<usize>), ParseErr> {
         if let Token::Identifier = &self.current_token.token {
             Ok((
-                self.current_token.clone().get_str(&self.source).to_string(),
+                self.get_str(self.current_token.span.clone()).to_string(),
                 self.current_token.span.clone(),
             ))
         } else {

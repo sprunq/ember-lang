@@ -1,12 +1,12 @@
 use super::token::{self, Token, TokenInfo};
-use std::str::CharIndices;
+use std::str::Chars;
 
 pub struct Lexer<'source> {
     pub input: &'source str,
-    pub iter: CharIndices<'source>, // uh oh. leaked string...
-    position: usize,                // current position in input (points to current char)
-    read_position: usize,           // current reading position in input (after current char)
-    character: char,                // current char under examination
+    pub iter: Chars<'source>, // uh oh. leaked string...
+    position: usize,          // current position in input (points to current char)
+    read_position: usize,     // current reading position in input (after current char)
+    character: char,          // current char under examination
 }
 
 impl<'source> Iterator for Lexer<'source> {
@@ -28,7 +28,7 @@ impl<'source> Lexer<'source> {
             read_position: 0,
             position: 0,
             input,
-            iter: input.char_indices(),
+            iter: input.chars(),
         };
         lexer.read_char();
         lexer
@@ -165,7 +165,7 @@ impl<'source> Lexer<'source> {
     }
 
     fn read_char(&mut self) {
-        self.character = if let Some((_, ch)) = self.iter.next() {
+        self.character = if let Some(ch) = self.iter.next() {
             ch
         } else {
             '\0'
@@ -175,7 +175,7 @@ impl<'source> Lexer<'source> {
     }
 
     fn peek_char(&mut self) -> char {
-        if let Some((_, ch)) = self.iter.clone().next() {
+        if let Some(ch) = self.iter.clone().next() {
             ch
         } else {
             '\0'

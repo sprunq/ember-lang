@@ -1,10 +1,9994 @@
 i64 a = 0;
 bool b = true;
 bool c = b;
-// comment
+
 while(b){
     a += 10;
-    if(c != ((10000 == a) != b == (0 < -1))){
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
+        i64 e = a / 20;
+        i64 d = e;
+    };
+    a = a * -20;
+};
+while(b){
+    a += 10;
+    while(true){
         i64 e = a / 20;
         i64 d = e;
     };
