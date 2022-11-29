@@ -8,11 +8,15 @@ use std::{collections::HashMap, ops::Range};
 
 use super::typechecker_error::TypeCheckError;
 
-pub struct TypeChecker {
-    pub input: String,
+pub struct TypeChecker<'source> {
+    pub input: &'source str,
 }
 
-impl TypeChecker {
+impl<'source> TypeChecker<'source> {
+    pub fn new(source: &'source str) -> Self {
+        Self { input: source }
+    }
+
     pub fn typecheck(&self, program: &AstRoot) -> Result<Type, TypeCheckError> {
         let mut env = HashMap::new();
         self.check_statement(&mut env, &program.sequence)

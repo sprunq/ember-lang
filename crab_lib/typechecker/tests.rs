@@ -7,9 +7,7 @@ pub mod tests {
         let parse_res = parser.parse_program();
         match parse_res {
             Ok(mut program) => {
-                let tc = TypeChecker {
-                    input: input.to_string(),
-                };
+                let tc = TypeChecker::new(input);
                 let res = tc.typecheck(&mut program);
                 if res.is_err() {
                     println!("{:#?}", res);

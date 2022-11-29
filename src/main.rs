@@ -36,7 +36,6 @@ pub fn run(options: CompilerOptions) {
     let file_id = files.add(&options.path, data);
 
     let file = files.get(file_id).unwrap();
-    let input = file.source().clone();
 
     let now = Instant::now();
     let tokens = Lexer::new_file(file.source(), file_id).collect();
@@ -66,7 +65,7 @@ pub fn run(options: CompilerOptions) {
     }
 
     let now = Instant::now();
-    let typechecker = TypeChecker { input: input };
+    let typechecker = TypeChecker::new(file.source());
     let typecheck_result = typechecker.typecheck(&ast);
     let typecheck_elapsed = now.elapsed();
 
