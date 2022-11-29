@@ -107,7 +107,7 @@ impl<'source> TypeChecker<'source> {
                     });
                 }
                 let actual_t = type_interaction_res.unwrap();
-                if actual_t != expected_type {
+                if actual_t != expected_type && expected_type != Type::Void {
                     return Err(TypeCheckError::InfixTypesNotMatching {
                         l: actual_t,
                         r: expected_type.to_owned(),
