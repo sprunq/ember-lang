@@ -1,9 +1,9 @@
 #[cfg(test)]
 pub mod tests {
-    use crate::{parser::parse::Parser, typechecker::typecheck::TypeChecker};
+    use crate::{lexer::lex::Lexer, parser::parse::Parser, typechecker::typecheck::TypeChecker};
 
     pub fn expect_res(input: &str, expected: bool) {
-        let mut parser = Parser::new(input.to_owned());
+        let mut parser = Parser::new(Lexer::tokenize_all_collect(input), input.to_owned());
         let parse_res = parser.parse_program();
         match parse_res {
             Ok(mut program) => {

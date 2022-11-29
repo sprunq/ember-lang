@@ -3,9 +3,11 @@ pub mod tests {
     use crate::lexer::{lex::Lexer, token::Token};
 
     fn assert_lex_against(input: String, expected: Vec<Token>) {
-        let mut lexer = Lexer::new(input);
+        let lexer = Lexer::tokenize_all_collect(&input);
+        let mut idx = 0;
         for expected_token in expected.iter() {
-            let actual_token = lexer.next_token().token;
+            let actual_token = lexer[idx].token.clone();
+            idx += 1;
             assert_eq!(
                 *expected_token, actual_token,
                 "expected {} found {}",

@@ -1,25 +1,22 @@
-use std::str::Chars;
-
 use super::token::{self, Token, TokenInfo};
+use std::str::CharIndices;
 
-pub struct Lexer {
-    pub input: Chars<'static>, // uh oh. leaked string...
-    position: usize,           // current position in input (points to current char)
-    read_position: usize,      // current reading position in input (after current char)
-    character: char,           // current char under examination
+pub struct Lexer<'source> {
+    pub input: &'source str,
+    pub iter: CharIndices<'source>, // uh oh. leaked string...
+    position: usize,                // current position in input (points to current char)
+    read_position: usize,           // current reading position in input (after current char)
+    character: char,                // current char under examination
 }
 
-fn string_to_static_str(s: String) -> &'static str {
-    Box::leak(s.into_boxed_str())
-}
-
-impl Lexer {
-    pub fn new(input: String) -> Self {
+impl<'source> Lexer<'source> {
+    pub fn new(input: &'source str) -> Self {
         let mut lexer = Lexer {
-            input: string_to_static_str(input).chars(),
             character: '\u{0}',
             read_position: 0,
             position: 0,
+            input,
+            iter: input.char_indices(),
         };
         lexer.read_char();
         lexer
@@ -151,12 +148,37 @@ impl Lexer {
     }
 
     fn read_char(&mut self) {
-        self.character = self.input.next().unwrap_or('\0');
+        self.character = if let Some((_, ch)) = self.iter.next() {
+            ch
+        } else {
+            '\0'
+        };
         self.position = self.read_position;
         self.read_position += 1;
     }
 
     fn peek_char(&mut self) -> char {
-        *self.input.clone().peekable().peek().unwrap_or(&'\0')
+        if let Some((_, ch)) = self.iter.clone().next() {
+            ch
+        } else {
+            '\0'
+        }
+    }
+
+    pub fn tokenize_all_collect(data: &'source str) -> Vec<TokenInfo> {
+        let lex = Lexer::new(&data);
+        lex.collect()
+    }
+}
+
+impl<'source> Iterator for Lexer<'source> {
+    type Item = TokenInfo;
+    fn next(&mut self) -> Option<Self::Item> {
+        let tok = self.next_token();
+        if tok.token == Token::Eof {
+            None
+        } else {
+            Some(tok)
+        }
     }
 }

@@ -16,20 +16,21 @@ type PrefixParseFn = fn(&mut Parser) -> Result<AstNode<TypedExpr>, ParseErr>;
 type InfixParseFn = fn(&mut Parser, AstNode<TypedExpr>) -> Result<AstNode<TypedExpr>, ParseErr>;
 
 pub struct Parser {
-    lexer: Lexer,
+    tokens: Vec<TokenInfo>,
     current_token: TokenInfo,
     peek_token: TokenInfo,
     input: String,
+    token_idx: usize,
 }
 
 impl Parser {
-    pub fn new(input: String) -> Self {
-        let input2 = input.clone();
+    pub fn new(tokens: Vec<TokenInfo>, input: String) -> Self {
         let mut parser = Parser {
-            lexer: Lexer::new(input),
             current_token: TokenInfo::new(Token::Illegal, 0, 0),
             peek_token: TokenInfo::new(Token::Illegal, 0, 0),
-            input: input2,
+            input: input,
+            tokens,
+            token_idx: 0,
         };
 
         parser.next_token();
@@ -38,8 +39,13 @@ impl Parser {
     }
 
     pub fn next_token(&mut self) {
-        self.current_token = self.peek_token.to_owned();
-        self.peek_token = self.lexer.next_token();
+        self.current_token = self.peek_token.clone();
+        self.peek_token = if let Some(token) = self.tokens.get(self.token_idx) {
+            token.to_owned()
+        } else {
+            TokenInfo::new(Token::Eof, 0, 0)
+        };
+        self.token_idx += 1;
     }
 
     fn expect_and_move(

@@ -3,6 +3,7 @@ use codespan_reporting::term;
 use codespan_reporting::term::termcolor::{ColorChoice, StandardStream};
 use crab_lib::diagnostic_converter::convert_parse::build_parse_error_diagnostic;
 use crab_lib::diagnostic_converter::convert_typecheck::build_typecheck_error_diagnostic;
+use crab_lib::lexer::lex::Lexer;
 use crab_lib::parser::parse::Parser;
 use crab_lib::typechecker::typecheck::TypeChecker;
 use std::{fs, time::Instant};
@@ -11,13 +12,15 @@ pub struct CompilerOptions {
     pub path: String,
     pub measure_performance: bool,
     pub emit_ast: bool,
+    pub emit_tokens: bool,
 }
 
 fn main() {
     let options = CompilerOptions {
         path: String::from(".\\examples\\compile.crab"),
         measure_performance: true,
-        emit_ast: false,
+        emit_ast: true,
+        emit_tokens: true,
     };
 
     run(options);
@@ -34,8 +37,17 @@ pub fn run(options: CompilerOptions) {
 
     let file = files.get(file_id).unwrap();
     let input = file.source().clone();
-    let mut parser = Parser::new(input.clone());
 
+    let now = Instant::now();
+    let tokens = Lexer::tokenize_all_collect(&input);
+    let lexing_elapsed = now.elapsed();
+
+    if options.emit_tokens {
+        fs::create_dir_all(".\\emit").expect("Failed to create directory");
+        fs::write(".\\emit\\tokens.txt", format!("{tokens:#?}")).expect("Unable to write file");
+    }
+
+    let mut parser = Parser::new(tokens, input.clone());
     let now = Instant::now();
     let parse_res = parser.parse_program();
     let parsing_elapsed = now.elapsed();
@@ -66,6 +78,7 @@ pub fn run(options: CompilerOptions) {
 
     if options.measure_performance {
         println!("\nPerformance:");
+        println!("- Lexing \t{lexing_elapsed:.2?}");
         println!("- Parsing \t{parsing_elapsed:.2?}");
         println!("- Typecheck \t{typecheck_elapsed:.2?}");
     }
