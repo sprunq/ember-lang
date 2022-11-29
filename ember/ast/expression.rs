@@ -17,7 +17,6 @@ pub enum Expr {
     BooleanLiteral(AstNode<bool>),
     Assign {
         ident: Box<AstNode<TypedExpr>>,
-        // =, +=, *=, ...
         operand: AstNode<InfixOp>,
         expr: Box<AstNode<TypedExpr>>,
     },
