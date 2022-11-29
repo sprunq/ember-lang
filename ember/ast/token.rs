@@ -17,7 +17,7 @@ impl TokenInfo {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Token {
     Number,
     Identifier,

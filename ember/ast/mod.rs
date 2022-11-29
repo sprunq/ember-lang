@@ -5,5 +5,6 @@ pub mod infix;
 pub mod precedence;
 pub mod prefix;
 pub mod statement;
+pub mod token;
 pub mod ty;
 pub mod typed_expression;

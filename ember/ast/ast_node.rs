@@ -5,6 +5,7 @@ pub struct AstNode<T: std::fmt::Display> {
     pub pos: Range<usize>,
     pub inner: T,
 }
+
 impl<T: std::fmt::Display> AstNode<T> {
     pub fn new(expr: T, pos: Range<usize>) -> Self {
         Self { pos, inner: expr }

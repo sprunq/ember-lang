@@ -1,7 +1,7 @@
 use super::{ast_node::AstNode, infix::InfixOp, prefix::PrefixOp, typed_expression::TypedExpr};
 use std::fmt;
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Expr {
     Infix {
         op: AstNode<InfixOp>,

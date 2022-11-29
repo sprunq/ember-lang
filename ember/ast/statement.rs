@@ -1,7 +1,7 @@
 use super::{ast_node::AstNode, ty::Type, typed_expression::TypedExpr};
 use std::fmt;
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Stmt {
     Declaration {
         ty: Type,

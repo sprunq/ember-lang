@@ -1,4 +1,4 @@
-#[derive(Debug, PartialEq, Eq, PartialOrd)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd)]
 pub enum Precedence {
     Lowest,
     Assign,

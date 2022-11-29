@@ -1,14 +1,11 @@
 use super::parse_error::ParseErr;
 use crate::ast::ast_node::AstNode;
 use crate::ast::ast_root::AstRoot;
+use crate::ast::token::{Token, TokenInfo};
 use crate::ast::typed_expression::TypedExpr;
-use crate::lexer::token::Token;
-use crate::{
-    ast::{
-        expression::Expr, infix::InfixOp, precedence::Precedence, prefix::PrefixOp,
-        statement::Stmt, ty::Type,
-    },
-    lexer::token::TokenInfo,
+use crate::ast::{
+    expression::Expr, infix::InfixOp, precedence::Precedence, prefix::PrefixOp, statement::Stmt,
+    ty::Type,
 };
 use std::ops::Range;
 

@@ -1,8 +1,7 @@
+use super::{expression::Expr, ty::Type};
 use std::fmt;
 
-use super::{expression::Expr, ty::Type};
-
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct TypedExpr {
     pub ty: Option<Type>,
     pub expr: Expr,

@@ -1,7 +1,7 @@
 use super::statement::Stmt;
 use std::fmt;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct AstRoot {
     pub sequence: Stmt,
 }

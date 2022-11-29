@@ -1,8 +1,7 @@
-use super::infix::InfixOp;
-use crate::lexer::token::Token;
+use super::{infix::InfixOp, token::Token};
 use std::fmt;
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Type {
     I64,
     Bool,

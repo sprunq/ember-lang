@@ -1,12 +1,12 @@
-use super::token::{self, Token, TokenInfo};
+use crate::ast::token::{lookup_ident, Token, TokenInfo};
 use std::str::Chars;
 
 pub struct Lexer<'source> {
     pub input: &'source str,
     pub iter: Chars<'source>,
     pub file_id: usize,
-    position: usize, // current position in input (points to current char)
-    character: char, // current char under examination
+    position: usize,
+    character: char,
 }
 
 impl<'source> Iterator for Lexer<'source> {
@@ -119,7 +119,7 @@ impl<'source> Lexer<'source> {
             _ => {
                 if Self::is_letter(self.character) && self.character != '_' {
                     let ident = self.read_identifier();
-                    return TokenInfo::new(token::lookup_ident(ident), start_pos..self.position, 0);
+                    return TokenInfo::new(lookup_ident(ident), start_pos..self.position, 0);
                 } else if Self::is_digit(self.character) {
                     self.consume_number();
                     return TokenInfo::new(Token::Number, start_pos..self.position, 0);
