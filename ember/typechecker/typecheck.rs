@@ -94,8 +94,9 @@ impl<'source> TypeChecker<'source> {
     ) -> Result<Type, TypeCheckError> {
         match &expression.inner.expr {
             Expr::Infix { op, left, right } => {
-                let l = self.check_expression(env, left, expected_type)?;
-                let r = self.check_expression(env, right, expected_type)?;
+                // No expected type. Compare the resulting types instead
+                let l = self.check_expression(env, left, Type::Void)?;
+                let r = self.check_expression(env, right, Type::Void)?;
                 let type_interaction_res = l.type_interaction(op.inner, r);
                 if type_interaction_res.is_none() {
                     return Err(TypeCheckError::IncompatibleTypesForOperand {
@@ -127,7 +128,7 @@ impl<'source> TypeChecker<'source> {
                 }
             }
             Expr::IntegerLiteral(lit) => {
-                if expected_type != Type::I64 {
+                if expected_type != Type::I64 && expected_type != Type::Void {
                     return Err(TypeCheckError::NotMatchingExpetectedType {
                         expected: expected_type,
                         actual: Type::I64,
@@ -137,7 +138,7 @@ impl<'source> TypeChecker<'source> {
                 Ok(Type::I64)
             }
             Expr::BooleanLiteral(lit) => {
-                if expected_type != Type::Bool {
+                if expected_type != Type::Bool && expected_type != Type::Void {
                     return Err(TypeCheckError::NotMatchingExpetectedType {
                         expected: expected_type,
                         actual: Type::I64,

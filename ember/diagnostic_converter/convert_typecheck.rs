@@ -68,8 +68,7 @@ pub fn build_typecheck_error_diagnostic(
         } => Diagnostic::error()
             .with_message("Actual type not matching expected type")
             .with_code("T009")
-            .with_labels(vec![Label::primary(file_id, pos).with_message(format!(
-                "expected a {expected} type but got {actual}"
-            ))]),
+            .with_labels(vec![Label::primary(file_id, pos)
+                .with_message(format!("expected a {expected} but got {actual}"))]),
     }
 }
