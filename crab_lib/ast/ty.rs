@@ -2,7 +2,7 @@ use super::infix::InfixOp;
 use crate::lexer::token::Token;
 use std::fmt;
 
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Type {
     I64,
     Bool,

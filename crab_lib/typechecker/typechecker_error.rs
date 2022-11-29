@@ -46,4 +46,9 @@ pub enum TypeCheckError {
         position_ident: Range<usize>,
         position_init_ident: Range<usize>,
     },
+    NotMatchingExpetectedType {
+        expected: Type,
+        actual: Type,
+        pos: Range<usize>,
+    },
 }

@@ -257,4 +257,20 @@ pub mod tests {
         ";
         expect_res(input, false);
     }
+
+    #[test]
+    fn test_if_int() {
+        let input = "
+        if(0){};
+        ";
+        expect_res(input, false);
+    }
+
+    #[test]
+    fn test_if_bool() {
+        let input = "
+        if(true){};
+        ";
+        expect_res(input, true);
+    }
 }

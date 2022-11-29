@@ -39,7 +39,7 @@ impl TypeChecker {
                     self.input[ident.pos.clone()].to_string(),
                     (ty.clone(), ident.pos.clone()),
                 );
-                let val_type = self.check_expression(env, value, ty)?;
+                let val_type = self.check_expression(env, value, *ty)?;
                 if *ty == val_type {
                     Ok(Type::Void)
                 } else {
@@ -51,9 +51,9 @@ impl TypeChecker {
                     })
                 }
             }
-            Stmt::Expression { expr } => self.check_expression(env, expr, &Type::Void),
+            Stmt::Expression { expr } => self.check_expression(env, expr, Type::Void),
             Stmt::While { condition, body } => {
-                let cond = self.check_expression(env, condition, &Type::Bool)?;
+                let cond = self.check_expression(env, condition, Type::Bool)?;
                 let bod = self.check_statement(env, body)?;
                 Ok(Type::Void)
             }
@@ -62,7 +62,7 @@ impl TypeChecker {
                 body,
                 alternative,
             } => {
-                let cond = self.check_expression(env, &*condition, &Type::Bool)?;
+                let cond = self.check_expression(env, &*condition, Type::Bool)?;
                 let bod = self.check_statement(env, body)?;
                 let alt = self.check_statement(
                     env,
@@ -88,7 +88,7 @@ impl TypeChecker {
         &self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         expression: &AstNode<TypedExpr>,
-        expected_type: &Type,
+        expected_type: Type,
     ) -> Result<Type, TypeCheckError> {
         match &expression.inner.expr {
             Expr::Infix { op, left, right } => {
@@ -104,7 +104,7 @@ impl TypeChecker {
                     });
                 }
                 let actual_t = type_interaction_res.unwrap();
-                if actual_t != *expected_type {
+                if actual_t != expected_type {
                     return Err(TypeCheckError::InfixTypesNotMatching {
                         l: actual_t,
                         r: expected_type.to_owned(),
@@ -124,15 +124,33 @@ impl TypeChecker {
                     }),
                 }
             }
-            Expr::IntegerLiteral(_) => Ok(Type::I64),
-            Expr::BooleanLiteral(_) => Ok(Type::Bool),
+            Expr::IntegerLiteral(lit) => {
+                if expected_type != Type::I64 {
+                    return Err(TypeCheckError::NotMatchingExpetectedType {
+                        expected: expected_type,
+                        actual: Type::I64,
+                        pos: lit.pos.clone(),
+                    });
+                }
+                Ok(Type::I64)
+            }
+            Expr::BooleanLiteral(lit) => {
+                if expected_type != Type::Bool {
+                    return Err(TypeCheckError::NotMatchingExpetectedType {
+                        expected: expected_type,
+                        actual: Type::I64,
+                        pos: lit.pos.clone(),
+                    });
+                }
+                Ok(Type::Bool)
+            }
             Expr::Assign {
                 ident,
                 operand,
                 expr,
             } => {
                 let ident_type = self.check_expression(env, &ident, expected_type)?;
-                let expr_type = self.check_expression(env, &expr, &ident_type)?;
+                let expr_type = self.check_expression(env, &expr, ident_type)?;
                 let type_interaction_res = ident_type.type_interaction(&operand.inner, &expr_type);
                 if type_interaction_res.is_none() {
                     return Err(TypeCheckError::IncompatibleTypesForOperand {

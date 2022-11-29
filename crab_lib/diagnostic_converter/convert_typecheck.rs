@@ -72,5 +72,16 @@ pub fn build_typecheck_error_diagnostic(
                 Label::secondary(file_id, position_init_ident)
                     .with_message(format!("already declared here with {exists_with_type}")),
             ]),
+
+        TypeCheckError::NotMatchingExpetectedType {
+            expected,
+            actual,
+            pos,
+        } => Diagnostic::error()
+            .with_message("Actual type not matching expected type")
+            .with_code("T009")
+            .with_labels(vec![Label::primary(file_id, pos).with_message(format!(
+                "expected a {expected} type but got {actual}"
+            ))]),
     }
 }
