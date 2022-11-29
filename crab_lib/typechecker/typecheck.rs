@@ -8,21 +8,24 @@ use std::{collections::HashMap, ops::Range};
 
 use super::typechecker_error::TypeCheckError;
 
-pub struct TypeChecker {}
+pub struct TypeChecker {
+    pub input: String,
+}
 
 impl TypeChecker {
-    pub fn typecheck(program: &AstRoot) -> Result<Type, TypeCheckError> {
+    pub fn typecheck(&self, program: &AstRoot) -> Result<Type, TypeCheckError> {
         let mut env = HashMap::new();
-        Self::check_statement(&mut env, &program.sequence)
+        self.check_statement(&mut env, &program.sequence)
     }
 
     fn check_statement(
+        &self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         stmt: &Stmt,
     ) -> Result<Type, TypeCheckError> {
         match stmt {
             Stmt::Declaration { ty, ident, value } => {
-                let type_opt = env.get(&ident.inner.expr.to_string());
+                let type_opt = env.get(&self.input[ident.pos.clone()]);
                 if let Some(t) = type_opt {
                     return Err(TypeCheckError::VariableAlreadyExists {
                         ident: ident.inner.expr.to_string(),
@@ -32,8 +35,11 @@ impl TypeChecker {
                         position_init_ident: t.1.to_owned(),
                     });
                 }
-                env.insert(ident.to_string(), (ty.clone(), ident.pos.clone()));
-                let val_type = Self::check_expression(env, value, ty)?;
+                env.insert(
+                    self.input[ident.pos.clone()].to_string(),
+                    (ty.clone(), ident.pos.clone()),
+                );
+                let val_type = self.check_expression(env, value, ty)?;
                 if *ty == val_type {
                     Ok(Type::Void)
                 } else {
@@ -45,10 +51,10 @@ impl TypeChecker {
                     })
                 }
             }
-            Stmt::Expression { expr } => Self::check_expression(env, expr, &Type::Void),
+            Stmt::Expression { expr } => self.check_expression(env, expr, &Type::Void),
             Stmt::While { condition, body } => {
-                let cond = Self::check_expression(env, condition, &Type::Bool)?;
-                let bod = Self::check_statement(env, body)?;
+                let cond = self.check_expression(env, condition, &Type::Bool)?;
+                let bod = self.check_statement(env, body)?;
                 Ok(Type::Void)
             }
             Stmt::If {
@@ -56,9 +62,9 @@ impl TypeChecker {
                 body,
                 alternative,
             } => {
-                let cond = Self::check_expression(env, &*condition, &Type::Bool)?;
-                let bod = Self::check_statement(env, body)?;
-                let alt = Self::check_statement(
+                let cond = self.check_expression(env, &*condition, &Type::Bool)?;
+                let bod = self.check_statement(env, body)?;
+                let alt = self.check_statement(
                     env,
                     &alternative.to_owned().unwrap_or_else(|| {
                         Box::new(Stmt::Sequence {
@@ -71,7 +77,7 @@ impl TypeChecker {
             Stmt::Sequence { statements } => {
                 let mut extended_env = env.clone();
                 for stmt in statements.iter() {
-                    Self::check_statement(&mut extended_env, stmt)?;
+                    self.check_statement(&mut extended_env, stmt)?;
                 }
                 Ok(Type::Void)
             }
@@ -79,14 +85,15 @@ impl TypeChecker {
     }
 
     fn check_expression(
+        &self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         expression: &AstNode<TypedExpr>,
         expected_type: &Type,
     ) -> Result<Type, TypeCheckError> {
         match &expression.inner.expr {
             Expr::Infix { op, left, right } => {
-                let l = Self::check_expression(env, &left, expected_type)?;
-                let r = Self::check_expression(env, &right, expected_type)?;
+                let l = self.check_expression(env, &left, expected_type)?;
+                let r = self.check_expression(env, &right, expected_type)?;
                 let type_interaction_res = l.type_interaction(&op.inner, &r);
                 if type_interaction_res.is_none() {
                     return Err(TypeCheckError::IncompatibleTypesForOperand {
@@ -106,9 +113,9 @@ impl TypeChecker {
                 }
                 Ok(actual_t)
             }
-            Expr::Prefix { op, expr } => Self::check_expression(env, expr, expected_type),
+            Expr::Prefix { op, expr } => self.check_expression(env, expr, expected_type),
             Expr::Identifier(ident) => {
-                let type_opt = env.get(ident.inner.as_str());
+                let type_opt = env.get(&self.input[ident.pos.clone()]);
                 match type_opt {
                     Some(ty) => Ok(ty.0.to_owned()),
                     None => Err(TypeCheckError::IdentifierNotFound {
@@ -124,8 +131,8 @@ impl TypeChecker {
                 operand,
                 expr,
             } => {
-                let ident_type = Self::check_expression(env, &ident, expected_type)?;
-                let expr_type = Self::check_expression(env, &expr, &ident_type)?;
+                let ident_type = self.check_expression(env, &ident, expected_type)?;
+                let expr_type = self.check_expression(env, &expr, &ident_type)?;
                 let type_interaction_res = ident_type.type_interaction(&operand.inner, &expr_type);
                 if type_interaction_res.is_none() {
                     return Err(TypeCheckError::IncompatibleTypesForOperand {

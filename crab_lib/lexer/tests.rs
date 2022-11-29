@@ -23,14 +23,14 @@ pub mod tests {
         .to_string();
         let expected = vec![
             Token::I64,
-            Token::Identifier("five".to_string()),
+            Token::Identifier,
             Token::Assign,
-            Token::Number("5".to_string()),
+            Token::Number,
             Token::Semicolon,
             Token::I64,
-            Token::Identifier("ten".to_string()),
+            Token::Identifier,
             Token::Assign,
-            Token::Number("10".to_string()),
+            Token::Number,
             Token::Semicolon,
         ];
         assert_lex_against(input, expected);
@@ -48,13 +48,13 @@ pub mod tests {
             Token::Minus,
             Token::Slash,
             Token::Asterisk,
-            Token::Number("5".to_string()),
+            Token::Number,
             Token::Semicolon,
-            Token::Number("5".to_string()),
+            Token::Number,
             Token::Lt,
-            Token::Number("10".to_string()),
+            Token::Number,
             Token::Gt,
-            Token::Number("5".to_string()),
+            Token::Number,
             Token::Semicolon,
         ];
 
@@ -69,13 +69,13 @@ pub mod tests {
         "#
         .to_string();
         let expected = vec![
-            Token::Number("10".to_string()),
+            Token::Number,
             Token::Equal,
-            Token::Number("10".to_string()),
+            Token::Number,
             Token::Semicolon,
-            Token::Number("10".to_string()),
+            Token::Number,
             Token::NotEqual,
-            Token::Number("9".to_string()),
+            Token::Number,
             Token::Semicolon,
         ];
 

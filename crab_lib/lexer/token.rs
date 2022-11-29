@@ -13,12 +13,16 @@ impl TokenInfo {
             span: start_idx..end_idx,
         }
     }
+
+    pub fn get_str(self, source: &String) -> &str {
+        &source[self.span]
+    }
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Token {
-    Number(String),
-    Identifier(String),
+    Number,
+    Identifier,
     Illegal,
     Eof,
     Comma,
@@ -66,7 +70,7 @@ pub fn lookup_ident(ident: &str) -> Token {
     if let Some(token) = token {
         token
     } else {
-        Token::Identifier(ident.to_owned())
+        Token::Identifier
     }
 }
 
@@ -100,8 +104,8 @@ impl fmt::Display for Token {
             Token::MinusEquals => write!(f, "-="),
             Token::SlashEuqals => write!(f, "/="),
             Token::AsteriskEquals => write!(f, "*="),
-            Token::Identifier(ident) => write!(f, "{}", ident),
-            Token::Number(lit) => write!(f, "{}", lit),
+            Token::Identifier => write!(f, ""),
+            Token::Number => write!(f, ""),
             Token::True => write!(f, "true"),
             Token::False => write!(f, "false"),
             Token::I64 => write!(f, "i64"),

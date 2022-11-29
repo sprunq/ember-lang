@@ -19,26 +19,26 @@ pub struct Parser {
     lexer: Lexer,
     current_token: TokenInfo,
     peek_token: TokenInfo,
+    input: String,
 }
 
 impl Parser {
-    pub fn new(lexer: Lexer) -> Self {
+    pub fn new(input: String) -> Self {
+        let input2 = input.clone();
         let mut parser = Parser {
-            lexer,
+            lexer: Lexer::new(input),
             current_token: TokenInfo::new(Token::Illegal, 0, 0),
             peek_token: TokenInfo::new(Token::Illegal, 0, 0),
+            input: input2,
         };
+
         parser.next_token();
         parser.next_token();
         parser
     }
 
-    pub fn input(&self) -> &str {
-        &self.lexer.input
-    }
-
     pub fn next_token(&mut self) {
-        self.current_token = self.peek_token.clone();
+        self.current_token = self.peek_token.to_owned();
         self.peek_token = self.lexer.next_token();
     }
 
@@ -117,10 +117,10 @@ impl Parser {
 
     fn get_prefix_fn(&self) -> Option<PrefixParseFn> {
         match &self.current_token.token {
-            Token::Identifier(_) => Some(Parser::parse_identifier_expression),
+            Token::Identifier => Some(Parser::parse_identifier_expression),
             Token::Minus => Some(Parser::parse_prefix_expression),
             Token::LParenthesis => Some(Parser::parse_grouped_expression),
-            Token::Number(_) => Some(Parser::parse_literal_expression),
+            Token::Number => Some(Parser::parse_literal_expression),
             Token::True | Token::False => Some(Parser::parse_boolean_expression),
             _ => None,
         }
@@ -141,8 +141,13 @@ impl Parser {
     }
 
     fn parse_literal_expression(&mut self) -> Result<AstNode<TypedExpr>, ParseErr> {
-        if let Token::Number(lit) = &self.current_token.token {
-            match lit.parse::<i64>() {
+        if let Token::Number = &self.current_token.token {
+            match self
+                .current_token
+                .clone()
+                .get_str(&self.input)
+                .parse::<i64>()
+            {
                 Ok(value) => Ok(AstNode::new(
                     TypedExpr {
                         ty: Some(Type::I64),
@@ -235,6 +240,7 @@ impl Parser {
         let prefix = self
             .get_prefix_fn()
             .ok_or_else(|| ParseErr::ExpectedPrefixToken(self.current_token.clone()))?;
+
         let mut left_expr = prefix(self)?;
 
         while self.peek_token.token != Token::Semicolon
@@ -274,17 +280,17 @@ impl Parser {
         let operator_pos = self.current_token.span.clone();
         self.next_token();
         let value = self.parse_expr(Precedence::Lowest)?;
-        let ident = AstNode::new_boxed(
-            TypedExpr::new(Expr::Identifier(identifier.clone())),
-            identifier.pos,
-        );
+        let end_pos = value.pos.end.clone();
+        let pos = identifier.pos.clone();
+        let ident = AstNode::new_boxed(TypedExpr::new(Expr::Identifier(identifier)), pos);
+        let ident_pos = ident.pos.start;
         Ok(AstNode::new(
             TypedExpr::new(Expr::Assign {
-                ident: ident.clone(),
+                ident: ident,
                 operand: AstNode::<InfixOp>::new(operator, operator_pos),
-                expr: Box::new(value.clone()),
+                expr: Box::new(value),
             }),
-            ident.pos.start..value.pos.end,
+            ident_pos..end_pos,
         ))
     }
 
@@ -337,8 +343,11 @@ impl Parser {
     }
 
     fn parse_identifier_string(&self) -> Result<(String, Range<usize>), ParseErr> {
-        if let Token::Identifier(ident) = &self.current_token.token {
-            Ok((ident.to_string(), self.current_token.span.clone()))
+        if let Token::Identifier = &self.current_token.token {
+            Ok((
+                self.current_token.clone().get_str(&self.input).to_string(),
+                self.current_token.span.clone(),
+            ))
         } else {
             Err(ParseErr::ExpectedIdentifierToken(
                 self.current_token.clone(),

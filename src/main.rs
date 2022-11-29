@@ -3,8 +3,8 @@ use codespan_reporting::term;
 use codespan_reporting::term::termcolor::{ColorChoice, StandardStream};
 use crab_lib::diagnostic_converter::convert_parse::build_parse_error_diagnostic;
 use crab_lib::diagnostic_converter::convert_typecheck::build_typecheck_error_diagnostic;
+use crab_lib::parser::parse::Parser;
 use crab_lib::typechecker::typecheck::TypeChecker;
-use crab_lib::{lexer::lex::Lexer, parser::parse::Parser};
 use std::{fs, time::Instant};
 
 pub struct CompilerOptions {
@@ -17,7 +17,7 @@ fn main() {
     let options = CompilerOptions {
         path: String::from(".\\examples\\compile.crab"),
         measure_performance: true,
-        emit_ast: true,
+        emit_ast: false,
     };
 
     run(options);
@@ -34,8 +34,7 @@ pub fn run(options: CompilerOptions) {
 
     let file = files.get(file_id).unwrap();
     let input = file.source().clone();
-    let lexer = Lexer::new(input);
-    let mut parser = Parser::new(lexer);
+    let mut parser = Parser::new(input.clone());
 
     let now = Instant::now();
     let parse_res = parser.parse_program();
@@ -48,13 +47,15 @@ pub fn run(options: CompilerOptions) {
     }
 
     let ast = parse_res.unwrap();
+
     if options.emit_ast {
         fs::create_dir_all(".\\emit").expect("Failed to create directory");
         fs::write(".\\emit\\ast.txt", format!("{ast:#?}")).expect("Unable to write file");
     }
 
     let now = Instant::now();
-    let typecheck_result = TypeChecker::typecheck(&ast);
+    let typechecker = TypeChecker { input: input };
+    let typecheck_result = typechecker.typecheck(&ast);
     let typecheck_elapsed = now.elapsed();
 
     if let Err(error) = typecheck_result {

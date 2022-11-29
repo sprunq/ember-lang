@@ -5,14 +5,12 @@ pub mod tests {
             ast_node::AstNode, expression::Expr, infix::InfixOp, statement::Stmt, ty::Type,
             typed_expression::TypedExpr,
         },
-        lexer::lex::Lexer,
         parser::parse::Parser,
     };
 
     pub fn check_str_str_eq(intput_output: Vec<(&str, &str)>) {
         for (input, expected) in intput_output {
-            let lexer = Lexer::new(input.to_owned());
-            let mut parser = Parser::new(lexer);
+            let mut parser = Parser::new(input.to_owned());
             let parse_res = parser.parse_program();
 
             match parse_res {
@@ -33,8 +31,7 @@ pub mod tests {
             ("5 < 5;", 5, InfixOp::Lt, 5),
         ];
         for (input, left, operator, right) in tests {
-            let lexer = Lexer::new(input.to_owned());
-            let mut parser = Parser::new(lexer);
+            let mut parser = Parser::new(input.to_owned());
 
             let program = parser.parse_program();
 
@@ -78,8 +75,7 @@ pub mod tests {
             ("5 != 5;", 5, InfixOp::NotEq, 5),
         ];
         for (input, left, operator, right) in tests {
-            let lexer = Lexer::new(input.to_owned());
-            let mut parser = Parser::new(lexer);
+            let mut parser = Parser::new(input.to_owned());
 
             let program = parser.parse_program();
 

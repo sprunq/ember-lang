@@ -1,16 +1,22 @@
+use std::str::Chars;
+
 use super::token::{self, Token, TokenInfo};
 
 pub struct Lexer {
-    pub input: String,
+    pub input: Chars<'static>,
     position: usize,      // current position in input (points to current char)
     read_position: usize, // current reading position in input (after current char)
     character: char,      // current char under examination
 }
 
+fn string_to_static_str(s: String) -> &'static str {
+    Box::leak(s.into_boxed_str())
+}
+
 impl Lexer {
     pub fn new(input: String) -> Self {
         let mut lexer = Lexer {
-            input,
+            input: string_to_static_str(input).chars(),
             character: '\u{0}',
             read_position: 0,
             position: 0,
@@ -23,7 +29,7 @@ impl Lexer {
         self.skip_whitespace();
         let tok: Token;
         let start_pos = self.position;
-        match self.character {
+        match &self.character {
             '<' => tok = Token::Lt,
             '>' => tok = Token::Gt,
             ';' => tok = Token::Semicolon,
@@ -101,8 +107,8 @@ impl Lexer {
                     let ident = self.read_identifier();
                     return TokenInfo::new(token::lookup_ident(&ident), start_pos, self.position);
                 } else if Self::is_digit(self.character) {
-                    let integer_part = self.read_number();
-                    return TokenInfo::new(Token::Number(integer_part), start_pos, self.position);
+                    self.read_number();
+                    return TokenInfo::new(Token::Number, start_pos, self.position);
                 } else {
                     tok = Token::Illegal
                 }
@@ -127,36 +133,30 @@ impl Lexer {
     }
 
     pub fn read_identifier(&mut self) -> String {
-        let start_pos = self.position;
+        let mut ident = String::from("");
         while Self::is_letter(self.character) || Self::is_digit(self.character) {
+            ident.push(self.character);
             self.read_char();
         }
-        self.input[start_pos..self.position].to_string()
+        ident
     }
 
     fn read_number(&mut self) -> String {
-        let start_pos = self.position;
+        let mut ident = String::from("");
         while Self::is_digit(self.character) || self.character == '.' {
+            ident.push(self.character);
             self.read_char();
         }
-        self.input[start_pos..self.position].to_string()
+        ident
     }
 
     fn read_char(&mut self) {
-        if self.read_position >= self.input.len() {
-            self.character = '\0';
-        } else {
-            self.character = self.input.chars().nth(self.read_position).unwrap_or('\0');
-        }
+        self.character = self.input.next().unwrap_or('\0');
         self.position = self.read_position;
         self.read_position += 1;
     }
 
     fn peek_char(&mut self) -> char {
-        if self.read_position >= self.input.len() {
-            '\0'
-        } else {
-            self.input.chars().nth(self.read_position).unwrap_or('\0')
-        }
+        *self.input.clone().peekable().peek().unwrap_or(&'\0')
     }
 }

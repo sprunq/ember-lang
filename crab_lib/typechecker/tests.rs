@@ -1,15 +1,16 @@
 #[cfg(test)]
 pub mod tests {
-    use crate::{lexer::lex::Lexer, parser::parse::Parser, typechecker::typecheck::TypeChecker};
+    use crate::{parser::parse::Parser, typechecker::typecheck::TypeChecker};
 
     pub fn expect_res(input: &str, expected: bool) {
-        let lexer = Lexer::new(input.to_owned());
-        let mut parser = Parser::new(lexer);
+        let mut parser = Parser::new(input.to_owned());
         let parse_res = parser.parse_program();
-
         match parse_res {
             Ok(mut program) => {
-                let res = TypeChecker::typecheck(&mut program);
+                let tc = TypeChecker {
+                    input: input.to_string(),
+                };
+                let res = tc.typecheck(&mut program);
                 if res.is_err() {
                     println!("{:#?}", res);
                 }
