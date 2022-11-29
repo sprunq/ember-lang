@@ -11,7 +11,7 @@ pub mod tests {
 
     pub fn check_str_str_eq(intput_output: Vec<(&str, &str)>) {
         for (input, expected) in intput_output {
-            let mut parser = Parser::new(Lexer::tokenize_all_collect(input), input.to_owned());
+            let mut parser = Parser::new(Lexer::tokenize_all_collect(input), input);
             let parse_res = parser.parse_program();
 
             match parse_res {
@@ -32,7 +32,7 @@ pub mod tests {
             ("5 < 5;", 5, InfixOp::Lt, 5),
         ];
         for (input, left, operator, right) in tests {
-            let mut parser = Parser::new(Lexer::tokenize_all_collect(input), input.to_owned());
+            let mut parser = Parser::new(Lexer::tokenize_all_collect(input), input);
 
             let program = parser.parse_program();
 
@@ -76,7 +76,7 @@ pub mod tests {
             ("5 != 5;", 5, InfixOp::NotEq, 5),
         ];
         for (input, left, operator, right) in tests {
-            let mut parser = Parser::new(Lexer::tokenize_all_collect(input), input.to_owned());
+            let mut parser = Parser::new(Lexer::tokenize_all_collect(input), input);
 
             let program = parser.parse_program();
 

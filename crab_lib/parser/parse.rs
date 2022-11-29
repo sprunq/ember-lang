@@ -2,7 +2,7 @@ use super::parse_error::ParseErr;
 use crate::ast::ast_node::AstNode;
 use crate::ast::ast_root::AstRoot;
 use crate::ast::typed_expression::TypedExpr;
-use crate::lexer::{lex::Lexer, token::Token};
+use crate::lexer::token::Token;
 use crate::{
     ast::{
         expression::Expr, infix::InfixOp, precedence::Precedence, prefix::PrefixOp,
@@ -12,23 +12,20 @@ use crate::{
 };
 use std::ops::Range;
 
-type PrefixParseFn = fn(&mut Parser) -> Result<AstNode<TypedExpr>, ParseErr>;
-type InfixParseFn = fn(&mut Parser, AstNode<TypedExpr>) -> Result<AstNode<TypedExpr>, ParseErr>;
-
-pub struct Parser {
+pub struct Parser<'source> {
+    source: &'source str,
     tokens: Vec<TokenInfo>,
     current_token: TokenInfo,
     peek_token: TokenInfo,
-    input: String,
     token_idx: usize,
 }
 
-impl Parser {
-    pub fn new(tokens: Vec<TokenInfo>, input: String) -> Self {
+impl<'source> Parser<'source> {
+    pub fn new(tokens: Vec<TokenInfo>, source: &'source str) -> Self {
         let mut parser = Parser {
             current_token: TokenInfo::new(Token::Illegal, 0, 0),
             peek_token: TokenInfo::new(Token::Illegal, 0, 0),
-            input: input,
+            source,
             tokens,
             token_idx: 0,
         };
@@ -121,7 +118,9 @@ impl Parser {
         })
     }
 
-    fn get_prefix_fn(&self) -> Option<PrefixParseFn> {
+    fn get_prefix_fn(
+        &self,
+    ) -> Option<for<'r> fn(&'r mut Parser<'source>) -> Result<AstNode<TypedExpr>, ParseErr>> {
         match &self.current_token.token {
             Token::Identifier => Some(Parser::parse_identifier_expression),
             Token::Minus => Some(Parser::parse_prefix_expression),
@@ -151,7 +150,7 @@ impl Parser {
             match self
                 .current_token
                 .clone()
-                .get_str(&self.input)
+                .get_str(self.source)
                 .parse::<i64>()
             {
                 Ok(value) => Ok(AstNode::new(
@@ -195,7 +194,14 @@ impl Parser {
         }
     }
 
-    fn get_infix_fn(&mut self) -> Option<InfixParseFn> {
+    fn get_infix_fn(
+        &mut self,
+    ) -> Option<
+        for<'r> fn(
+            &'r mut Parser<'source>,
+            AstNode<TypedExpr>,
+        ) -> Result<AstNode<TypedExpr>, ParseErr>,
+    > {
         match &self.peek_token.token {
             Token::Plus
             | Token::Minus
@@ -351,7 +357,7 @@ impl Parser {
     fn parse_identifier_string(&self) -> Result<(String, Range<usize>), ParseErr> {
         if let Token::Identifier = &self.current_token.token {
             Ok((
-                self.current_token.clone().get_str(&self.input).to_string(),
+                self.current_token.clone().get_str(&self.source).to_string(),
                 self.current_token.span.clone(),
             ))
         } else {

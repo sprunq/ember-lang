@@ -39,7 +39,7 @@ pub fn run(options: CompilerOptions) {
     let input = file.source().clone();
 
     let now = Instant::now();
-    let tokens = Lexer::tokenize_all_collect(&input);
+    let tokens = Lexer::tokenize_all_collect(file.source());
     let lexing_elapsed = now.elapsed();
 
     if options.emit_tokens {
@@ -47,7 +47,7 @@ pub fn run(options: CompilerOptions) {
         fs::write(".\\emit\\tokens.txt", format!("{tokens:#?}")).expect("Unable to write file");
     }
 
-    let mut parser = Parser::new(tokens, input.clone());
+    let mut parser = Parser::new(tokens, file.source());
     let now = Instant::now();
     let parse_res = parser.parse_program();
     let parsing_elapsed = now.elapsed();

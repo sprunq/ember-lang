@@ -9,6 +9,18 @@ pub struct Lexer<'source> {
     character: char,                // current char under examination
 }
 
+impl<'source> Iterator for Lexer<'source> {
+    type Item = TokenInfo;
+    fn next(&mut self) -> Option<Self::Item> {
+        let tok = self.next_token();
+        if tok.token == Token::Eof {
+            None
+        } else {
+            Some(tok)
+        }
+    }
+}
+
 impl<'source> Lexer<'source> {
     pub fn new(input: &'source str) -> Self {
         let mut lexer = Lexer {
@@ -20,6 +32,11 @@ impl<'source> Lexer<'source> {
         };
         lexer.read_char();
         lexer
+    }
+
+    pub fn tokenize_all_collect(data: &'source str) -> Vec<TokenInfo> {
+        let lex = Lexer::new(&data);
+        lex.collect()
     }
 
     pub fn next_token(&mut self) -> TokenInfo {
@@ -162,23 +179,6 @@ impl<'source> Lexer<'source> {
             ch
         } else {
             '\0'
-        }
-    }
-
-    pub fn tokenize_all_collect(data: &'source str) -> Vec<TokenInfo> {
-        let lex = Lexer::new(&data);
-        lex.collect()
-    }
-}
-
-impl<'source> Iterator for Lexer<'source> {
-    type Item = TokenInfo;
-    fn next(&mut self) -> Option<Self::Item> {
-        let tok = self.next_token();
-        if tok.token == Token::Eof {
-            None
-        } else {
-            Some(tok)
         }
     }
 }

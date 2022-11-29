@@ -14,7 +14,7 @@ impl TokenInfo {
         }
     }
 
-    pub fn get_str(self, source: &String) -> &str {
+    pub fn get_str(self, source: &str) -> &str {
         &source[self.span]
     }
 }
