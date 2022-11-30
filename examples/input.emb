@@ -1,6 +1,2 @@
-bool bo = false;
-i64 a = 5;
-
-i64 b = a / 4;
-
-i64 c = a + b;
+i64 a = 1;
+a -=  a -3;

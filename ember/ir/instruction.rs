@@ -74,32 +74,32 @@ impl fmt::Display for IRInstruction {
         match self {
             IRInstruction::NOP => write!(f, "NOP"),
             IRInstruction::MovI { value, target } => {
-                write!(f, "MOVI \t{value:05}, {target}")
+                write!(f, "MOVI {value}, {target}")
             }
-            IRInstruction::LoadI { target, name } => write!(f, "LOAD \t{name}, {target}"),
-            IRInstruction::StoreI { target, name } => write!(f, "STORE \t{target}, {name}"),
+            IRInstruction::LoadI { target, name } => write!(f, "LOAD {name}, {target}"),
+            IRInstruction::StoreI { target, name } => write!(f, "STOR {target}, {name}"),
             IRInstruction::ArithmeticBinaryI {
                 left,
                 operand,
                 right,
                 target,
             } => {
-                write!(f, "{operand}I \t{left}, {right}, {target}")
+                write!(f, "{operand}I {left}, {right}, {target}")
             }
             IRInstruction::Label { name } => write!(f, "{name}:"),
-            IRInstruction::Branch { label: target } => write!(f, "BRANCH \t{target}"),
+            IRInstruction::Branch { label: target } => write!(f, "BRAN {target}"),
             IRInstruction::BranchCond {
                 condition: cond,
                 on_true,
                 on_false,
-            } => write!(f, "CBRANCH \t{cond}, {on_true}, {on_false}"),
+            } => write!(f, "CBRA {cond}, {on_true}, {on_false}"),
             IRInstruction::CompareI {
                 left,
                 operand,
                 right,
                 target,
             } => {
-                write!(f, "CMPI \t{operand}, {left}, {right}, {target}")
+                write!(f, "CMPI {operand}, {left}, {right}, {target}")
             }
         }
     }

@@ -20,7 +20,6 @@ pub enum BinaryOp {
     Sub,
     Mul,
     Div,
-    Assign,
 }
 impl fmt::Display for BinaryOp {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -29,7 +28,6 @@ impl fmt::Display for BinaryOp {
             BinaryOp::Sub => write!(f, "SUB"),
             BinaryOp::Mul => write!(f, "MUL"),
             BinaryOp::Div => write!(f, "DIV"),
-            BinaryOp::Assign => write!(f, "MOV"),
         }
     }
 }
