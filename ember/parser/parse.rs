@@ -335,7 +335,7 @@ impl<'source> Parser<'source> {
         &mut self,
         left: AstNode<TypedExpr>,
     ) -> Result<AstNode<TypedExpr>, ParseErr> {
-        let start = self.current_token.span.start;
+        let start = left.pos.start;
         let args = self.parse_expressions(Token::RParenthesis, ParseErr::ExpectedRparen)?;
         let inv = Expr::FunctionInvocation {
             name: Box::new(left),

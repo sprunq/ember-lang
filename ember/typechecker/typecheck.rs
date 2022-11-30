@@ -17,13 +17,14 @@ impl<'source> TypeChecker<'source> {
 
     pub fn typecheck(&self, program: &AstRoot) -> Result<Type, TypeCheckError> {
         let mut env = HashMap::new();
-        self.check_statement(&mut env, &program.sequence)
+        self.check_statement(&mut env, &program.sequence, None)
     }
 
     fn check_statement(
         &self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         stmt: &Stmt,
+        expected_type: Option<Type>,
     ) -> Result<Type, TypeCheckError> {
         match stmt {
             Stmt::Declaration { ty, ident, value } => {
@@ -56,7 +57,7 @@ impl<'source> TypeChecker<'source> {
             Stmt::Expression { expr } => self.check_expression(env, expr, Type::Void),
             Stmt::While { condition, body } => {
                 self.check_expression(env, condition, Type::Bool)?;
-                self.check_statement(env, body)?;
+                self.check_statement(env, body, None)?;
                 Ok(Type::Void)
             }
             Stmt::If {
@@ -65,7 +66,7 @@ impl<'source> TypeChecker<'source> {
                 alternative,
             } => {
                 self.check_expression(env, condition, Type::Bool)?;
-                self.check_statement(env, body)?;
+                self.check_statement(env, body, None)?;
                 self.check_statement(
                     env,
                     &alternative.to_owned().unwrap_or_else(|| {
@@ -73,13 +74,14 @@ impl<'source> TypeChecker<'source> {
                             statements: Box::new(Vec::new()),
                         })
                     }),
+                    None,
                 )?;
                 Ok(Type::Void)
             }
             Stmt::Sequence { statements } => {
                 let mut extended_env = env.clone();
                 for stmt in statements.iter() {
-                    self.check_statement(&mut extended_env, stmt)?;
+                    self.check_statement(&mut extended_env, stmt, expected_type)?;
                 }
                 Ok(Type::Void)
             }
@@ -88,8 +90,39 @@ impl<'source> TypeChecker<'source> {
                 parameters,
                 return_type,
                 body,
-            } => todo!(),
-            Stmt::Return { value } => todo!(),
+            } => {
+                env.insert(format!("_{name}"), (*return_type, name.pos.clone()));
+                let mut idx = 0;
+                for param in parameters {
+                    let ty = match &param.inner.expr {
+                        Expr::FunctionParameter { name: _, ty } => ty.clone().inner,
+                        _ => unreachable!(),
+                    };
+                    env.insert(format!("_{name}::{idx}"), (ty, param.pos.clone()));
+                    idx += 1;
+                }
+                self.check_statement(env, &body, Some(*return_type))?;
+                Ok(Type::Void)
+            }
+            Stmt::Return { value } => {
+                let mut span = 0..0;
+                let actual_type = if let Some(val) = value {
+                    span = val.pos.clone();
+                    self.check_expression(env, val, expected_type.unwrap_or(Type::Void))?
+                } else {
+                    Type::Void
+                };
+                let expected_type = expected_type.unwrap_or(Type::Void);
+                if expected_type == actual_type {
+                    Ok(expected_type)
+                } else {
+                    Err(TypeCheckError::NotMatchingExpetectedType {
+                        expected: expected_type,
+                        actual: actual_type,
+                        pos: span,
+                    })
+                }
+            }
         }
     }
 
@@ -148,7 +181,7 @@ impl<'source> TypeChecker<'source> {
                 if expected_type != Type::Bool && expected_type != Type::Void {
                     return Err(TypeCheckError::NotMatchingExpetectedType {
                         expected: expected_type,
-                        actual: Type::I64,
+                        actual: Type::Bool,
                         pos: lit.pos.clone(),
                     });
                 }
@@ -173,8 +206,34 @@ impl<'source> TypeChecker<'source> {
                 let actual_t = type_interaction_res.unwrap();
                 Ok(actual_t)
             }
-            Expr::FunctionParameter { name, ty } => todo!(),
-            Expr::FunctionInvocation { name, args } => todo!(),
+            Expr::FunctionParameter { name: _, ty: _ } => {
+                unreachable!(
+                    "Case gets handled in FunctionParameterInvocation. Should not get called."
+                )
+            }
+            Expr::FunctionInvocation { name, args } => {
+                let mut idx = 0;
+                for arg in args {
+                    let expected_ty = env.get(&format!("_{name}::{idx}"));
+                    if let Some(func_param) = expected_ty {
+                        let ty = self.check_expression(env, arg, func_param.0)?;
+                    } else {
+                        return Err(TypeCheckError::IdentifierNotFound {
+                            ident: format!("{name}::{arg}"),
+                            pos: arg.pos.clone(),
+                        });
+                    }
+                    idx += 1;
+                }
+                if let Some(func) = env.get(&format!("_{name}")) {
+                    Ok(func.0)
+                } else {
+                    return Err(TypeCheckError::IdentifierNotFound {
+                        ident: format!("{name}"),
+                        pos: name.pos.clone(),
+                    });
+                }
+            }
         }
     }
 }

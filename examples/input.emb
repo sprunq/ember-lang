@@ -1,6 +1,5 @@
-fn main(bool b) -> i64 {
-    i64 x = 0;
-    return x + 3;
+fn main(i64 a, bool b) -> i64 {
+    return 0;
 };
 
-main(true);
+i64 x = main(0, true) + true;

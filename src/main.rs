@@ -83,6 +83,7 @@ pub fn run(options: CompilerOptions) {
         std::process::exit(0);
     }
 
+    /*
     let now = Instant::now();
     let mut ir_generator = IRGenerator::new();
     let generated_ir = ir_generator.gen_code(&ast).to_owned();
@@ -109,4 +110,5 @@ pub fn run(options: CompilerOptions) {
             (lexing_elapsed + parsing_elapsed + typecheck_elapsed + ir_gen_elapsed).as_secs_f64()
         );
     }
+    */
 }
