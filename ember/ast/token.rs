@@ -51,7 +51,10 @@ pub enum Token {
     True,
     False,
     I64,
+    Void,
     Bool,
+    Function,
+    Arrow,
 }
 
 pub fn lookup_ident(ident: &str) -> Token {
@@ -63,6 +66,8 @@ pub fn lookup_ident(ident: &str) -> Token {
         "false" => Some(Token::False),
         "i64" => Some(Token::I64),
         "bool" => Some(Token::Bool),
+        "void" => Some(Token::Void),
+        "fn" => Some(Token::Function),
         _ => None,
     };
     if let Some(token) = token {
@@ -108,6 +113,9 @@ impl fmt::Display for Token {
             Token::False => write!(f, "false"),
             Token::I64 => write!(f, "i64"),
             Token::Bool => write!(f, "bool"),
+            Token::Function => write!(f, "fn"),
+            Token::Arrow => write!(f, "->"),
+            Token::Void => write!(f, "void"),
         }
     }
 }

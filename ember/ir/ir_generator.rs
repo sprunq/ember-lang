@@ -61,6 +61,12 @@ impl IRGenerator {
             Stmt::Sequence { statements } => {
                 self.gen_stmt_sequence(statements);
             }
+            Stmt::FunctionDefinition {
+                name,
+                parameters,
+                return_type,
+                body,
+            } => todo!(),
         }
     }
 
@@ -76,6 +82,7 @@ impl IRGenerator {
                 operand,
                 expr,
             } => self.gen_expr_assign(ident, operand, expr),
+            Expr::FunctionParameter { name, ty } => todo!(),
         }
     }
 

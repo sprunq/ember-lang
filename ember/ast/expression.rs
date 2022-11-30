@@ -1,4 +1,6 @@
-use super::{ast_node::AstNode, infix::InfixOp, prefix::PrefixOp, typed_expression::TypedExpr};
+use super::{
+    ast_node::AstNode, infix::InfixOp, prefix::PrefixOp, ty::Type, typed_expression::TypedExpr,
+};
 use std::fmt;
 
 #[derive(Debug, Clone, PartialEq)]
@@ -20,6 +22,10 @@ pub enum Expr {
         operand: AstNode<InfixOp>,
         expr: Box<AstNode<TypedExpr>>,
     },
+    FunctionParameter {
+        name: Box<AstNode<TypedExpr>>,
+        ty: AstNode<Type>,
+    },
 }
 
 impl fmt::Display for Expr {
@@ -35,6 +41,7 @@ impl fmt::Display for Expr {
                 operand: op,
                 expr,
             } => write!(f, "{ident} {op} {expr}"),
+            Expr::FunctionParameter { name, ty } => write!(f, "{ty} {name}"),
         }
     }
 }

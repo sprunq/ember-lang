@@ -23,6 +23,12 @@ pub enum Stmt {
     Sequence {
         statements: Box<Vec<Stmt>>,
     },
+    FunctionDefinition {
+        name: AstNode<TypedExpr>,
+        parameters: Vec<AstNode<TypedExpr>>,
+        return_type: Type,
+        body: Box<Stmt>,
+    },
 }
 
 impl fmt::Display for Stmt {
@@ -52,6 +58,19 @@ impl fmt::Display for Stmt {
                     write!(f, "{}", stmt)?;
                 }
                 Ok(())
+            }
+            Stmt::FunctionDefinition {
+                name,
+                parameters,
+                return_type,
+                body,
+            } => {
+                let decl = parameters
+                    .iter()
+                    .map(|f| format!("{}", f.inner))
+                    .collect::<Vec<_>>()
+                    .join(", ");
+                write!(f, "fn {name}({decl}) -> {return_type} {{\n{body}}};")
             }
         }
     }

@@ -13,6 +13,7 @@ impl Type {
         match token {
             Token::I64 => Some(Type::I64),
             Token::Bool => Some(Type::Bool),
+            Token::Void => Some(Type::Void),
             _ => None,
         }
     }

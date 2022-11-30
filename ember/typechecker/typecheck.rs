@@ -83,6 +83,12 @@ impl<'source> TypeChecker<'source> {
                 }
                 Ok(Type::Void)
             }
+            Stmt::FunctionDefinition {
+                name,
+                parameters,
+                return_type,
+                body,
+            } => todo!(),
         }
     }
 
@@ -166,6 +172,7 @@ impl<'source> TypeChecker<'source> {
                 let actual_t = type_interaction_res.unwrap();
                 Ok(actual_t)
             }
+            Expr::FunctionParameter { name, ty } => todo!(),
         }
     }
 }

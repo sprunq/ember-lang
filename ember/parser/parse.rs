@@ -83,8 +83,61 @@ impl<'source> Parser<'source> {
             Token::I64 | Token::Bool => self.parse_declaration_stmt(),
             Token::While => self.parse_while_stmt(),
             Token::If => self.parse_if_stmt(),
+            Token::Function => self.parse_define_function_expression(),
             _ => self.parse_expr_stmt(),
         }
+    }
+
+    fn parse_function_parameter(&mut self) -> Result<AstNode<TypedExpr>, ParseErr> {
+        let start_pos = self.current_token.span.start;
+        let ty = self.parse_type()?;
+        self.next_token();
+        let end_type = self.current_token.span.end;
+        let ident = self.parse_identifier_expression()?;
+        Ok(AstNode::new(
+            TypedExpr::new(Expr::FunctionParameter {
+                name: Box::new(ident.clone()),
+                ty: AstNode::new(ty, start_pos..end_type),
+            }),
+            start_pos..ident.pos.end,
+        ))
+    }
+
+    fn parse_function_parameters(&mut self) -> Result<Vec<AstNode<TypedExpr>>, ParseErr> {
+        let mut identifiers = vec![];
+        if self.peek_token.token == Token::RParenthesis {
+            return Ok(identifiers);
+        }
+        self.next_token();
+        identifiers.push(self.parse_function_parameter()?);
+
+        while self.peek_token.token == Token::Comma {
+            self.next_token();
+            self.next_token();
+            identifiers.push(self.parse_function_parameter()?);
+        }
+        Ok(identifiers)
+    }
+
+    fn parse_define_function_expression(&mut self) -> Result<Stmt, ParseErr> {
+        self.next_token();
+        let name = self.parse_identifier_expression()?;
+        self.expect_and_move(Token::LParenthesis, ParseErr::ExpectedLparen)?;
+        let parameters = self.parse_function_parameters()?;
+        self.expect_and_move(Token::RParenthesis, ParseErr::ExpectedRparen)?;
+        self.expect_and_move(Token::Arrow, ParseErr::ExpectedArrow)?;
+        self.next_token();
+        let ty = self.parse_type()?;
+        self.expect_and_move(Token::LBrace, ParseErr::ExpectedLbrace)?;
+        let body = self.parse_sequence()?;
+
+        self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
+        Ok(Stmt::FunctionDefinition {
+            name,
+            parameters: parameters,
+            return_type: ty,
+            body: Box::new(body),
+        })
     }
 
     fn parse_if_stmt(&mut self) -> Result<Stmt, ParseErr> {

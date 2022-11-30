@@ -91,6 +91,9 @@ impl<'source> Lexer<'source> {
                 tok = if self.peek_char() == '=' {
                     self.read_char();
                     Token::MinusEquals
+                } else if self.peek_char() == '>' {
+                    self.read_char();
+                    Token::Arrow
                 } else {
                     Token::Minus
                 }

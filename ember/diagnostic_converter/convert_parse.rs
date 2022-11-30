@@ -109,5 +109,11 @@ pub fn build_parse_error_diagnostic(error: ParseErr, file_id: usize) -> Diagnost
             .with_code("P021")
             .with_labels(vec![Label::primary(file_id, info.span)
                 .with_message(format!("expected true/false but got {}", info.token))]),
+        ParseErr::ExpectedArrow(info) => Diagnostic::error()
+            .with_message("Expected a return type")
+            .with_code("P022")
+            .with_labels(vec![Label::primary(file_id, info.span).with_message(
+                format!("expected a return type but got {}", info.token),
+            )]),
     }
 }
