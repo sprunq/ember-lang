@@ -3,24 +3,28 @@ use codespan_reporting::term;
 use codespan_reporting::term::termcolor::{ColorChoice, StandardStream};
 use ember::diagnostic_converter::convert_parse::build_parse_error_diagnostic;
 use ember::diagnostic_converter::convert_typecheck::build_typecheck_error_diagnostic;
+use ember::ir::ir_generator::IRGenerator;
 use ember::lexer::lex::Lexer;
 use ember::parser::parse::Parser;
 use ember::typechecker::typecheck::TypeChecker;
+use std::fmt::format;
 use std::{fs, time::Instant};
 
 pub struct CompilerOptions {
     pub path: String,
     pub measure_performance: bool,
-    pub emit_ast: bool,
     pub emit_tokens: bool,
+    pub emit_ast: bool,
+    pub emit_ir: bool,
 }
 
 fn main() {
     let options = CompilerOptions {
         path: String::from(".\\examples\\input.emb"),
         measure_performance: true,
-        emit_ast: true,
         emit_tokens: true,
+        emit_ast: true,
+        emit_ir: true,
     };
 
     run(options);
@@ -73,6 +77,17 @@ pub fn run(options: CompilerOptions) {
         let diagnostic = build_typecheck_error_diagnostic(error, file_id);
         term::emit(&mut writer.lock(), &config, &files, &diagnostic).unwrap();
         std::process::exit(0);
+    }
+
+    let now = Instant::now();
+    let mut ir_generator = IRGenerator::new();
+    let generated_ir = ir_generator.gen_code(&ast).to_owned();
+    let ir_gen_elapsed = now.elapsed();
+
+    if options.emit_ir {
+        fs::create_dir_all(".\\emit").expect("Failed to create directory");
+        let x: Vec<String> = generated_ir.iter().map(|f| format!("{f}")).collect();
+        fs::write(".\\emit\\ir.txt", x.join("\n")).expect("Unable to write file");
     }
 
     if options.measure_performance {
