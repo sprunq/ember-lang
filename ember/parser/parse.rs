@@ -278,6 +278,7 @@ impl<'source> Parser<'source> {
             | Token::MinusEquals
             | Token::SlashEuqals
             | Token::AsteriskEquals => Some(Parser::parse_assign_expression),
+            Token::LParenthesis => Some(Parser::parse_call_expression),
             _ => None,
         }
     }
@@ -328,6 +329,42 @@ impl<'source> Parser<'source> {
             }
         }
         Ok(left_expr)
+    }
+
+    fn parse_call_expression(
+        &mut self,
+        left: AstNode<TypedExpr>,
+    ) -> Result<AstNode<TypedExpr>, ParseErr> {
+        let start = self.current_token.span.start;
+        let args = self.parse_expressions(Token::RParenthesis, ParseErr::ExpectedRparen)?;
+        let inv = Expr::FunctionInvocation {
+            name: Box::new(left),
+            args,
+        };
+        let end = self.current_token.span.end;
+        Ok(AstNode::new(TypedExpr::new(inv), start..end))
+    }
+
+    fn parse_expressions(
+        &mut self,
+        closing_token: Token,
+        expected: fn(TokenInfo) -> ParseErr,
+    ) -> Result<Vec<AstNode<TypedExpr>>, ParseErr> {
+        let mut exps = vec![];
+        if self.peek_token.token == closing_token {
+            self.next_token();
+            return Ok(exps);
+        }
+        self.next_token();
+        exps.push(self.parse_expr(Precedence::Lowest)?);
+        while self.peek_token.token == Token::Comma {
+            self.next_token();
+            self.next_token();
+            exps.push(self.parse_expr(Precedence::Lowest)?);
+        }
+        self.expect_and_move(closing_token, expected)?;
+
+        Ok(exps)
     }
 
     fn parse_assign_expression(
