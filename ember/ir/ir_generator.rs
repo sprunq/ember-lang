@@ -15,6 +15,11 @@ pub struct IRGenerator {
     label_count: usize,
     instructions: Vec<IRInstruction>,
 }
+impl Default for IRGenerator {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
 impl IRGenerator {
     pub fn new() -> Self {
@@ -88,7 +93,7 @@ impl IRGenerator {
         }
     }
 
-    fn gen_stmt_while(&mut self, condition: &Box<AstNode<TypedExpr>>, body: &Box<Stmt>) {
+    fn gen_stmt_while(&mut self, condition: &AstNode<TypedExpr>, body: &Stmt) {
         let top_label = self.new_label();
         let start_label = self.new_label();
         let merge_label = self.new_label();
@@ -122,8 +127,8 @@ impl IRGenerator {
 
     fn gen_stmt_if(
         &mut self,
-        condition: &Box<AstNode<TypedExpr>>,
-        body: &Box<Stmt>,
+        condition: &AstNode<TypedExpr>,
+        body: &Stmt,
         alternative: &Option<Box<Stmt>>,
     ) {
         let cond_register = self
@@ -162,7 +167,7 @@ impl IRGenerator {
 
     fn gen_expr_prefix(
         &mut self,
-        expr: &Box<AstNode<TypedExpr>>,
+        expr: &AstNode<TypedExpr>,
         op: &AstNode<PrefixOp>,
     ) -> Option<Register> {
         let expr_reg = self
@@ -191,7 +196,7 @@ impl IRGenerator {
         Some(target)
     }
 
-    fn gen_stmt_sequence(&mut self, statements: &Box<Vec<Stmt>>) {
+    fn gen_stmt_sequence(&mut self, statements: &[Stmt]) {
         for stmt in statements.iter() {
             self.gen_statements(stmt);
         }
@@ -237,8 +242,8 @@ impl IRGenerator {
 
     fn gen_expr_infix(
         &mut self,
-        left: &Box<AstNode<TypedExpr>>,
-        right: &Box<AstNode<TypedExpr>>,
+        left: &AstNode<TypedExpr>,
+        right: &AstNode<TypedExpr>,
         op: &AstNode<InfixOp>,
     ) -> Option<Register> {
         let left_reg = self
@@ -270,15 +275,13 @@ impl IRGenerator {
                     right: right_reg,
                     target,
                 })
-            } else if let Some(bin) = bin_op {
-                Some(IRInstruction::ArithmeticBinaryI {
+            } else {
+                bin_op.map(|bin| IRInstruction::ArithmeticBinaryI {
                     operand: bin,
                     left: left_reg,
                     right: right_reg,
                     target,
                 })
-            } else {
-                None
             }
         };
         let n = node.unwrap();
@@ -288,9 +291,9 @@ impl IRGenerator {
 
     fn gen_expr_assign(
         &mut self,
-        ident: &Box<AstNode<TypedExpr>>,
+        ident: &AstNode<TypedExpr>,
         operand: &AstNode<InfixOp>,
-        expr: &Box<AstNode<TypedExpr>>,
+        expr: &AstNode<TypedExpr>,
     ) -> Option<Register> {
         let expr_reg = self
             .gen_expressions(&expr.inner)
@@ -332,7 +335,7 @@ impl IRGenerator {
 
                 let node = IRInstruction::LoadI {
                     name: ident.inner.to_string(),
-                    target: target,
+                    target,
                 };
                 self.instructions.push(node);
                 Some(target)

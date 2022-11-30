@@ -147,7 +147,7 @@ impl<'source> Parser<'source> {
         self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
         Ok(Stmt::FunctionDefinition {
             name,
-            parameters: parameters,
+            parameters,
             return_type: ty,
             body: Box::new(body),
         })
