@@ -1,9 +1,8 @@
-fn main(i64 a, bool b) -> i64 {
+fn f(i64 a, bool b) -> i64 {
     return 0;
 };
 
-fn main(i64 a, bool b) -> i64 {
-    return 0;
-};
+i64 x = 20;
+i64 b = f(f(x,true)+x, true);
 
-i64 x = main(0, true) + 1;
+

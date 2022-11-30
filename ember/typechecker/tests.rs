@@ -271,4 +271,38 @@ pub mod tests {
         ";
         expect_res(input, true);
     }
+
+    #[test]
+    fn test_duplicate_function() {
+        let input = "
+        fn main(i64 a, bool b) -> i64 {
+            return 0;
+        };
+        
+        fn main(i64 a, bool b) -> i64 {
+            return 0;
+        };
+        ";
+        expect_res(input, false);
+    }
+
+    #[test]
+    fn test_function_declaration() {
+        let input = "
+        fn main(i64 a, bool b) -> i64 {
+            return 0;
+        };
+        ";
+        expect_res(input, true);
+    }
+
+    #[test]
+    fn test_function_declaration_false() {
+        let input = "
+        fn main(i64 a, bool b) -> i64 {
+            return 0;
+        };
+        ";
+        expect_res(input, false);
+    }
 }
