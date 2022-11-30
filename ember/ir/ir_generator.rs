@@ -67,6 +67,7 @@ impl IRGenerator {
                 return_type,
                 body,
             } => todo!(),
+            Stmt::Return { value } => todo!(),
         }
     }
 
@@ -83,6 +84,7 @@ impl IRGenerator {
                 expr,
             } => self.gen_expr_assign(ident, operand, expr),
             Expr::FunctionParameter { name, ty } => todo!(),
+            Expr::FunctionInvocation { name, args } => todo!(),
         }
     }
 

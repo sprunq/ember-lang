@@ -26,6 +26,10 @@ pub enum Expr {
         name: Box<AstNode<TypedExpr>>,
         ty: AstNode<Type>,
     },
+    FunctionInvocation {
+        name: Box<AstNode<TypedExpr>>,
+        args: Vec<AstNode<TypedExpr>>,
+    },
 }
 
 impl fmt::Display for Expr {
@@ -42,6 +46,14 @@ impl fmt::Display for Expr {
                 expr,
             } => write!(f, "{ident} {op} {expr}"),
             Expr::FunctionParameter { name, ty } => write!(f, "{ty} {name}"),
+            Expr::FunctionInvocation { name, args } => {
+                let arguments = args
+                    .iter()
+                    .map(|f| format!("{}", f.inner))
+                    .collect::<Vec<_>>()
+                    .join(", ");
+                write!(f, "{name}({arguments})")
+            }
         }
     }
 }

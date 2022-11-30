@@ -21,4 +21,5 @@ pub enum ParseErr {
     TokenNotFound(TokenInfo),
     ExpectedBoolToken(TokenInfo),
     ExpectedArrow(TokenInfo),
+    ExpectedReturn(TokenInfo),
 }

@@ -83,8 +83,21 @@ impl<'source> Parser<'source> {
             Token::I64 | Token::Bool => self.parse_declaration_stmt(),
             Token::While => self.parse_while_stmt(),
             Token::If => self.parse_if_stmt(),
-            Token::Function => self.parse_define_function_expression(),
+            Token::Function => self.parse_define_function_stmt(),
+            Token::Return => self.parse_return_stmt(),
             _ => self.parse_expr_stmt(),
+        }
+    }
+
+    fn parse_return_stmt(&mut self) -> Result<Stmt, ParseErr> {
+        if self.peek_token.token == Token::Semicolon {
+            self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
+            Ok(Stmt::Return { value: None })
+        } else {
+            self.next_token();
+            let expr = self.parse_expr(Precedence::Lowest)?;
+            self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
+            Ok(Stmt::Return { value: Some(expr) })
         }
     }
 
@@ -119,7 +132,7 @@ impl<'source> Parser<'source> {
         Ok(identifiers)
     }
 
-    fn parse_define_function_expression(&mut self) -> Result<Stmt, ParseErr> {
+    fn parse_define_function_stmt(&mut self) -> Result<Stmt, ParseErr> {
         self.next_token();
         let name = self.parse_identifier_expression()?;
         self.expect_and_move(Token::LParenthesis, ParseErr::ExpectedLparen)?;

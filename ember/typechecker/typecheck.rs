@@ -89,6 +89,7 @@ impl<'source> TypeChecker<'source> {
                 return_type,
                 body,
             } => todo!(),
+            Stmt::Return { value } => todo!(),
         }
     }
 
@@ -173,6 +174,7 @@ impl<'source> TypeChecker<'source> {
                 Ok(actual_t)
             }
             Expr::FunctionParameter { name, ty } => todo!(),
+            Expr::FunctionInvocation { name, args } => todo!(),
         }
     }
 }

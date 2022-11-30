@@ -1,3 +1,4 @@
-fn main(bool b) -> bool {
-
+fn main(bool b) -> i64 {
+    i64 x = 0;
+    return x + 3;
 };

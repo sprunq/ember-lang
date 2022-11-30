@@ -29,6 +29,9 @@ pub enum Stmt {
         return_type: Type,
         body: Box<Stmt>,
     },
+    Return {
+        value: Option<AstNode<TypedExpr>>,
+    },
 }
 
 impl fmt::Display for Stmt {
@@ -71,6 +74,13 @@ impl fmt::Display for Stmt {
                     .collect::<Vec<_>>()
                     .join(", ");
                 write!(f, "fn {name}({decl}) -> {return_type} {{\n{body}}};")
+            }
+            Stmt::Return { value } => {
+                if let Some(val) = value {
+                    write!(f, "return {val};")
+                } else {
+                    write!(f, "return;")
+                }
             }
         }
     }
