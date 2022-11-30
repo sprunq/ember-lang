@@ -41,12 +41,17 @@ pub fn run(options: CompilerOptions) {
     let file = files.get(file_id).unwrap();
 
     let now = Instant::now();
-    let tokens = Lexer::new_file(file.source(), file_id).collect();
+    let tokens = Lexer::new_file(file.source(), file_id).collect::<Vec<_>>();
     let lexing_elapsed = now.elapsed();
 
     if options.emit_tokens {
         fs::create_dir_all(".\\emit").expect("Failed to create directory");
-        fs::write(".\\emit\\tokens.txt", format!("{tokens:#?}")).expect("Unable to write file");
+        let token_string = tokens
+            .iter()
+            .map(|f| format!("{:?}\t\t{:?}", f.span, f.token))
+            .collect::<Vec<_>>()
+            .join("\n");
+        fs::write(".\\emit\\tokens.txt", token_string).expect("Unable to write file");
     }
 
     let mut parser = Parser::new(tokens, file.source());
