@@ -85,8 +85,12 @@ pub fn run(options: CompilerOptions) {
 
     if options.emit_ir {
         fs::create_dir_all(".\\emit").expect("Failed to create directory");
-        let x: Vec<String> = generated_ir.iter().map(|f| format!("{f}")).collect();
-        fs::write(".\\emit\\ir.txt", x.join("\n")).expect("Unable to write file");
+        let ir_string = generated_ir
+            .iter()
+            .map(|f| format!("{f}"))
+            .collect::<Vec<_>>()
+            .join("\n");
+        fs::write(".\\emit\\ir.txt", ir_string).expect("Unable to write file");
     }
 
     if options.measure_performance {
@@ -97,7 +101,7 @@ pub fn run(options: CompilerOptions) {
         println!("- IR Gen \t{ir_gen_elapsed:.2?}");
         println!(
             "- Total \t{:.5?}s",
-            (lexing_elapsed + parsing_elapsed + typecheck_elapsed).as_secs_f64()
+            (lexing_elapsed + parsing_elapsed + typecheck_elapsed + ir_gen_elapsed).as_secs_f64()
         );
     }
 }

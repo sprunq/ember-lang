@@ -84,7 +84,7 @@ impl fmt::Display for IRInstruction {
                 right,
                 target,
             } => {
-                write!(f, "{operand}I {left}, {right}, {target}")
+                write!(f, "{operand}I  {left}, {right}, {target}")
             }
             IRInstruction::Label { name } => write!(f, "\n{name}:"),
             IRInstruction::Branch { label: target } => write!(f, "JUMP  {target}"),
