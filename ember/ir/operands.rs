@@ -42,7 +42,7 @@ pub enum CompareOp {
 impl fmt::Display for CompareOp {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            CompareOp::Eq => write!(f, "=="),
+            CompareOp::Eq => write!(f, "="),
             CompareOp::NotEq => write!(f, "!="),
             CompareOp::Lt => write!(f, "<"),
             CompareOp::Gt => write!(f, ">"),

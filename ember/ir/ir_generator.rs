@@ -1,8 +1,8 @@
 #![allow(unused_variables)]
 #![allow(dead_code)]
 use crate::ast::{
-    ast_node::AstNode, ast_root::AstRoot, expression::Expr, infix::InfixOp, statement::Stmt,
-    typed_expression::TypedExpr,
+    ast_node::AstNode, ast_root::AstRoot, expression::Expr, infix::InfixOp, prefix::PrefixOp,
+    statement::Stmt, typed_expression::TypedExpr,
 };
 
 use super::{
@@ -48,16 +48,88 @@ impl IRGenerator {
             Stmt::Expression { expr } => {
                 self.gen_stmt_expr(expr);
             }
-            Stmt::While { condition, body } => todo!(),
+            Stmt::While { condition, body } => {
+                self.gen_stmt_while(condition, body);
+            }
             Stmt::If {
                 condition,
                 body,
                 alternative,
-            } => todo!(),
+            } => {
+                self.gen_stmt_if(condition, body, alternative);
+            }
             Stmt::Sequence { statements } => {
                 self.gen_stmt_sequence(statements);
             }
         }
+    }
+
+    fn gen_stmt_while(&mut self, condition: &Box<AstNode<TypedExpr>>, body: &Box<Stmt>) {
+        let top_label = self.new_label();
+        let start_label = self.new_label();
+        let merge_label = self.new_label();
+
+        self.instructions
+            .push(IRInstruction::Branch { label: top_label });
+
+        self.instructions
+            .push(IRInstruction::Label { name: top_label });
+
+        let cond_reg = self
+            .gen_expressions(&condition.inner)
+            .unwrap_or(Register(usize::MAX));
+
+        let cond_node = IRInstruction::BranchCond {
+            condition: cond_reg,
+            on_true: start_label,
+            on_false: merge_label,
+        };
+        self.instructions.push(cond_node);
+
+        self.instructions
+            .push(IRInstruction::Label { name: start_label });
+        self.gen_statements(body);
+        self.instructions
+            .push(IRInstruction::Branch { label: top_label });
+
+        self.instructions
+            .push(IRInstruction::Label { name: merge_label });
+    }
+
+    fn gen_stmt_if(
+        &mut self,
+        condition: &Box<AstNode<TypedExpr>>,
+        body: &Box<Stmt>,
+        alternative: &Option<Box<Stmt>>,
+    ) {
+        let cond_register = self
+            .gen_expressions(&condition.inner)
+            .unwrap_or(Register(usize::MAX));
+        let t_label = self.new_label();
+        let f_label = self.new_label();
+        let merge_label = self.new_label();
+        let cond_node = IRInstruction::BranchCond {
+            condition: cond_register,
+            on_true: t_label,
+            on_false: f_label,
+        };
+        self.instructions.push(cond_node);
+        // true block
+        let t_label_node = IRInstruction::Label { name: t_label };
+        self.instructions.push(t_label_node);
+        self.gen_statements(body);
+        let jmp_to_merge_node = IRInstruction::Branch { label: merge_label };
+        self.instructions.push(jmp_to_merge_node);
+        // false block
+        if let Some(alt) = alternative {
+            let f_label_node = IRInstruction::Label { name: f_label };
+            self.instructions.push(f_label_node);
+            self.gen_statements(alt);
+            let jmp_to_merge_node = IRInstruction::Branch { label: merge_label };
+            self.instructions.push(jmp_to_merge_node);
+        }
+        let merge_node = IRInstruction::Label { name: merge_label };
+        self.instructions.push(merge_node);
     }
 
     fn gen_stmt_expr(&mut self, expr: &AstNode<TypedExpr>) {
@@ -67,7 +139,7 @@ impl IRGenerator {
     fn gen_expressions(&mut self, expr: &TypedExpr) -> Option<Register> {
         match &expr.expr {
             Expr::Infix { op, left, right } => self.gen_expr_infix(left, right, op),
-            Expr::Prefix { op, expr } => todo!(),
+            Expr::Prefix { op, expr } => self.gen_expr_prefix(expr, op),
             Expr::Identifier(ident) => self.gen_expr_ident(ident),
             Expr::IntegerLiteral(literal) => self.gen_expr_int_literal(literal),
             Expr::BooleanLiteral(literal) => self.gen_expr_bool_literal(literal),
@@ -77,6 +149,41 @@ impl IRGenerator {
                 expr,
             } => self.gen_expr_assign(ident, operand, expr),
         }
+    }
+
+    fn gen_expr_prefix(
+        &mut self,
+        expr: &Box<AstNode<TypedExpr>>,
+        op: &AstNode<PrefixOp>,
+    ) -> Option<Register> {
+        let expr_reg = self
+            .gen_expressions(&expr.inner)
+            .unwrap_or(Register(usize::MAX));
+        let target = self.new_register();
+        let prefix_node = match op.inner {
+            PrefixOp::Bang => {
+                // only for bools
+                todo!()
+            }
+            PrefixOp::Minus => {
+                // do value * -1;
+                let int_literal_target = self.new_register();
+                let int_literal = IRInstruction::MovI {
+                    value: Value(-1),
+                    target: int_literal_target,
+                };
+                self.instructions.push(int_literal);
+
+                IRInstruction::ArithmeticBinaryI {
+                    operand: BinaryOp::Mul,
+                    left: int_literal_target,
+                    right: expr_reg,
+                    target,
+                }
+            }
+        };
+        self.instructions.push(prefix_node);
+        Some(target)
     }
 
     fn gen_stmt_sequence(&mut self, statements: &Box<Vec<Stmt>>) {

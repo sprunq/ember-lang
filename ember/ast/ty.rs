@@ -24,7 +24,7 @@ impl Type {
                 _ => Some(Type::I64),
             },
             (Type::Bool, Type::Bool) => match operand {
-                InfixOp::Eq | InfixOp::NotEq => Some(Type::Bool),
+                InfixOp::Eq | InfixOp::NotEq | InfixOp::Assign => Some(Type::Bool),
                 _ => None,
             },
             _ => None,

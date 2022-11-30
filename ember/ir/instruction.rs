@@ -63,7 +63,7 @@ pub enum IRInstruction {
         label: Label,
     },
     BranchCond {
-        condition: Value,
+        condition: Register,
         on_true: Label,
         on_false: Label,
     },
@@ -74,10 +74,10 @@ impl fmt::Display for IRInstruction {
         match self {
             IRInstruction::NOP => write!(f, "NOP"),
             IRInstruction::MovI { value, target } => {
-                write!(f, "MOVI {value}, {target}")
+                write!(f, "MOVEI {value}, {target}")
             }
-            IRInstruction::LoadI { target, name } => write!(f, "LOAD {name}, {target}"),
-            IRInstruction::StoreI { target, name } => write!(f, "STOR {target}, {name}"),
+            IRInstruction::LoadI { target, name } => write!(f, "LOAD  {name}, {target}"),
+            IRInstruction::StoreI { target, name } => write!(f, "STORE {target}, {name}"),
             IRInstruction::ArithmeticBinaryI {
                 left,
                 operand,
@@ -86,20 +86,20 @@ impl fmt::Display for IRInstruction {
             } => {
                 write!(f, "{operand}I {left}, {right}, {target}")
             }
-            IRInstruction::Label { name } => write!(f, "{name}:"),
-            IRInstruction::Branch { label: target } => write!(f, "BRAN {target}"),
+            IRInstruction::Label { name } => write!(f, "\n{name}:"),
+            IRInstruction::Branch { label: target } => write!(f, "JUMP  {target}"),
             IRInstruction::BranchCond {
                 condition: cond,
                 on_true,
                 on_false,
-            } => write!(f, "CBRA {cond}, {on_true}, {on_false}"),
+            } => write!(f, "CJUMP {cond}, {on_true}, {on_false}"),
             IRInstruction::CompareI {
                 left,
                 operand,
                 right,
                 target,
             } => {
-                write!(f, "CMPI {operand}, {left}, {right}, {target}")
+                write!(f, "COMPI {operand}, {left}, {right}, {target}")
             }
         }
     }

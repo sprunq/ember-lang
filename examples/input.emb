@@ -1,2 +1,7 @@
-i64 a = 1;
-a -=  a -3;
+bool a = true;
+bool b = false;
+while(a != b){
+    b = true;
+};
+
+i64 z = 100;
