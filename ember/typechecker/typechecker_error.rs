@@ -43,4 +43,9 @@ pub enum TypeCheckError {
         actual: Type,
         pos: Range<usize>,
     },
+    FunctionDuplicate {
+        name: String,
+        pos: Range<usize>,
+        other_pos: Range<usize>,
+    },
 }

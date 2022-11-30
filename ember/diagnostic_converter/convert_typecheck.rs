@@ -70,5 +70,19 @@ pub fn build_typecheck_error_diagnostic(
             .with_code("T009")
             .with_labels(vec![Label::primary(file_id, pos)
                 .with_message(format!("expected a {expected} but got {actual}"))]),
+
+        TypeCheckError::FunctionDuplicate {
+            name,
+            pos,
+            other_pos,
+        } => Diagnostic::error()
+            .with_message("Function duplicate detected")
+            .with_code("T010")
+            .with_labels(vec![
+                Label::primary(file_id, pos).with_message(format!(
+                    "cannot create function with name {name} since it already exists"
+                )),
+                Label::secondary(file_id, other_pos).with_message(format!("already defined here")),
+            ]),
     }
 }

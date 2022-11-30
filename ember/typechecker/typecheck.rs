@@ -205,6 +205,13 @@ impl<'source> TypeChecker<'source> {
         parameters: &[AstNode<TypedExpr>],
         body: &Stmt,
     ) -> Result<Type, TypeCheckError> {
+        if let Some(func) = env.get(&format!("_{name}")) {
+            return Err(TypeCheckError::FunctionDuplicate {
+                name: name.inner.to_string(),
+                pos: name.pos.clone(),
+                other_pos: func.1.clone(),
+            });
+        };
         env.insert(format!("_{name}"), (*return_type, name.pos.clone()));
         for (idx, param) in parameters.iter().enumerate() {
             let ty = match &param.inner.expr {
