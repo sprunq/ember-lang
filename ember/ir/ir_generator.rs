@@ -64,6 +64,21 @@ impl IRGenerator {
         }
     }
 
+    fn gen_expressions(&mut self, expr: &TypedExpr) -> Option<Register> {
+        match &expr.expr {
+            Expr::Infix { op, left, right } => self.gen_expr_infix(left, right, op),
+            Expr::Prefix { op, expr } => self.gen_expr_prefix(expr, op),
+            Expr::Identifier(ident) => self.gen_expr_ident(ident),
+            Expr::IntegerLiteral(literal) => self.gen_expr_int_literal(literal),
+            Expr::BooleanLiteral(literal) => self.gen_expr_bool_literal(literal),
+            Expr::Assign {
+                ident,
+                operand,
+                expr,
+            } => self.gen_expr_assign(ident, operand, expr),
+        }
+    }
+
     fn gen_stmt_while(&mut self, condition: &Box<AstNode<TypedExpr>>, body: &Box<Stmt>) {
         let top_label = self.new_label();
         let start_label = self.new_label();
@@ -136,21 +151,6 @@ impl IRGenerator {
         self.gen_expressions(&expr.inner);
     }
 
-    fn gen_expressions(&mut self, expr: &TypedExpr) -> Option<Register> {
-        match &expr.expr {
-            Expr::Infix { op, left, right } => self.gen_expr_infix(left, right, op),
-            Expr::Prefix { op, expr } => self.gen_expr_prefix(expr, op),
-            Expr::Identifier(ident) => self.gen_expr_ident(ident),
-            Expr::IntegerLiteral(literal) => self.gen_expr_int_literal(literal),
-            Expr::BooleanLiteral(literal) => self.gen_expr_bool_literal(literal),
-            Expr::Assign {
-                ident,
-                operand,
-                expr,
-            } => self.gen_expr_assign(ident, operand, expr),
-        }
-    }
-
     fn gen_expr_prefix(
         &mut self,
         expr: &Box<AstNode<TypedExpr>>,
@@ -161,10 +161,6 @@ impl IRGenerator {
             .unwrap_or(Register(usize::MAX));
         let target = self.new_register();
         let prefix_node = match op.inner {
-            PrefixOp::Bang => {
-                // only for bools
-                todo!()
-            }
             PrefixOp::Minus => {
                 // do value * -1;
                 let int_literal_target = self.new_register();
