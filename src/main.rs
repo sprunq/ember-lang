@@ -7,7 +7,6 @@ use ember::ir::ir_generator::IRGenerator;
 use ember::lexer::lex::Lexer;
 use ember::parser::parse::Parser;
 use ember::typechecker::typecheck::TypeChecker;
-use std::fmt::format;
 use std::{fs, time::Instant};
 
 pub struct CompilerOptions {
@@ -95,6 +94,7 @@ pub fn run(options: CompilerOptions) {
         println!("- Lexing \t{lexing_elapsed:.2?}");
         println!("- Parsing \t{parsing_elapsed:.2?}");
         println!("- Typecheck \t{typecheck_elapsed:.2?}");
+        println!("- IR Gen \t{ir_gen_elapsed:.2?}");
         println!(
             "- Total \t{:.5?}s",
             (lexing_elapsed + parsing_elapsed + typecheck_elapsed).as_secs_f64()

@@ -114,7 +114,14 @@ impl IRGenerator {
                 Some(target)
             }
             Expr::Prefix { op, expr } => todo!(),
-            Expr::Identifier(_) => todo!(),
+            Expr::Identifier(ident) => {
+                let s = ident.inner.to_string();
+
+                let target = self.new_register();
+                let node = IRInstruction::LoadI { name: s, target };
+                self.instructions.push(node);
+                Some(target)
+            }
             Expr::IntegerLiteral(literal) => {
                 let target = self.new_register();
                 let node = IRInstruction::MovI {
