@@ -48,4 +48,11 @@ pub enum TypeCheckError {
         pos: Range<usize>,
         other_pos: Range<usize>,
     },
+    ArgumentCountNotMatching {
+        name: String,
+        pos: Range<usize>,
+        other_pos: Range<usize>,
+        called_with_arg_count: usize,
+        expected_with_arg_cont: usize,
+    },
 }

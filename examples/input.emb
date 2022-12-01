@@ -1,8 +1,18 @@
-fn f(i64 a, bool b) -> i64 {
-    return 0;
+fn increment_a(i64 a) -> i64 {
+    bool b = false;
+    while(b){
+        if(a < 10){
+            a += 1;
+        }else{
+            b = false;
+        };
+    };
+    return a;
 };
 
-i64 x = 20;
-i64 b = f(f(x,true)+x, true);
+fn main() -> void {
+    i64 a = 0;
+    i64 res = increment_a(0);
+};
 
 

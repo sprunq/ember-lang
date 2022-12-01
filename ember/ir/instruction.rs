@@ -36,7 +36,6 @@ pub enum IRInstruction {
     NOP,
     Allocation {
         name: String,
-        on_stack : bool,
     },
     MovI {
         value: Value,
@@ -76,44 +75,89 @@ pub enum IRInstruction {
     FunctionDefinition {
         name: String,
         parameters: Vec<(String, Type)>,
-        body: Label,
+        body: Vec<IRInstruction>,
+    },
+    FunctionInvocation {
+        name: String,
+        registers: Vec<Register>,
+        target: Register,
+    },
+    Return {
+        register: Option<Register>,
     },
 }
 
 impl fmt::Display for IRInstruction {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            IRInstruction::NOP => write!(f, "NOP"),
+            IRInstruction::NOP => write!(f, "\tNOP"),
             IRInstruction::MovI { value, target } => {
-                write!(f, "MOVEI {value}, {target}")
+                write!(f, "\tMOVEI {value}, {target}")
             }
-            IRInstruction::LoadI { target, name } => write!(f, "LOAD  {name}, {target}"),
-            IRInstruction::StoreI { target, name } => write!(f, "STORE {target}, {name}"),
+            IRInstruction::LoadI { target, name } => write!(f, "\tLOAD  {name}, {target}"),
+            IRInstruction::StoreI { target, name } => write!(f, "\tSTORE {target}, {name}"),
             IRInstruction::ArithmeticBinaryI {
                 left,
                 operand,
                 right,
                 target,
             } => {
-                write!(f, "{operand}I  {left}, {right}, {target}")
+                write!(f, "\t{operand}I  {left}, {right}, {target}")
             }
             IRInstruction::Label { name } => write!(f, "\n{name}:"),
-            IRInstruction::Branch { label: target } => write!(f, "JUMP  {target}"),
+            IRInstruction::Branch { label: target } => write!(f, "\tJUMP  {target}"),
             IRInstruction::BranchCond {
                 condition: cond,
                 on_true,
                 on_false,
-            } => write!(f, "CJUMP {cond}, {on_true}, {on_false}"),
+            } => write!(f, "\tCJUMP {cond}, {on_true}, {on_false}"),
             IRInstruction::CompareI {
                 left,
                 operand,
                 right,
                 target,
             } => {
-                write!(f, "COMPI {operand}, {left}, {right}, {target}")
+                write!(f, "\tCOMPI {operand}, {left}, {right}, {target}")
             }
-            IRInstruction::Allocation { name, on_stack } => {
-                write!(f, "{} {name}", if *on_stack {"ALOC"} else{"VAR "})        }
-            IRInstruction::FunctionDefinition { name, parameters, body } => todo!(),
-    }}
+            IRInstruction::Allocation { name } => {
+                write!(f, "\tALLOC {name}")
+            }
+            IRInstruction::FunctionDefinition {
+                name,
+                parameters,
+                body,
+            } => {
+                let param_str = parameters
+                    .iter()
+                    .map(|(n, _)| n.to_string())
+                    .collect::<Vec<String>>()
+                    .join(", ");
+                let body_str = body
+                    .iter()
+                    .map(|s| format!("{s}"))
+                    .collect::<Vec<String>>()
+                    .join("\n");
+                write!(f, "{name}({param_str})\n{body_str}\n",)
+            }
+            IRInstruction::Return { register } => {
+                if let Some(reg) = register {
+                    write!(f, "\tRET   {}", reg)
+                } else {
+                    write!(f, "\tRET")
+                }
+            }
+            IRInstruction::FunctionInvocation {
+                name,
+                registers,
+                target,
+            } => {
+                let param_str = registers
+                    .iter()
+                    .map(|r| format!("{}", r))
+                    .collect::<Vec<String>>()
+                    .join(", ");
+                write!(f, "\tCALL  {name}, ({param_str}), {target}")
+            }
+        }
+    }
 }

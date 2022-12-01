@@ -1,27 +1,59 @@
+use super::typechecker_error::TypeCheckError;
 use crate::ast::{
     ast_node::AstNode, ast_root::AstRoot, expression::Expr, infix::InfixOp, statement::Stmt,
     ty::Type, typed_expression::TypedExpr,
 };
 use std::{collections::HashMap, ops::Range};
 
-use super::typechecker_error::TypeCheckError;
-
+/*
+Pretty shit typechecker. Needs a rework.
+*/
 pub struct TypeChecker<'source> {
     pub input: &'source str,
+    current_stack: Vec<String>,
 }
 
 impl<'source> TypeChecker<'source> {
     pub fn new(source: &'source str) -> Self {
-        Self { input: source }
+        Self {
+            input: source,
+            current_stack: vec!["".to_string()],
+        }
     }
 
-    pub fn typecheck(&self, program: &AstRoot) -> Result<Type, TypeCheckError> {
+    pub fn typecheck(&mut self, program: &AstRoot) -> Result<Type, TypeCheckError> {
         let mut env = HashMap::new();
         self.check_statement(&mut env, &program.sequence, None)
     }
 
+    fn insert_scoped_var(
+        &mut self,
+        env: &mut HashMap<String, (Type, Range<usize>)>,
+        name: &String,
+        ty: Type,
+        pos: Range<usize>,
+    ) {
+        let binding = "_".to_string();
+        let current_scope = self.current_stack.last().unwrap_or(&binding);
+        env.insert(format!("__{current_scope}::{name}"), (ty, pos));
+    }
+
+    fn get_scoped_var(
+        &mut self,
+        env: &mut HashMap<String, (Type, Range<usize>)>,
+        name: &String,
+    ) -> Option<(Type, Range<usize>)> {
+        for current_scope in self.current_stack.iter().rev() {
+            println!("{}", current_scope);
+            if let Some(x) = env.get(&format!("__{current_scope}::{name}")) {
+                return Some((x.0, x.1.clone()));
+            }
+        }
+        None
+    }
+
     fn check_statement(
-        &self,
+        &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         stmt: &Stmt,
         expected_type: Option<Type>,
@@ -47,7 +79,7 @@ impl<'source> TypeChecker<'source> {
     }
 
     fn check_expression(
-        &self,
+        &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         expression: &AstNode<TypedExpr>,
         expected_type: Type,
@@ -77,34 +109,51 @@ impl<'source> TypeChecker<'source> {
     }
 
     fn check_function_invocation(
-        &self,
+        &mut self,
         args: &[AstNode<TypedExpr>],
         env: &mut HashMap<String, (Type, Range<usize>)>,
         name: &AstNode<TypedExpr>,
     ) -> Result<Type, TypeCheckError> {
-        for (idx, arg) in args.iter().enumerate() {
-            let expected_ty = env.get(&format!("_{name}::{idx}"));
-            if let Some(func_param) = expected_ty {
-                self.check_expression(env, arg, func_param.0)?;
-            } else {
-                return Err(TypeCheckError::IdentifierNotFound {
-                    ident: format!("{name}::{arg}"),
-                    pos: arg.pos.clone(),
-                });
+        let fun_name_str = name.inner.expr.to_string();
+        self.current_stack.push(fun_name_str.clone());
+        let mut all_params: HashMap<String, (Type, Range<usize>)> = HashMap::new();
+        for n in env.iter() {
+            if n.0.starts_with(&format!("__{name}::")) && !n.0.ends_with(&format!("::{name}")) {
+                all_params.insert(n.0.to_string(), n.1.clone());
             }
         }
-        if let Some(func) = env.get(&format!("_{name}")) {
+        let a_len = args.len();
+        let aa_len = all_params.len();
+        if a_len != aa_len {
+            let other_pos = if let Some(other_p) = all_params.values().into_iter().next() {
+                other_p.1.clone()
+            } else {
+                0..0
+            };
+            return Err(TypeCheckError::ArgumentCountNotMatching {
+                name: fun_name_str,
+                pos: name.pos.clone(),
+                called_with_arg_count: a_len,
+                expected_with_arg_cont: aa_len,
+                other_pos,
+            });
+        }
+
+        let name_str = name.inner.expr.to_string();
+        let ret = if let Some(func) = self.get_scoped_var(env, &name_str) {
             Ok(func.0)
         } else {
             Err(TypeCheckError::IdentifierNotFound {
-                ident: format!("{name}"),
+                ident: name_str.to_string(),
                 pos: name.pos.clone(),
             })
-        }
+        };
+        self.current_stack.pop();
+        ret
     }
 
     fn check_assign(
-        &self,
+        &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         ident: &AstNode<TypedExpr>,
         expected_type: Type,
@@ -127,11 +176,12 @@ impl<'source> TypeChecker<'source> {
     }
 
     fn check_identifier(
-        &self,
+        &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         ident: &AstNode<String>,
     ) -> Result<Type, TypeCheckError> {
-        let type_opt = env.get(&self.input[ident.pos.clone()]);
+        let name_str = ident.inner.to_string();
+        let type_opt = self.get_scoped_var(env, &name_str);
         match type_opt {
             Some(ty) => Ok(ty.0.to_owned()),
             None => Err(TypeCheckError::IdentifierNotFound {
@@ -142,7 +192,7 @@ impl<'source> TypeChecker<'source> {
     }
 
     fn check_infix(
-        &self,
+        &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         left: &AstNode<TypedExpr>,
         right: &AstNode<TypedExpr>,
@@ -173,7 +223,7 @@ impl<'source> TypeChecker<'source> {
     }
 
     fn check_return(
-        &self,
+        &mut self,
         value: &Option<AstNode<TypedExpr>>,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         expected_type: Option<Type>,
@@ -198,34 +248,39 @@ impl<'source> TypeChecker<'source> {
     }
 
     fn check_function(
-        &self,
+        &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         return_type: &Type,
         name: &AstNode<TypedExpr>,
         parameters: &[AstNode<TypedExpr>],
         body: &Stmt,
     ) -> Result<Type, TypeCheckError> {
-        if let Some(func) = env.get(&format!("_{name}")) {
+        if let Some(func) = env.get(&format!("__{name}")) {
             return Err(TypeCheckError::FunctionDuplicate {
                 name: name.inner.to_string(),
                 pos: name.pos.clone(),
                 other_pos: func.1.clone(),
             });
         };
-        env.insert(format!("_{name}"), (*return_type, name.pos.clone()));
-        for (idx, param) in parameters.iter().enumerate() {
-            let ty = match &param.inner.expr {
-                Expr::FunctionParameter { name: _, ty } => ty.clone().inner,
+        let name_str = name.inner.expr.to_string();
+        self.current_stack.push(name_str.clone());
+        self.insert_scoped_var(env, &name_str, *return_type, name.pos.clone());
+        for param in parameters.iter() {
+            let param = match &param.inner.expr {
+                Expr::FunctionParameter { name: p_name, ty } => {
+                    (p_name.inner.expr.to_string(), ty.clone().inner)
+                }
                 _ => unreachable!(),
             };
-            env.insert(format!("_{name}::{idx}"), (ty, param.pos.clone()));
+            self.insert_scoped_var(env, &param.0.to_string(), param.1, name.pos.clone());
         }
         self.check_statement(env, body, Some(*return_type))?;
+        self.current_stack.pop();
         Ok(Type::Void)
     }
 
     fn check_sequence(
-        &self,
+        &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         statements: &[Stmt],
         expected_type: Option<Type>,
@@ -238,7 +293,7 @@ impl<'source> TypeChecker<'source> {
     }
 
     fn check_if(
-        &self,
+        &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         condition: &AstNode<TypedExpr>,
         body: &Stmt,
@@ -259,7 +314,7 @@ impl<'source> TypeChecker<'source> {
     }
 
     fn check_while(
-        &self,
+        &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         condition: &AstNode<TypedExpr>,
         body: &Stmt,
@@ -270,7 +325,7 @@ impl<'source> TypeChecker<'source> {
     }
 
     fn check_declaration(
-        &self,
+        &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         ident: &AstNode<TypedExpr>,
         ty: &Type,
@@ -286,10 +341,14 @@ impl<'source> TypeChecker<'source> {
                 position_init_ident: t.1.to_owned(),
             });
         }
-        env.insert(
-            self.input[ident.pos.clone()].to_string(),
-            (*ty, ident.pos.clone()),
+
+        self.insert_scoped_var(
+            env,
+            &self.input[ident.pos.clone()].to_string(),
+            *ty,
+            ident.pos.clone(),
         );
+
         let val_type = self.check_expression(env, value, *ty)?;
         if *ty == val_type {
             Ok(Type::Void)

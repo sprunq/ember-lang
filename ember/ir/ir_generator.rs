@@ -1,19 +1,18 @@
 #![allow(unused_variables)]
 #![allow(dead_code)]
-use crate::ast::{
-    ast_node::AstNode, ast_root::AstRoot, expression::Expr, infix::InfixOp, prefix::PrefixOp,
-    statement::Stmt, typed_expression::TypedExpr, ty::Type,
-};
 use super::{
     instruction::{IRInstruction, Label, Register, Value},
     operands::{BinaryOp, CompareOp},
+};
+use crate::ast::{
+    ast_node::AstNode, ast_root::AstRoot, expression::Expr, infix::InfixOp, prefix::PrefixOp,
+    statement::Stmt, ty::Type, typed_expression::TypedExpr,
 };
 
 pub struct IRGenerator {
     register_count: usize,
     label_count: usize,
     instructions: Vec<IRInstruction>,
-    global_scope  :bool,
 }
 impl Default for IRGenerator {
     fn default() -> Self {
@@ -27,7 +26,6 @@ impl IRGenerator {
             register_count: 0,
             label_count: 0,
             instructions: Vec::new(),
-            global_scope : true,
         }
     }
 
@@ -74,16 +72,35 @@ impl IRGenerator {
                 body,
             } => {
                 let body_label = self.new_label();
-                let name_str = name.inner.expr.to_string() ;
-                let params = parameters.iter().map(|f| (f.inner.expr.to_string(), f.inner.ty.unwrap_or(Type::Void))).collect();
-                let node = IRInstruction::FunctionDefinition { name: if name_str== "main" {"__main".to_string()} else {name_str}, parameters: params, body: body_label };
-                
-                self.global_scope = false;
+                let mut name_str = name.inner.expr.to_string();
+                name_str.insert_str(0, "__");
+                let params = parameters
+                    .iter()
+                    .map(|f| (f.inner.expr.to_string(), f.inner.ty.unwrap_or(Type::Void)))
+                    .collect();
+
+                let old_code = self.instructions.to_owned();
+                self.instructions = vec![];
+
                 self.gen_statements(body);
-                self.global_scope = true;
-                todo!()
-            },
-            Stmt::Return { value } => todo!(),
+
+                let node = IRInstruction::FunctionDefinition {
+                    name: name_str,
+                    parameters: params,
+                    body: self.instructions.to_owned(),
+                };
+                self.instructions = old_code;
+                self.instructions.push(node);
+            }
+            Stmt::Return { value } => {
+                let node = if let Some(val) = value {
+                    let reg = self.gen_expressions(&val.inner);
+                    IRInstruction::Return { register: reg }
+                } else {
+                    IRInstruction::Return { register: None }
+                };
+                self.instructions.push(node);
+            }
         }
     }
 
@@ -100,7 +117,25 @@ impl IRGenerator {
                 expr,
             } => self.gen_expr_assign(ident, operand, expr),
             Expr::FunctionParameter { name, ty } => todo!(),
-            Expr::FunctionInvocation { name, args } => todo!(),
+            Expr::FunctionInvocation { name, args } => {
+                let mut arg_regs = vec![];
+                for arg in args {
+                    let arg_reg = self
+                        .gen_expressions(&arg.inner)
+                        .unwrap_or(Register(usize::MAX));
+                    arg_regs.push(arg_reg);
+                }
+                let target = self.new_register();
+                let mut name_str = name.inner.expr.to_string();
+                name_str.insert_str(0, "__");
+                let node = IRInstruction::FunctionInvocation {
+                    name: name_str,
+                    registers: arg_regs,
+                    target,
+                };
+                self.instructions.push(node);
+                Some(target)
+            }
         }
     }
 
@@ -214,7 +249,9 @@ impl IRGenerator {
     }
 
     fn gen_stmt_declaration(&mut self, value: &AstNode<TypedExpr>, ident: &AstNode<TypedExpr>) {
-        let node_decl = IRInstruction::Allocation { name: value.inner.expr.to_string(), on_stack: self.global_scope };
+        let node_decl = IRInstruction::Allocation {
+            name: ident.inner.expr.to_string(),
+        };
         self.instructions.push(node_decl);
         let a = self
             .gen_expressions(&value.inner)

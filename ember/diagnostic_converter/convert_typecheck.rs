@@ -82,7 +82,25 @@ pub fn build_typecheck_error_diagnostic(
                 Label::primary(file_id, pos).with_message(format!(
                     "cannot create function with name {name} since it already exists"
                 )),
-                Label::secondary(file_id, other_pos).with_message(format!("already defined here")),
+                Label::secondary(file_id, other_pos)
+                    .with_message("already defined here".to_string()),
+            ]),
+        TypeCheckError::ArgumentCountNotMatching {
+            name,
+            pos,
+            other_pos,
+            called_with_arg_count,
+            expected_with_arg_cont,
+        } => Diagnostic::error()
+            .with_message("Function called with invalid argument count")
+            .with_code("T011")
+            .with_labels(vec![
+                Label::primary(file_id, pos).with_message(format!(
+                    "cannot invoke {name} with {called_with_arg_count} arguments"
+                )),
+                Label::secondary(file_id, other_pos).with_message(format!(
+                    "defined here with {expected_with_arg_cont} parameters"
+                )),
             ]),
     }
 }

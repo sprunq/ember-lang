@@ -7,7 +7,7 @@ pub mod tests {
         let parse_res = parser.parse_program();
         match parse_res {
             Ok(mut program) => {
-                let tc = TypeChecker::new(input);
+                let mut tc = TypeChecker::new(input);
                 let res = tc.typecheck(&mut program);
                 if res.is_err() {
                     println!("{:#?}", res);
@@ -273,20 +273,6 @@ pub mod tests {
     }
 
     #[test]
-    fn test_duplicate_function() {
-        let input = "
-        fn main(i64 a, bool b) -> i64 {
-            return 0;
-        };
-        
-        fn main(i64 a, bool b) -> i64 {
-            return 0;
-        };
-        ";
-        expect_res(input, false);
-    }
-
-    #[test]
     fn test_function_declaration() {
         let input = "
         fn main(i64 a, bool b) -> i64 {
@@ -300,7 +286,7 @@ pub mod tests {
     fn test_function_declaration_false() {
         let input = "
         fn main(i64 a, bool b) -> i64 {
-            return 0;
+            return true;
         };
         ";
         expect_res(input, false);
