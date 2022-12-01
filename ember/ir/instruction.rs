@@ -1,5 +1,7 @@
 use std::fmt;
 
+use crate::ast::ty::Type;
+
 use super::operands::{BinaryOp, CompareOp};
 
 #[derive(Debug, Copy, Clone)]
@@ -32,6 +34,10 @@ impl fmt::Display for Register {
 #[derive(Debug, Clone)]
 pub enum IRInstruction {
     NOP,
+    Allocation {
+        name: String,
+        on_stack : bool,
+    },
     MovI {
         value: Value,
         target: Register,
@@ -67,6 +73,11 @@ pub enum IRInstruction {
         on_true: Label,
         on_false: Label,
     },
+    FunctionDefinition {
+        name: String,
+        parameters: Vec<(String, Type)>,
+        body: Label,
+    },
 }
 
 impl fmt::Display for IRInstruction {
@@ -101,6 +112,8 @@ impl fmt::Display for IRInstruction {
             } => {
                 write!(f, "COMPI {operand}, {left}, {right}, {target}")
             }
-        }
-    }
+            IRInstruction::Allocation { name, on_stack } => {
+                write!(f, "{} {name}", if *on_stack {"ALOC"} else{"VAR "})        }
+            IRInstruction::FunctionDefinition { name, parameters, body } => todo!(),
+    }}
 }

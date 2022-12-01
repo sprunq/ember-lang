@@ -2,9 +2,8 @@
 #![allow(dead_code)]
 use crate::ast::{
     ast_node::AstNode, ast_root::AstRoot, expression::Expr, infix::InfixOp, prefix::PrefixOp,
-    statement::Stmt, typed_expression::TypedExpr,
+    statement::Stmt, typed_expression::TypedExpr, ty::Type,
 };
-
 use super::{
     instruction::{IRInstruction, Label, Register, Value},
     operands::{BinaryOp, CompareOp},
@@ -14,6 +13,7 @@ pub struct IRGenerator {
     register_count: usize,
     label_count: usize,
     instructions: Vec<IRInstruction>,
+    global_scope  :bool,
 }
 impl Default for IRGenerator {
     fn default() -> Self {
@@ -27,6 +27,7 @@ impl IRGenerator {
             register_count: 0,
             label_count: 0,
             instructions: Vec::new(),
+            global_scope : true,
         }
     }
 
@@ -71,7 +72,17 @@ impl IRGenerator {
                 parameters,
                 return_type,
                 body,
-            } => todo!(),
+            } => {
+                let body_label = self.new_label();
+                let name_str = name.inner.expr.to_string() ;
+                let params = parameters.iter().map(|f| (f.inner.expr.to_string(), f.inner.ty.unwrap_or(Type::Void))).collect();
+                let node = IRInstruction::FunctionDefinition { name: if name_str== "main" {"__main".to_string()} else {name_str}, parameters: params, body: body_label };
+                
+                self.global_scope = false;
+                self.gen_statements(body);
+                self.global_scope = true;
+                todo!()
+            },
             Stmt::Return { value } => todo!(),
         }
     }
@@ -203,6 +214,8 @@ impl IRGenerator {
     }
 
     fn gen_stmt_declaration(&mut self, value: &AstNode<TypedExpr>, ident: &AstNode<TypedExpr>) {
+        let node_decl = IRInstruction::Allocation { name: value.inner.expr.to_string(), on_stack: self.global_scope };
+        self.instructions.push(node_decl);
         let a = self
             .gen_expressions(&value.inner)
             .unwrap_or(Register(usize::MAX));
