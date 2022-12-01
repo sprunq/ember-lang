@@ -11,8 +11,7 @@ fn increment_a(i64 a) -> i64 {
 };
 
 fn main() -> void {
-    i64 a = 0;
-    i64 res = increment_a(0);
+    i64 res = increment_a(20);
 };
 
 

@@ -44,7 +44,6 @@ impl<'source> TypeChecker<'source> {
         name: &String,
     ) -> Option<(Type, Range<usize>)> {
         for current_scope in self.current_stack.iter().rev() {
-            println!("{}", current_scope);
             if let Some(x) = env.get(&format!("__{current_scope}::{name}")) {
                 return Some((x.0, x.1.clone()));
             }
