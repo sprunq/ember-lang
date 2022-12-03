@@ -72,7 +72,7 @@ impl IRGenerator {
                 body,
             } => {
                 let body_label = self.new_label();
-                let mut name_str = name.inner.expr.to_string();
+                let mut name_str = name.inner.clone();
                 name_str.insert_str(0, "__");
                 let params = parameters
                     .iter()
@@ -108,7 +108,7 @@ impl IRGenerator {
         match &expr.expr {
             Expr::Infix { op, left, right } => self.gen_expr_infix(left, right, op),
             Expr::Prefix { op, expr } => self.gen_expr_prefix(expr, op),
-            Expr::Identifier(ident) => self.gen_expr_ident(ident),
+            Expr::Identifier(ident) => self.gen_expr_ident(&ident.inner),
             Expr::IntegerLiteral(literal) => self.gen_expr_int_literal(literal),
             Expr::BooleanLiteral(literal) => self.gen_expr_bool_literal(literal),
             Expr::Assign {
@@ -126,7 +126,7 @@ impl IRGenerator {
                     arg_regs.push(arg_reg);
                 }
                 let target = self.new_register();
-                let mut name_str = name.inner.expr.to_string();
+                let mut name_str = name.inner.clone();
                 name_str.insert_str(0, "__");
                 let node = IRInstruction::FunctionInvocation {
                     name: name_str,
@@ -248,9 +248,9 @@ impl IRGenerator {
         }
     }
 
-    fn gen_stmt_declaration(&mut self, value: &AstNode<TypedExpr>, ident: &AstNode<TypedExpr>) {
+    fn gen_stmt_declaration(&mut self, value: &AstNode<TypedExpr>, ident: &AstNode<String>) {
         let node_decl = IRInstruction::Allocation {
-            name: ident.inner.expr.to_string(),
+            name: ident.inner.clone(),
         };
         self.instructions.push(node_decl);
         let a = self
@@ -258,7 +258,7 @@ impl IRGenerator {
             .unwrap_or(Register(usize::MAX));
         self.instructions.push(IRInstruction::StoreI {
             target: a,
-            name: ident.inner.expr.to_string(),
+            name: ident.inner.clone(),
         });
     }
 
@@ -282,8 +282,8 @@ impl IRGenerator {
         Some(target)
     }
 
-    fn gen_expr_ident(&mut self, ident: &AstNode<String>) -> Option<Register> {
-        let s = ident.inner.to_string();
+    fn gen_expr_ident(&mut self, ident: &String) -> Option<Register> {
+        let s = ident.clone();
         let target = self.new_register();
         let node = IRInstruction::LoadI { name: s, target };
         self.instructions.push(node);
@@ -341,7 +341,7 @@ impl IRGenerator {
 
     fn gen_expr_assign(
         &mut self,
-        ident: &AstNode<TypedExpr>,
+        ident: &AstNode<String>,
         operand: &AstNode<InfixOp>,
         expr: &AstNode<TypedExpr>,
     ) -> Option<Register> {
@@ -370,7 +370,7 @@ impl IRGenerator {
                     _ => None,
                 };
                 let ident_reg = self
-                    .gen_expressions(&ident.inner)
+                    .gen_expr_ident(&ident.inner)
                     .unwrap_or(Register(usize::MAX));
 
                 let target = self.new_register();

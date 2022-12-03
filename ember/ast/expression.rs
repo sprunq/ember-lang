@@ -18,16 +18,16 @@ pub enum Expr {
     IntegerLiteral(AstNode<i64>),
     BooleanLiteral(AstNode<bool>),
     Assign {
-        ident: Box<AstNode<TypedExpr>>,
+        ident: AstNode<String>,
         operand: AstNode<InfixOp>,
         expr: Box<AstNode<TypedExpr>>,
     },
     FunctionParameter {
-        name: Box<AstNode<TypedExpr>>,
+        name: AstNode<String>,
         ty: AstNode<Type>,
     },
     FunctionInvocation {
-        name: Box<AstNode<TypedExpr>>,
+        name: AstNode<String>,
         args: Vec<AstNode<TypedExpr>>,
     },
 }

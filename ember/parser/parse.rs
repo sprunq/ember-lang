@@ -106,13 +106,13 @@ impl<'source> Parser<'source> {
         let ty = self.parse_type()?;
         self.next_token();
         let end_type = self.current_token.span.end;
-        let ident = self.parse_identifier_expression()?;
+        let ident = self.parse_identifier_string()?;
         Ok(AstNode::new(
             TypedExpr::new(Expr::FunctionParameter {
-                name: Box::new(ident.clone()),
+                name: AstNode::new(ident.0, ident.1.clone()),
                 ty: AstNode::new(ty, start_pos..end_type),
             }),
-            start_pos..ident.pos.end,
+            start_pos..ident.1.end,
         ))
     }
 
@@ -134,7 +134,7 @@ impl<'source> Parser<'source> {
 
     fn parse_define_function_stmt(&mut self) -> Result<Stmt, ParseErr> {
         self.next_token();
-        let name = self.parse_identifier_expression()?;
+        let name = self.parse_identifier_string()?;
         self.expect_and_move(Token::LParenthesis, ParseErr::ExpectedLparen)?;
         let parameters = self.parse_function_parameters()?;
         self.expect_and_move(Token::RParenthesis, ParseErr::ExpectedRparen)?;
@@ -147,7 +147,7 @@ impl<'source> Parser<'source> {
             self.next_token();
         }
         Ok(Stmt::FunctionDefinition {
-            name,
+            name: AstNode::new(name.0, name.1),
             parameters,
             return_type: ty,
             body: Box::new(body),
@@ -343,7 +343,7 @@ impl<'source> Parser<'source> {
         let start = left.pos.start;
         let args = self.parse_expressions(Token::RParenthesis, ParseErr::ExpectedRparen)?;
         let inv = Expr::FunctionInvocation {
-            name: Box::new(left),
+            name: AstNode::new(left.inner.expr.to_string(), left.pos),
             args,
         };
         let end = self.current_token.span.end;
@@ -376,15 +376,6 @@ impl<'source> Parser<'source> {
         &mut self,
         left: AstNode<TypedExpr>,
     ) -> Result<AstNode<TypedExpr>, ParseErr> {
-        let identifier = {
-            if let Expr::Identifier(ident) = left.inner.expr {
-                Ok(ident)
-            } else {
-                Err(ParseErr::ExpectedIdentifierToken(
-                    self.current_token.clone(),
-                ))
-            }
-        }?;
         let operator = match self.current_token.token {
             Token::Assign => InfixOp::Assign,
             Token::PlusEquals => InfixOp::PlusEquals,
@@ -397,12 +388,10 @@ impl<'source> Parser<'source> {
         self.next_token();
         let value = self.parse_expr(Precedence::Lowest)?;
         let end_pos = value.pos.end;
-        let pos = identifier.pos.clone();
-        let ident = AstNode::new_boxed(TypedExpr::new(Expr::Identifier(identifier)), pos);
-        let ident_pos = ident.pos.start;
+        let ident_pos = left.pos.start;
         Ok(AstNode::new(
             TypedExpr::new(Expr::Assign {
-                ident,
+                ident: AstNode::new(left.inner.expr.to_string(), left.pos),
                 operand: AstNode::<InfixOp>::new(operator, operator_pos),
                 expr: Box::new(value),
             }),
@@ -437,13 +426,7 @@ impl<'source> Parser<'source> {
         self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
         Ok(Stmt::Declaration {
             ty,
-            ident: AstNode::new(
-                TypedExpr::new(Expr::Identifier(AstNode::<String>::new(
-                    ident.0,
-                    ident.1.clone(),
-                ))),
-                ident.1,
-            ),
+            ident: AstNode::new(ident.0, ident.1),
             value,
         })
     }

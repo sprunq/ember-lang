@@ -111,10 +111,9 @@ impl<'source> TypeChecker<'source> {
         &mut self,
         args: &[AstNode<TypedExpr>],
         env: &mut HashMap<String, (Type, Range<usize>)>,
-        name: &AstNode<TypedExpr>,
+        name: &AstNode<String>,
     ) -> Result<Type, TypeCheckError> {
-        let fun_name_str = name.inner.expr.to_string();
-        self.current_stack.push(fun_name_str.clone());
+        self.current_stack.push(name.inner.clone());
         let mut all_params: HashMap<String, (Type, Range<usize>)> = HashMap::new();
         for n in env.iter() {
             if n.0.starts_with(&format!("__{name}::")) && !n.0.ends_with(&format!("::{name}")) {
@@ -130,7 +129,7 @@ impl<'source> TypeChecker<'source> {
                 0..0
             };
             return Err(TypeCheckError::ArgumentCountNotMatching {
-                name: fun_name_str,
+                name: name.inner.clone(),
                 pos: name.pos.clone(),
                 called_with_arg_count: a_len,
                 expected_with_arg_cont: aa_len,
@@ -138,12 +137,11 @@ impl<'source> TypeChecker<'source> {
             });
         }
 
-        let name_str = name.inner.expr.to_string();
-        let ret = if let Some(func) = self.get_scoped_var(env, &name_str) {
+        let ret = if let Some(func) = self.get_scoped_var(env, &name.inner) {
             Ok(func.0)
         } else {
             Err(TypeCheckError::IdentifierNotFound {
-                ident: name_str.to_string(),
+                ident: name.inner.clone(),
                 pos: name.pos.clone(),
             })
         };
@@ -154,12 +152,26 @@ impl<'source> TypeChecker<'source> {
     fn check_assign(
         &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
-        ident: &AstNode<TypedExpr>,
+        ident: &AstNode<String>,
         expected_type: Type,
         expr: &AstNode<TypedExpr>,
         operand: &AstNode<InfixOp>,
     ) -> Result<Type, TypeCheckError> {
-        let ident_type = self.check_expression(env, ident, expected_type)?;
+        let i_type = self.get_scoped_var(env, &ident.inner);
+        if let None = i_type {
+            return Err(TypeCheckError::IdentifierNotFound {
+                ident: ident.inner.clone(),
+                pos: ident.pos.clone(),
+            });
+        }
+        let ident_type = i_type.unwrap().0;
+        if ident_type != expected_type && expected_type != Type::Void {
+            return Err(TypeCheckError::NotMatchingExpetectedType {
+                expected: expected_type,
+                actual: ident_type,
+                pos: ident.pos.clone(),
+            });
+        }
         let expr_type = self.check_expression(env, expr, ident_type)?;
         let type_interaction_res = ident_type.type_interaction(operand.inner, expr_type);
         if type_interaction_res.is_none() {
@@ -250,7 +262,7 @@ impl<'source> TypeChecker<'source> {
         &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         return_type: &Type,
-        name: &AstNode<TypedExpr>,
+        name: &AstNode<String>,
         parameters: &[AstNode<TypedExpr>],
         body: &Stmt,
     ) -> Result<Type, TypeCheckError> {
@@ -261,13 +273,13 @@ impl<'source> TypeChecker<'source> {
                 other_pos: func.1.clone(),
             });
         };
-        let name_str = name.inner.expr.to_string();
+        let name_str = name.inner.clone();
         self.current_stack.push(name_str.clone());
         self.insert_scoped_var(env, &name_str, *return_type, name.pos.clone());
         for param in parameters.iter() {
             let param = match &param.inner.expr {
                 Expr::FunctionParameter { name: p_name, ty } => {
-                    (p_name.inner.expr.to_string(), ty.clone().inner)
+                    (p_name.inner.clone(), ty.clone().inner)
                 }
                 _ => unreachable!(),
             };
@@ -326,7 +338,7 @@ impl<'source> TypeChecker<'source> {
     fn check_declaration(
         &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
-        ident: &AstNode<TypedExpr>,
+        ident: &AstNode<String>,
         ty: &Option<Type>,
         value: &AstNode<TypedExpr>,
     ) -> Result<Type, TypeCheckError> {
@@ -334,7 +346,7 @@ impl<'source> TypeChecker<'source> {
         let type_opt = env.get(&self.input[ident.pos.clone()]);
         if let Some(t) = type_opt {
             return Err(TypeCheckError::VariableAlreadyExists {
-                ident: ident.inner.expr.to_string(),
+                ident: ident.inner.clone(),
                 initialized_with_type: t.0.to_owned(),
                 tried_to_init_with: ty.to_owned(),
                 position_ident: ident.pos.to_owned(),

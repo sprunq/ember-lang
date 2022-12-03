@@ -5,7 +5,7 @@ use std::fmt;
 pub enum Stmt {
     Declaration {
         ty: Option<Type>,
-        ident: AstNode<TypedExpr>,
+        ident: AstNode<String>,
         value: AstNode<TypedExpr>,
     },
     Expression {
@@ -24,7 +24,7 @@ pub enum Stmt {
         statements: Box<Vec<Stmt>>,
     },
     FunctionDefinition {
-        name: AstNode<TypedExpr>,
+        name: AstNode<String>,
         parameters: Vec<AstNode<TypedExpr>>,
         return_type: Type,
         body: Box<Stmt>,
