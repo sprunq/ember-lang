@@ -5,9 +5,8 @@ use super::{
     operands::{BinaryOp, CompareOp},
 };
 use crate::syntax::{
-    ast::{AstRoot, Expr, Spanned, Stmt, TypedExpr},
+    ast::{AstRoot, Expr, Spanned, Stmt},
     operands::{InfixOp, PrefixOp},
-    ty::Type,
 };
 
 pub struct IRGenerator {
@@ -77,7 +76,7 @@ impl IRGenerator {
                 name_str.insert_str(0, "__");
                 let params = parameters
                     .iter()
-                    .map(|f| (f.inner.expr.to_string(), f.inner.ty.unwrap_or(Type::Void)))
+                    .map(|f| (f.0.inner.clone(), f.1.inner))
                     .collect();
 
                 let old_code = self.instructions.to_owned();
@@ -105,8 +104,8 @@ impl IRGenerator {
         }
     }
 
-    fn gen_expressions(&mut self, expr: &TypedExpr) -> Option<Register> {
-        match &expr.expr {
+    fn gen_expressions(&mut self, expr: &Expr) -> Option<Register> {
+        match &expr {
             Expr::Infix { op, left, right } => self.gen_expr_infix(left, right, op),
             Expr::Prefix { op, expr } => self.gen_expr_prefix(expr, op),
             Expr::Identifier(ident) => self.gen_expr_ident(&ident.inner),
@@ -140,7 +139,7 @@ impl IRGenerator {
         }
     }
 
-    fn gen_stmt_while(&mut self, condition: &Spanned<TypedExpr>, body: &Stmt) {
+    fn gen_stmt_while(&mut self, condition: &Spanned<Expr>, body: &Stmt) {
         let top_label = self.new_label();
         let start_label = self.new_label();
         let merge_label = self.new_label();
@@ -174,7 +173,7 @@ impl IRGenerator {
 
     fn gen_stmt_if(
         &mut self,
-        condition: &Spanned<TypedExpr>,
+        condition: &Spanned<Expr>,
         body: &Stmt,
         alternative: &Option<Box<Stmt>>,
     ) {
@@ -208,13 +207,13 @@ impl IRGenerator {
         self.instructions.push(merge_node);
     }
 
-    fn gen_stmt_expr(&mut self, expr: &Spanned<TypedExpr>) {
+    fn gen_stmt_expr(&mut self, expr: &Spanned<Expr>) {
         self.gen_expressions(&expr.inner);
     }
 
     fn gen_expr_prefix(
         &mut self,
-        expr: &Spanned<TypedExpr>,
+        expr: &Spanned<Expr>,
         op: &Spanned<PrefixOp>,
     ) -> Option<Register> {
         let expr_reg = self
@@ -249,7 +248,7 @@ impl IRGenerator {
         }
     }
 
-    fn gen_stmt_declaration(&mut self, value: &Spanned<TypedExpr>, ident: &Spanned<String>) {
+    fn gen_stmt_declaration(&mut self, value: &Spanned<Expr>, ident: &Spanned<String>) {
         let node_decl = IRInstruction::Allocation {
             name: ident.inner.clone(),
         };
@@ -293,8 +292,8 @@ impl IRGenerator {
 
     fn gen_expr_infix(
         &mut self,
-        left: &Spanned<TypedExpr>,
-        right: &Spanned<TypedExpr>,
+        left: &Spanned<Expr>,
+        right: &Spanned<Expr>,
         op: &Spanned<InfixOp>,
     ) -> Option<Register> {
         let left_reg = self
@@ -344,7 +343,7 @@ impl IRGenerator {
         &mut self,
         ident: &Spanned<String>,
         operand: &Spanned<InfixOp>,
-        expr: &Spanned<TypedExpr>,
+        expr: &Spanned<Expr>,
     ) -> Option<Register> {
         let expr_reg = self
             .gen_expressions(&expr.inner)

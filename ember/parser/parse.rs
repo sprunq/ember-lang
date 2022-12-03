@@ -2,17 +2,16 @@ use super::parse_error::ParseErr;
 use crate::syntax::operands::Precedence;
 use crate::syntax::token::{Token, TokenInfo};
 use crate::syntax::{
-    ast::{AstRoot, Expr, Spanned, Stmt, TypedExpr},
+    ast::{AstRoot, Expr, Spanned, Stmt},
     operands::{InfixOp, PrefixOp},
     ty::Type,
 };
 use std::ops::Range;
 
-type InfixFunctionType<'source> = Option<
-    for<'r> fn(&'r mut Parser<'source>, Spanned<TypedExpr>) -> Result<Spanned<TypedExpr>, ParseErr>,
->;
+type InfixFunctionType<'source> =
+    Option<for<'r> fn(&'r mut Parser<'source>, Spanned<Expr>) -> Result<Spanned<Expr>, ParseErr>>;
 type PrefixFunctionType<'source> =
-    Option<for<'r> fn(&'r mut Parser<'source>) -> Result<Spanned<TypedExpr>, ParseErr>>;
+    Option<for<'r> fn(&'r mut Parser<'source>) -> Result<Spanned<Expr>, ParseErr>>;
 
 pub struct Parser<'source> {
     pub tokens: Vec<TokenInfo>,
@@ -100,22 +99,20 @@ impl<'source> Parser<'source> {
         }
     }
 
-    fn parse_function_parameter(&mut self) -> Result<Spanned<TypedExpr>, ParseErr> {
+    fn parse_function_parameter(&mut self) -> Result<(Spanned<String>, Spanned<Type>), ParseErr> {
         let start_pos = self.current_token.span.start;
         let ty = self.parse_type()?;
         self.next_token();
         let end_type = self.current_token.span.end;
         let ident = self.parse_identifier_string()?;
-        Ok(Spanned::new(
-            TypedExpr::new(Expr::FunctionParameter {
-                name: Spanned::new(ident.0, ident.1.clone()),
-                ty: Spanned::new(ty, start_pos..end_type),
-            }),
-            start_pos..ident.1.end,
-        ))
+        let expr_sp = Spanned::new(ident.0, ident.1);
+        let type_sp = Spanned::new(ty, start_pos..end_type);
+        Ok((expr_sp, type_sp))
     }
 
-    fn parse_function_parameters(&mut self) -> Result<Vec<Spanned<TypedExpr>>, ParseErr> {
+    fn parse_function_parameters(
+        &mut self,
+    ) -> Result<Vec<(Spanned<String>, Spanned<Type>)>, ParseErr> {
         let mut identifiers = vec![];
         if self.peek_token.token == Token::RParenthesis {
             return Ok(identifiers);
@@ -220,17 +217,14 @@ impl<'source> Parser<'source> {
         })
     }
 
-    fn parse_literal_expression(&mut self) -> Result<Spanned<TypedExpr>, ParseErr> {
+    fn parse_literal_expression(&mut self) -> Result<Spanned<Expr>, ParseErr> {
         if let Token::Number = &self.current_token.token {
             match &self.get_str(self.current_token.span.clone()).parse::<i64>() {
                 Ok(value) => Ok(Spanned::new(
-                    TypedExpr {
-                        ty: Some(Type::I64),
-                        expr: Expr::IntegerLiteral(Spanned::<i64>::new(
-                            *value,
-                            self.current_token.span.clone(),
-                        )),
-                    },
+                    Expr::IntegerLiteral(Spanned::<i64>::new(
+                        *value,
+                        self.current_token.span.clone(),
+                    )),
                     self.current_token.span.clone(),
                 )),
                 Err(error) => Err(ParseErr::ParseIntError(
@@ -243,7 +237,7 @@ impl<'source> Parser<'source> {
         }
     }
 
-    fn parse_boolean_expression(&mut self) -> Result<Spanned<TypedExpr>, ParseErr> {
+    fn parse_boolean_expression(&mut self) -> Result<Spanned<Expr>, ParseErr> {
         let value = match &self.current_token.token {
             Token::True => Some(Expr::BooleanLiteral(Spanned::<bool>::new(
                 true,
@@ -256,13 +250,7 @@ impl<'source> Parser<'source> {
             _ => None,
         };
         match value {
-            Some(expr) => Ok(Spanned::new(
-                TypedExpr {
-                    ty: Some(Type::Bool),
-                    expr,
-                },
-                self.current_token.span.clone(),
-            )),
+            Some(expr) => Ok(Spanned::new(expr, self.current_token.span.clone())),
             None => Err(ParseErr::ExpectedBoolToken(self.current_token.clone())),
         }
     }
@@ -315,7 +303,7 @@ impl<'source> Parser<'source> {
         }
     }
 
-    fn parse_expr(&mut self, precedence: Precedence) -> Result<Spanned<TypedExpr>, ParseErr> {
+    fn parse_expr(&mut self, precedence: Precedence) -> Result<Spanned<Expr>, ParseErr> {
         let prefix = self
             .get_prefix_fn()
             .ok_or_else(|| ParseErr::ExpectedPrefixToken(self.current_token.clone()))?;
@@ -335,25 +323,22 @@ impl<'source> Parser<'source> {
         Ok(left_expr)
     }
 
-    fn parse_call_expression(
-        &mut self,
-        left: Spanned<TypedExpr>,
-    ) -> Result<Spanned<TypedExpr>, ParseErr> {
+    fn parse_call_expression(&mut self, left: Spanned<Expr>) -> Result<Spanned<Expr>, ParseErr> {
         let start = left.pos.start;
         let args = self.parse_expressions(Token::RParenthesis, ParseErr::ExpectedRparen)?;
         let inv = Expr::FunctionInvocation {
-            name: Spanned::new(left.inner.expr.to_string(), left.pos),
+            name: Spanned::new(left.inner.to_string(), left.pos),
             args,
         };
         let end = self.current_token.span.end;
-        Ok(Spanned::new(TypedExpr::new(inv), start..end))
+        Ok(Spanned::new(inv, start..end))
     }
 
     fn parse_expressions(
         &mut self,
         closing_token: Token,
         expected: fn(TokenInfo) -> ParseErr,
-    ) -> Result<Vec<Spanned<TypedExpr>>, ParseErr> {
+    ) -> Result<Vec<Spanned<Expr>>, ParseErr> {
         let mut exps = vec![];
         if self.peek_token.token == closing_token {
             self.next_token();
@@ -371,10 +356,7 @@ impl<'source> Parser<'source> {
         Ok(exps)
     }
 
-    fn parse_assign_expression(
-        &mut self,
-        left: Spanned<TypedExpr>,
-    ) -> Result<Spanned<TypedExpr>, ParseErr> {
+    fn parse_assign_expression(&mut self, left: Spanned<Expr>) -> Result<Spanned<Expr>, ParseErr> {
         let operator = match self.current_token.token {
             Token::Assign => InfixOp::Assign,
             Token::PlusEquals => InfixOp::PlusEquals,
@@ -389,11 +371,11 @@ impl<'source> Parser<'source> {
         let end_pos = value.pos.end;
         let ident_pos = left.pos.start;
         Ok(Spanned::new(
-            TypedExpr::new(Expr::Assign {
-                ident: Spanned::new(left.inner.expr.to_string(), left.pos),
+            Expr::Assign {
+                ident: Spanned::new(left.inner.to_string(), left.pos),
                 operand: Spanned::<InfixOp>::new(operator, operator_pos),
                 expr: Box::new(value),
-            }),
+            },
             ident_pos..end_pos,
         ))
     }
@@ -437,11 +419,11 @@ impl<'source> Parser<'source> {
         Ok(Stmt::Expression { expr: expression })
     }
 
-    fn parse_identifier_expression(&mut self) -> Result<Spanned<TypedExpr>, ParseErr> {
+    fn parse_identifier_expression(&mut self) -> Result<Spanned<Expr>, ParseErr> {
         let s = self.parse_identifier_string();
         match s {
             Ok(st) => Ok(Spanned::new(
-                TypedExpr::new(Expr::Identifier(Spanned::<String>::new(st.0, st.1.clone()))),
+                Expr::Identifier(Spanned::<String>::new(st.0, st.1.clone())),
                 st.1,
             )),
             Err(err) => Err(err),
@@ -461,24 +443,21 @@ impl<'source> Parser<'source> {
         }
     }
 
-    fn parse_prefix_expression(&mut self) -> Result<Spanned<TypedExpr>, ParseErr> {
+    fn parse_prefix_expression(&mut self) -> Result<Spanned<Expr>, ParseErr> {
         let prefix_pos = self.current_token.span.clone();
         let prefix_token = self.get_prefix_token(&self.current_token)?;
         self.next_token();
         let right_expr = self.parse_expr(Precedence::Prefix)?;
         Ok(Spanned::new(
-            TypedExpr::new(Expr::Prefix {
+            Expr::Prefix {
                 op: Spanned::<PrefixOp>::new(prefix_token, prefix_pos.clone()),
                 expr: Box::new(right_expr.clone()),
-            }),
+            },
             prefix_pos.start..right_expr.pos.end,
         ))
     }
 
-    fn parse_infix_expression(
-        &mut self,
-        left: Spanned<TypedExpr>,
-    ) -> Result<Spanned<TypedExpr>, ParseErr> {
+    fn parse_infix_expression(&mut self, left: Spanned<Expr>) -> Result<Spanned<Expr>, ParseErr> {
         let (precedence, infix) = self.get_infix_token(&self.current_token.token);
         let i = infix.ok_or_else(|| ParseErr::ExpectedInfixToken(self.current_token.clone()))?;
         let infix_pos = self.current_token.span.clone();
@@ -486,16 +465,16 @@ impl<'source> Parser<'source> {
         let right = self.parse_expr(precedence)?;
 
         Ok(Spanned::new(
-            TypedExpr::new(Expr::Infix {
+            Expr::Infix {
                 op: Spanned::<InfixOp>::new(i, infix_pos),
                 left: Box::new(left.clone()),
                 right: Box::new(right.clone()),
-            }),
+            },
             left.pos.start..right.pos.end,
         ))
     }
 
-    fn parse_grouped_expression(&mut self) -> Result<Spanned<TypedExpr>, ParseErr> {
+    fn parse_grouped_expression(&mut self) -> Result<Spanned<Expr>, ParseErr> {
         self.next_token();
         let expr = self.parse_expr(Precedence::Lowest)?;
         self.expect_and_move(Token::RParenthesis, ParseErr::ExpectedRparen)?;

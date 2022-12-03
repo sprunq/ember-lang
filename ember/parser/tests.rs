@@ -4,9 +4,8 @@ pub mod tests {
         lexer::lex::Lexer,
         parser::parse::Parser,
         syntax::{
-            ast::{Expr, Spanned, Stmt, TypedExpr},
+            ast::{Expr, Spanned, Stmt},
             operands::InfixOp,
-            ty::Type,
         },
     };
 
@@ -42,26 +41,17 @@ pub mod tests {
                 Stmt::Sequence {
                     statements: Box::new(vec![Stmt::Expression {
                         expr: Spanned::new(
-                            TypedExpr::new(Expr::Infix {
+                            Expr::Infix {
                                 op: Spanned::<InfixOp>::new(operator, 2..3),
                                 left: Spanned::new_boxed(
-                                    TypedExpr {
-                                        ty: Some(Type::I64),
-                                        expr: Expr::IntegerLiteral(Spanned::<i64>::new(left, 0..1))
-                                    },
+                                    Expr::IntegerLiteral(Spanned::<i64>::new(left, 0..1)),
                                     0..1
                                 ),
                                 right: Spanned::new_boxed(
-                                    TypedExpr {
-                                        ty: Some(Type::I64),
-                                        expr: Expr::IntegerLiteral(Spanned::<i64>::new(
-                                            right,
-                                            4..5
-                                        ))
-                                    },
+                                    Expr::IntegerLiteral(Spanned::<i64>::new(right, 4..5)),
                                     4..5
                                 )
-                            }),
+                            },
                             0..5
                         )
                     }])
@@ -86,26 +76,17 @@ pub mod tests {
                 Stmt::Sequence {
                     statements: Box::new(vec![Stmt::Expression {
                         expr: Spanned::new(
-                            TypedExpr::new(Expr::Infix {
+                            Expr::Infix {
                                 op: Spanned::<InfixOp>::new(operator, 2..4),
                                 left: Spanned::new_boxed(
-                                    TypedExpr {
-                                        ty: Some(Type::I64),
-                                        expr: Expr::IntegerLiteral(Spanned::<i64>::new(left, 0..1))
-                                    },
+                                    Expr::IntegerLiteral(Spanned::<i64>::new(left, 0..1)),
                                     0..1
                                 ),
                                 right: Spanned::new_boxed(
-                                    TypedExpr {
-                                        ty: Some(Type::I64),
-                                        expr: Expr::IntegerLiteral(Spanned::<i64>::new(
-                                            right,
-                                            5..6
-                                        ))
-                                    },
+                                    Expr::IntegerLiteral(Spanned::<i64>::new(right, 5..6)),
                                     5..6
                                 )
-                            }),
+                            },
                             0..6
                         )
                     }])

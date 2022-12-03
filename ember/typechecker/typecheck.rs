@@ -1,6 +1,6 @@
 use super::typechecker_error::TypeCheckError;
 use crate::syntax::{
-    ast::{AstRoot, Expr, Spanned, Stmt, TypedExpr},
+    ast::{AstRoot, Expr, Spanned, Stmt},
     operands::InfixOp,
     ty::Type,
 };
@@ -81,10 +81,10 @@ impl<'source> TypeChecker<'source> {
     fn check_expression(
         &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
-        expression: &Spanned<TypedExpr>,
+        expression: &Spanned<Expr>,
         expected_type: Type,
     ) -> Result<Type, TypeCheckError> {
-        match &expression.inner.expr {
+        match &expression.inner {
             Expr::Infix { op, left, right } => {
                 self.check_infix(env, left, right, op, expected_type)
             }
@@ -110,7 +110,7 @@ impl<'source> TypeChecker<'source> {
 
     fn check_function_invocation(
         &mut self,
-        args: &[Spanned<TypedExpr>],
+        args: &[Spanned<Expr>],
         env: &mut HashMap<String, (Type, Range<usize>)>,
         name: &Spanned<String>,
     ) -> Result<Type, TypeCheckError> {
@@ -155,7 +155,7 @@ impl<'source> TypeChecker<'source> {
         env: &mut HashMap<String, (Type, Range<usize>)>,
         ident: &Spanned<String>,
         expected_type: Type,
-        expr: &Spanned<TypedExpr>,
+        expr: &Spanned<Expr>,
         operand: &Spanned<InfixOp>,
     ) -> Result<Type, TypeCheckError> {
         let i_type = self.get_scoped_var(env, &ident.inner);
@@ -206,8 +206,8 @@ impl<'source> TypeChecker<'source> {
     fn check_infix(
         &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
-        left: &Spanned<TypedExpr>,
-        right: &Spanned<TypedExpr>,
+        left: &Spanned<Expr>,
+        right: &Spanned<Expr>,
         op: &Spanned<InfixOp>,
         expected_type: Type,
     ) -> Result<Type, TypeCheckError> {
@@ -236,7 +236,7 @@ impl<'source> TypeChecker<'source> {
 
     fn check_return(
         &mut self,
-        value: &Option<Spanned<TypedExpr>>,
+        value: &Option<Spanned<Expr>>,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         expected_type: Option<Type>,
     ) -> Result<Type, TypeCheckError> {
@@ -264,7 +264,7 @@ impl<'source> TypeChecker<'source> {
         env: &mut HashMap<String, (Type, Range<usize>)>,
         return_type: &Type,
         name: &Spanned<String>,
-        parameters: &[Spanned<TypedExpr>],
+        parameters: &Vec<(Spanned<String>, Spanned<Type>)>,
         body: &Stmt,
     ) -> Result<Type, TypeCheckError> {
         if let Some(func) = env.get(&format!("__{name}")) {
@@ -277,14 +277,8 @@ impl<'source> TypeChecker<'source> {
         let name_str = name.inner.clone();
         self.current_stack.push(name_str.clone());
         self.insert_scoped_var(env, &name_str, *return_type, name.pos.clone());
-        for param in parameters.iter() {
-            let param = match &param.inner.expr {
-                Expr::FunctionParameter { name: p_name, ty } => {
-                    (p_name.inner.clone(), ty.clone().inner)
-                }
-                _ => unreachable!(),
-            };
-            self.insert_scoped_var(env, &param.0.to_string(), param.1, name.pos.clone());
+        for param in parameters {
+            self.insert_scoped_var(env, &param.0.to_string(), param.1.inner, name.pos.clone());
         }
         self.check_statement(env, body, Some(*return_type))?;
         self.current_stack.pop();
@@ -307,7 +301,7 @@ impl<'source> TypeChecker<'source> {
     fn check_if(
         &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
-        condition: &Spanned<TypedExpr>,
+        condition: &Spanned<Expr>,
         body: &Stmt,
         alternative: &Option<Box<Stmt>>,
     ) -> Result<Type, TypeCheckError> {
@@ -328,7 +322,7 @@ impl<'source> TypeChecker<'source> {
     fn check_while(
         &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
-        condition: &Spanned<TypedExpr>,
+        condition: &Spanned<Expr>,
         body: &Stmt,
     ) -> Result<Type, TypeCheckError> {
         self.check_expression(env, condition, Type::Bool)?;
@@ -341,7 +335,7 @@ impl<'source> TypeChecker<'source> {
         env: &mut HashMap<String, (Type, Range<usize>)>,
         ident: &Spanned<String>,
         ty: &Option<Type>,
-        value: &Spanned<TypedExpr>,
+        value: &Spanned<Expr>,
     ) -> Result<Type, TypeCheckError> {
         let ty = ty.unwrap_or(Type::I64);
         let type_opt = env.get(&self.input[ident.pos.clone()]);

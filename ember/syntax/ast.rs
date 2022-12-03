@@ -10,17 +10,17 @@ pub enum Stmt {
     Declaration {
         ty: Option<Type>,
         ident: Spanned<String>,
-        value: Spanned<TypedExpr>,
+        value: Spanned<Expr>,
     },
     Expression {
-        expr: Spanned<TypedExpr>,
+        expr: Spanned<Expr>,
     },
     While {
-        condition: Box<Spanned<TypedExpr>>,
+        condition: Box<Spanned<Expr>>,
         body: Box<Stmt>,
     },
     If {
-        condition: Box<Spanned<TypedExpr>>,
+        condition: Box<Spanned<Expr>>,
         body: Box<Stmt>,
         alternative: Option<Box<Stmt>>,
     },
@@ -29,12 +29,12 @@ pub enum Stmt {
     },
     FunctionDefinition {
         name: Spanned<String>,
-        parameters: Vec<Spanned<TypedExpr>>,
+        parameters: Vec<(Spanned<String>, Spanned<Type>)>,
         return_type: Type,
         body: Box<Stmt>,
     },
     Return {
-        value: Option<Spanned<TypedExpr>>,
+        value: Option<Spanned<Expr>>,
     },
 }
 
@@ -42,12 +42,12 @@ pub enum Stmt {
 pub enum Expr {
     Infix {
         op: Spanned<InfixOp>,
-        left: Box<Spanned<TypedExpr>>,
-        right: Box<Spanned<TypedExpr>>,
+        left: Box<Spanned<Expr>>,
+        right: Box<Spanned<Expr>>,
     },
     Prefix {
         op: Spanned<PrefixOp>,
-        expr: Box<Spanned<TypedExpr>>,
+        expr: Box<Spanned<Expr>>,
     },
     Identifier(Spanned<String>),
     IntegerLiteral(Spanned<i64>),
@@ -55,7 +55,7 @@ pub enum Expr {
     Assign {
         ident: Spanned<String>,
         operand: Spanned<InfixOp>,
-        expr: Box<Spanned<TypedExpr>>,
+        expr: Box<Spanned<Expr>>,
     },
     FunctionParameter {
         name: Spanned<String>,
@@ -63,7 +63,7 @@ pub enum Expr {
     },
     FunctionInvocation {
         name: Spanned<String>,
-        args: Vec<Spanned<TypedExpr>>,
+        args: Vec<Spanned<Expr>>,
     },
 }
 
@@ -86,24 +86,6 @@ impl<T: std::fmt::Display> Spanned<T> {
 #[derive(Debug, Clone, PartialEq)]
 pub struct AstRoot {
     pub sequence: Stmt,
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct TypedExpr {
-    pub ty: Option<Type>,
-    pub expr: Expr,
-}
-
-impl TypedExpr {
-    pub fn new(expr: Expr) -> Self {
-        TypedExpr { ty: None, expr }
-    }
-}
-
-impl fmt::Display for TypedExpr {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.expr)
-    }
 }
 
 impl<T: std::fmt::Display> fmt::Display for Spanned<T> {
@@ -159,7 +141,7 @@ impl fmt::Display for Stmt {
             } => {
                 let decl = parameters
                     .iter()
-                    .map(|f| format!("{}", f.inner))
+                    .map(|f| format!("{} : {}", f.0, f.1))
                     .collect::<Vec<_>>()
                     .join(", ");
                 write!(f, "fn {name}({decl}) -> {return_type} {{\n{body}}};")
