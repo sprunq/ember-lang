@@ -1,6 +1,6 @@
 use super::typechecker_error::TypeCheckError;
 use crate::syntax::{
-    ast::{AstRoot, Expr, Spanned, Stmt},
+    ast::{Expr, Spanned, Stmt},
     operands::InfixOp,
     ty::Type,
 };
@@ -22,9 +22,9 @@ impl<'source> TypeChecker<'source> {
         }
     }
 
-    pub fn typecheck(&mut self, program: &AstRoot) -> Result<Type, TypeCheckError> {
+    pub fn typecheck(&mut self, program: &Stmt) -> Result<Type, TypeCheckError> {
         let mut env = HashMap::new();
-        self.check_statement(&mut env, &program.sequence, None)
+        self.check_statement(&mut env, &program, None)
     }
 
     fn insert_scoped_var(
@@ -85,10 +85,10 @@ impl<'source> TypeChecker<'source> {
         expected_type: Type,
     ) -> Result<Type, TypeCheckError> {
         match &expression.inner {
-            Expr::Infix { op, left, right } => {
+            Expr::Binary { op, left, right } => {
                 self.check_infix(env, left, right, op, expected_type)
             }
-            Expr::Prefix { op: _, expr } => self.check_expression(env, expr, expected_type),
+            Expr::Unary { op: _, expr } => self.check_expression(env, expr, expected_type),
             Expr::Identifier(ident) => self.check_identifier(env, ident),
             Expr::IntegerLiteral(lit) => self.check_int_literal(expected_type, lit),
             Expr::BooleanLiteral(lit) => self.check_bool_literal(expected_type, lit),

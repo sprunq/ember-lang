@@ -37,11 +37,11 @@ pub mod tests {
             let program = parser.parse_program();
 
             assert_eq!(
-                program.unwrap().sequence,
+                program.unwrap(),
                 Stmt::Sequence {
                     statements: Box::new(vec![Stmt::Expression {
                         expr: Spanned::new(
-                            Expr::Infix {
+                            Expr::Binary {
                                 op: Spanned::<InfixOp>::new(operator, 2..3),
                                 left: Spanned::new_boxed(
                                     Expr::IntegerLiteral(Spanned::<i64>::new(left, 0..1)),
@@ -72,11 +72,11 @@ pub mod tests {
             let program = parser.parse_program();
 
             assert_eq!(
-                program.unwrap().sequence,
+                program.unwrap(),
                 Stmt::Sequence {
                     statements: Box::new(vec![Stmt::Expression {
                         expr: Spanned::new(
-                            Expr::Infix {
+                            Expr::Binary {
                                 op: Spanned::<InfixOp>::new(operator, 2..4),
                                 left: Spanned::new_boxed(
                                     Expr::IntegerLiteral(Spanned::<i64>::new(left, 0..1)),

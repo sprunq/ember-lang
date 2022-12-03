@@ -2,7 +2,7 @@ use super::parse_error::ParseErr;
 use crate::syntax::operands::Precedence;
 use crate::syntax::token::{Token, TokenInfo};
 use crate::syntax::{
-    ast::{AstRoot, Expr, Spanned, Stmt},
+    ast::{Expr, Spanned, Stmt},
     operands::{InfixOp, PrefixOp},
     ty::Type,
 };
@@ -63,17 +63,15 @@ impl<'source> Parser<'source> {
         &self.source[span]
     }
 
-    pub fn parse_program(&mut self) -> Result<AstRoot, ParseErr> {
+    pub fn parse_program(&mut self) -> Result<Stmt, ParseErr> {
         let mut statements = vec![];
         while self.current_token.token != Token::Eof {
             let statement = self.parse_statement()?;
             statements.push(statement);
             self.next_token();
         }
-        Ok(AstRoot {
-            sequence: Stmt::Sequence {
-                statements: Box::new(statements),
-            },
+        Ok(Stmt::Sequence {
+            statements: Box::new(statements),
         })
     }
 
@@ -448,7 +446,7 @@ impl<'source> Parser<'source> {
         self.next_token();
         let right_expr = self.parse_expr(Precedence::Prefix)?;
         Ok(Spanned::new(
-            Expr::Prefix {
+            Expr::Unary {
                 op: Spanned::<PrefixOp>::new(prefix_token, prefix_pos.clone()),
                 expr: Box::new(right_expr.clone()),
             },
@@ -464,7 +462,7 @@ impl<'source> Parser<'source> {
         let right = self.parse_expr(precedence)?;
 
         Ok(Spanned::new(
-            Expr::Infix {
+            Expr::Binary {
                 op: Spanned::<InfixOp>::new(i, infix_pos),
                 left: Box::new(left.clone()),
                 right: Box::new(right.clone()),

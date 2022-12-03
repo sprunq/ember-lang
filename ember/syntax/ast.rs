@@ -1,9 +1,8 @@
-use std::{fmt, ops::Range};
-
 use super::{
     operands::{InfixOp, PrefixOp},
     ty::Type,
 };
+use std::{fmt, ops::Range};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Stmt {
@@ -40,12 +39,12 @@ pub enum Stmt {
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Expr {
-    Infix {
+    Binary {
         op: Spanned<InfixOp>,
         left: Box<Spanned<Expr>>,
         right: Box<Spanned<Expr>>,
     },
-    Prefix {
+    Unary {
         op: Spanned<PrefixOp>,
         expr: Box<Spanned<Expr>>,
     },
@@ -83,21 +82,9 @@ impl<T: std::fmt::Display> Spanned<T> {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
-pub struct AstRoot {
-    pub sequence: Stmt,
-}
-
 impl<T: std::fmt::Display> fmt::Display for Spanned<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.inner)
-    }
-}
-
-impl fmt::Display for AstRoot {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.sequence)?;
-        Ok(())
     }
 }
 
@@ -160,11 +147,11 @@ impl fmt::Display for Stmt {
 impl fmt::Display for Expr {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Expr::Infix { op, left, right } => write!(f, "({left} {op} {right})"),
+            Expr::Binary { op, left, right } => write!(f, "({left} {op} {right})"),
             Expr::Identifier(ident) => write!(f, "{ident}"),
             Expr::IntegerLiteral(int) => write!(f, "{int}"),
             Expr::BooleanLiteral(bool) => write!(f, "{bool}"),
-            Expr::Prefix { op, expr } => write!(f, "({op}{expr})"),
+            Expr::Unary { op, expr } => write!(f, "({op}{expr})"),
             Expr::Assign {
                 ident,
                 operand: op,

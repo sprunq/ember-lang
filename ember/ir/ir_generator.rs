@@ -5,7 +5,7 @@ use super::{
     operands::{BinaryOp, CompareOp},
 };
 use crate::syntax::{
-    ast::{AstRoot, Expr, Spanned, Stmt},
+    ast::{Expr, Spanned, Stmt},
     operands::{InfixOp, PrefixOp},
 };
 
@@ -29,8 +29,8 @@ impl IRGenerator {
         }
     }
 
-    pub fn gen_code(&mut self, ast: &AstRoot) -> &Vec<IRInstruction> {
-        self.gen_statements(&ast.sequence);
+    pub fn gen_code(&mut self, ast: &Stmt) -> &Vec<IRInstruction> {
+        self.gen_statements(&ast);
         &self.instructions
     }
 
@@ -106,8 +106,8 @@ impl IRGenerator {
 
     fn gen_expressions(&mut self, expr: &Expr) -> Option<Register> {
         match &expr {
-            Expr::Infix { op, left, right } => self.gen_expr_infix(left, right, op),
-            Expr::Prefix { op, expr } => self.gen_expr_prefix(expr, op),
+            Expr::Binary { op, left, right } => self.gen_expr_infix(left, right, op),
+            Expr::Unary { op, expr } => self.gen_expr_prefix(expr, op),
             Expr::Identifier(ident) => self.gen_expr_ident(&ident.inner),
             Expr::IntegerLiteral(literal) => self.gen_expr_int_literal(literal),
             Expr::BooleanLiteral(literal) => self.gen_expr_bool_literal(literal),
