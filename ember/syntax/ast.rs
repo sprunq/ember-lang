@@ -9,18 +9,18 @@ use super::{
 pub enum Stmt {
     Declaration {
         ty: Option<Type>,
-        ident: AstNode<String>,
-        value: AstNode<TypedExpr>,
+        ident: Spanned<String>,
+        value: Spanned<TypedExpr>,
     },
     Expression {
-        expr: AstNode<TypedExpr>,
+        expr: Spanned<TypedExpr>,
     },
     While {
-        condition: Box<AstNode<TypedExpr>>,
+        condition: Box<Spanned<TypedExpr>>,
         body: Box<Stmt>,
     },
     If {
-        condition: Box<AstNode<TypedExpr>>,
+        condition: Box<Spanned<TypedExpr>>,
         body: Box<Stmt>,
         alternative: Option<Box<Stmt>>,
     },
@@ -28,49 +28,59 @@ pub enum Stmt {
         statements: Box<Vec<Stmt>>,
     },
     FunctionDefinition {
-        name: AstNode<String>,
-        parameters: Vec<AstNode<TypedExpr>>,
+        name: Spanned<String>,
+        parameters: Vec<Spanned<TypedExpr>>,
         return_type: Type,
         body: Box<Stmt>,
     },
     Return {
-        value: Option<AstNode<TypedExpr>>,
+        value: Option<Spanned<TypedExpr>>,
     },
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Expr {
     Infix {
-        op: AstNode<InfixOp>,
-        left: Box<AstNode<TypedExpr>>,
-        right: Box<AstNode<TypedExpr>>,
+        op: Spanned<InfixOp>,
+        left: Box<Spanned<TypedExpr>>,
+        right: Box<Spanned<TypedExpr>>,
     },
     Prefix {
-        op: AstNode<PrefixOp>,
-        expr: Box<AstNode<TypedExpr>>,
+        op: Spanned<PrefixOp>,
+        expr: Box<Spanned<TypedExpr>>,
     },
-    Identifier(AstNode<String>),
-    IntegerLiteral(AstNode<i64>),
-    BooleanLiteral(AstNode<bool>),
+    Identifier(Spanned<String>),
+    IntegerLiteral(Spanned<i64>),
+    BooleanLiteral(Spanned<bool>),
     Assign {
-        ident: AstNode<String>,
-        operand: AstNode<InfixOp>,
-        expr: Box<AstNode<TypedExpr>>,
+        ident: Spanned<String>,
+        operand: Spanned<InfixOp>,
+        expr: Box<Spanned<TypedExpr>>,
     },
     FunctionParameter {
-        name: AstNode<String>,
-        ty: AstNode<Type>,
+        name: Spanned<String>,
+        ty: Spanned<Type>,
     },
     FunctionInvocation {
-        name: AstNode<String>,
-        args: Vec<AstNode<TypedExpr>>,
+        name: Spanned<String>,
+        args: Vec<Spanned<TypedExpr>>,
     },
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
-pub struct AstNode<T: std::fmt::Display> {
+pub struct Spanned<T: std::fmt::Display> {
     pub pos: Range<usize>,
     pub inner: T,
+}
+
+impl<T: std::fmt::Display> Spanned<T> {
+    pub fn new(expr: T, pos: Range<usize>) -> Self {
+        Self { pos, inner: expr }
+    }
+
+    pub fn new_boxed(expr: T, pos: Range<usize>) -> Box<Self> {
+        Box::new(Spanned::new(expr, pos))
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -96,17 +106,7 @@ impl fmt::Display for TypedExpr {
     }
 }
 
-impl<T: std::fmt::Display> AstNode<T> {
-    pub fn new(expr: T, pos: Range<usize>) -> Self {
-        Self { pos, inner: expr }
-    }
-
-    pub fn new_boxed(expr: T, pos: Range<usize>) -> Box<Self> {
-        Box::new(AstNode::new(expr, pos))
-    }
-}
-
-impl<T: std::fmt::Display> fmt::Display for AstNode<T> {
+impl<T: std::fmt::Display> fmt::Display for Spanned<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.inner)
     }

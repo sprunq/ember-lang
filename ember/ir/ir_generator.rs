@@ -5,7 +5,7 @@ use super::{
     operands::{BinaryOp, CompareOp},
 };
 use crate::syntax::{
-    ast::{AstNode, AstRoot, Expr, Stmt, TypedExpr},
+    ast::{AstRoot, Expr, Spanned, Stmt, TypedExpr},
     operands::{InfixOp, PrefixOp},
     ty::Type,
 };
@@ -140,7 +140,7 @@ impl IRGenerator {
         }
     }
 
-    fn gen_stmt_while(&mut self, condition: &AstNode<TypedExpr>, body: &Stmt) {
+    fn gen_stmt_while(&mut self, condition: &Spanned<TypedExpr>, body: &Stmt) {
         let top_label = self.new_label();
         let start_label = self.new_label();
         let merge_label = self.new_label();
@@ -174,7 +174,7 @@ impl IRGenerator {
 
     fn gen_stmt_if(
         &mut self,
-        condition: &AstNode<TypedExpr>,
+        condition: &Spanned<TypedExpr>,
         body: &Stmt,
         alternative: &Option<Box<Stmt>>,
     ) {
@@ -208,14 +208,14 @@ impl IRGenerator {
         self.instructions.push(merge_node);
     }
 
-    fn gen_stmt_expr(&mut self, expr: &AstNode<TypedExpr>) {
+    fn gen_stmt_expr(&mut self, expr: &Spanned<TypedExpr>) {
         self.gen_expressions(&expr.inner);
     }
 
     fn gen_expr_prefix(
         &mut self,
-        expr: &AstNode<TypedExpr>,
-        op: &AstNode<PrefixOp>,
+        expr: &Spanned<TypedExpr>,
+        op: &Spanned<PrefixOp>,
     ) -> Option<Register> {
         let expr_reg = self
             .gen_expressions(&expr.inner)
@@ -249,7 +249,7 @@ impl IRGenerator {
         }
     }
 
-    fn gen_stmt_declaration(&mut self, value: &AstNode<TypedExpr>, ident: &AstNode<String>) {
+    fn gen_stmt_declaration(&mut self, value: &Spanned<TypedExpr>, ident: &Spanned<String>) {
         let node_decl = IRInstruction::Allocation {
             name: ident.inner.clone(),
         };
@@ -263,7 +263,7 @@ impl IRGenerator {
         });
     }
 
-    fn gen_expr_bool_literal(&mut self, literal: &AstNode<bool>) -> Option<Register> {
+    fn gen_expr_bool_literal(&mut self, literal: &Spanned<bool>) -> Option<Register> {
         let target = self.new_register();
         let node = IRInstruction::MovI {
             value: Value(i64::from(literal.inner)),
@@ -273,7 +273,7 @@ impl IRGenerator {
         Some(target)
     }
 
-    fn gen_expr_int_literal(&mut self, literal: &AstNode<i64>) -> Option<Register> {
+    fn gen_expr_int_literal(&mut self, literal: &Spanned<i64>) -> Option<Register> {
         let target = self.new_register();
         let node = IRInstruction::MovI {
             value: Value(literal.inner),
@@ -293,9 +293,9 @@ impl IRGenerator {
 
     fn gen_expr_infix(
         &mut self,
-        left: &AstNode<TypedExpr>,
-        right: &AstNode<TypedExpr>,
-        op: &AstNode<InfixOp>,
+        left: &Spanned<TypedExpr>,
+        right: &Spanned<TypedExpr>,
+        op: &Spanned<InfixOp>,
     ) -> Option<Register> {
         let left_reg = self
             .gen_expressions(&left.inner)
@@ -342,9 +342,9 @@ impl IRGenerator {
 
     fn gen_expr_assign(
         &mut self,
-        ident: &AstNode<String>,
-        operand: &AstNode<InfixOp>,
-        expr: &AstNode<TypedExpr>,
+        ident: &Spanned<String>,
+        operand: &Spanned<InfixOp>,
+        expr: &Spanned<TypedExpr>,
     ) -> Option<Register> {
         let expr_reg = self
             .gen_expressions(&expr.inner)
