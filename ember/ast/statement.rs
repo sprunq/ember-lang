@@ -4,7 +4,7 @@ use std::fmt;
 #[derive(Debug, Clone, PartialEq)]
 pub enum Stmt {
     Declaration {
-        ty: Type,
+        ty: Option<Type>,
         ident: AstNode<TypedExpr>,
         value: AstNode<TypedExpr>,
     },
@@ -38,7 +38,11 @@ impl fmt::Display for Stmt {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Stmt::Declaration { ty, ident, value } => {
-                write!(f, "{ty} {ident} = {value};")
+                if let Some(t) = ty {
+                    write!(f, "let {ident} : {t} = {value};")
+                } else {
+                    write!(f, "let {ident} = {value};")
+                }
             }
             Stmt::Expression { expr } => write!(f, "{expr};"),
             Stmt::While { condition, body } => {

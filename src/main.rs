@@ -48,7 +48,13 @@ pub fn run(options: CompilerOptions) {
         fs::create_dir_all(".\\emit").expect("Failed to create directory");
         let token_string = tokens
             .iter()
-            .map(|f| format!("{:?}\t\t{:?}", f.span, f.token))
+            .map(|f| {
+                format!(
+                    "{:>12}    {:?}",
+                    format!("{}..{}", f.span.start, f.span.end),
+                    f.token
+                )
+            })
             .collect::<Vec<_>>()
             .join("\n");
         fs::write(".\\emit\\tokens.txt", token_string).expect("Unable to write file");

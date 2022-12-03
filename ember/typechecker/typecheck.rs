@@ -327,9 +327,10 @@ impl<'source> TypeChecker<'source> {
         &mut self,
         env: &mut HashMap<String, (Type, Range<usize>)>,
         ident: &AstNode<TypedExpr>,
-        ty: &Type,
+        ty: &Option<Type>,
         value: &AstNode<TypedExpr>,
     ) -> Result<Type, TypeCheckError> {
+        let ty = ty.unwrap_or(Type::I64);
         let type_opt = env.get(&self.input[ident.pos.clone()]);
         if let Some(t) = type_opt {
             return Err(TypeCheckError::VariableAlreadyExists {
@@ -344,12 +345,12 @@ impl<'source> TypeChecker<'source> {
         self.insert_scoped_var(
             env,
             &self.input[ident.pos.clone()].to_string(),
-            *ty,
+            ty,
             ident.pos.clone(),
         );
 
-        let val_type = self.check_expression(env, value, *ty)?;
-        if *ty == val_type {
+        let val_type = self.check_expression(env, value, ty)?;
+        if ty == val_type {
             Ok(Type::Void)
         } else {
             Err(TypeCheckError::DeclarationTypesNotMatching {

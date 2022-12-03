@@ -1,17 +1,17 @@
 fn increment_a(i64 a) -> i64 {
-    bool b = false;
+    let b : bool = false;
     while(b){
         if(a < 10){
             a += 1;
         }else{
             b = false;
-        };
-    };
+        }
+    }
     return a;
-};
+}
 
 fn main() -> void {
-    i64 res = increment_a(20);
-};
+    let res : i64 = increment_a(20);
+}
 
 

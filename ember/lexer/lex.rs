@@ -47,6 +47,7 @@ impl<'source> Lexer<'source> {
             '<' => tok = Token::Lt,
             '>' => tok = Token::Gt,
             ';' => tok = Token::Semicolon,
+            ':' => tok = Token::Colon,
             ',' => tok = Token::Comma,
             '(' => tok = Token::LParenthesis,
             ')' => tok = Token::RParenthesis,

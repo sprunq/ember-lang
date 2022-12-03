@@ -21,7 +21,7 @@ pub mod tests {
     #[test]
     fn test_decl_int() {
         let input = "
-        i64 a = 3;
+        let a : i64 = 3;
         ";
         expect_res(input, true);
     }
@@ -29,7 +29,7 @@ pub mod tests {
     #[test]
     fn test_decl_int_error() {
         let input = "
-        i64 a = false;
+        let a : i64 = false;
         ";
         expect_res(input, false);
     }
@@ -37,7 +37,7 @@ pub mod tests {
     #[test]
     fn test_decl_bool() {
         let input = "
-        bool a = true;
+        let a : bool = true;
         ";
         expect_res(input, true);
     }
@@ -45,7 +45,7 @@ pub mod tests {
     #[test]
     fn test_decl_bool_error() {
         let input = "
-        bool a = 0;
+        let a  : bool = 0;
         ";
         expect_res(input, false);
     }
@@ -53,8 +53,8 @@ pub mod tests {
     #[test]
     fn test_identifier() {
         let input = "
-        bool a = false;
-        bool b = a;
+        let a : bool = false;
+        let b : bool = a;
         ";
         expect_res(input, true);
     }
@@ -62,8 +62,8 @@ pub mod tests {
     #[test]
     fn test_identifier_false() {
         let input = "
-        bool a = false;
-        i64 b = a;
+        let a : bool = false;
+        let b : i64= a;
         ";
         expect_res(input, false);
     }
@@ -71,7 +71,7 @@ pub mod tests {
     #[test]
     fn test_infix() {
         let input = "
-        i64 a = 0 + 1;
+        let a : i64 = 0 + 1;
         ";
         expect_res(input, true);
     }
@@ -79,7 +79,7 @@ pub mod tests {
     #[test]
     fn test_infix_false() {
         let input = "
-        i64 a = 0 + false;
+        let a : i64 = 0 + false;
         ";
         expect_res(input, false);
     }
@@ -87,9 +87,9 @@ pub mod tests {
     #[test]
     fn test_infix_idents() {
         let input = "
-        i64 a = 0;
-        i64 b = 1;
-        i64 c = a + b;
+        let a :i64 = 0;
+        let b :i64 = 1;
+        let c :i64 = a + b;
         ";
         expect_res(input, true);
     }
@@ -97,9 +97,9 @@ pub mod tests {
     #[test]
     fn test_infix_idents_false() {
         let input = "
-        i64 a = 0;
-        bool b = false;
-        i64 c = a + b;
+        let a : i64 = 0;
+        let b : bool = false;
+        let c : i64 = a + b;
         ";
         expect_res(input, false);
     }
@@ -107,7 +107,7 @@ pub mod tests {
     #[test]
     fn test_assign() {
         let input = "
-        i64 a = 0;
+        let a : i64 = 0;
         a += 20;
         ";
         expect_res(input, true);
@@ -116,7 +116,7 @@ pub mod tests {
     #[test]
     fn test_assign_false() {
         let input = "
-        i64 a = 0;
+        let a : i64 = 0;
         a += false;
         ";
         expect_res(input, false);
@@ -125,8 +125,8 @@ pub mod tests {
     #[test]
     fn test_assign_ident_false() {
         let input = "
-        i64 a = 0;
-        bool b = false;
+        let a : i64 = 0;
+        let a : bool = false;
         a = b;
         ";
         expect_res(input, false);
@@ -136,9 +136,9 @@ pub mod tests {
     fn test_if() {
         let input = "
         if (true == true){
-            i64 i = 20;
+            let i : i64 = 20;
         } else{
-            i64 j = 0;
+            let j : i64 = 0;
         };
         ";
         expect_res(input, true);
@@ -148,9 +148,9 @@ pub mod tests {
     fn test_if_false() {
         let input = "
         if (true == 0){
-            i64 i = 20;
+            let i : i64 = 20;
         } else{
-            i64 j = 0;
+            let j : i64 = 0;
         };
         ";
         expect_res(input, false);
@@ -160,9 +160,9 @@ pub mod tests {
     fn test_if_false_in_alternative() {
         let input = "
         if (true == true){
-            i64 i = 20;
+            let i : i64 = 20;
         } else{
-            i64 j = false;
+            let j : i64 = false;
         };
         ";
         expect_res(input, false);
@@ -171,12 +171,12 @@ pub mod tests {
     #[test]
     fn test_if_with_idents() {
         let input = "
-        i64 a = 0;
-        i64 b = 1;
+        let a : i64 = 0;
+        let b : i64 = 1;
         if (a == b){
-            i64 i = 20;
+            let c : i64 = 20;
         } else{
-            bool j = true;
+            let j : bool = true;
         };
         ";
         expect_res(input, true);
@@ -186,7 +186,7 @@ pub mod tests {
     fn test_while() {
         let input = "
         while (true){
-            i64 i = 20;
+            let a : i64 = 20;
         };
         ";
         expect_res(input, true);
@@ -196,7 +196,7 @@ pub mod tests {
     fn test_while_false() {
         let input = "
         while (true == 1){
-            i64 i = 20;
+            let a : i64 = 20;
         };
         ";
         expect_res(input, false);
@@ -205,10 +205,10 @@ pub mod tests {
     #[test]
     fn test_while_idents_true() {
         let input = "
-        i64 a = 0;
-        i64 b = 0;
+        let a : i64 = 0;
+        let b : i64 = 0;
         while (a == b){
-            i64 i = 20;
+            let i : i64 = 20;
         };
         ";
         expect_res(input, true);
@@ -217,10 +217,10 @@ pub mod tests {
     #[test]
     fn test_while_idents_false() {
         let input = "
-        i64 a = 0;
-        bool b = false;
+        let j : i64 = 0;
+        let j : bool = false;
         while (a == b){
-            i64 i = 20;
+            let i : i64 = 20;
         };
         ";
         expect_res(input, false);
@@ -230,9 +230,9 @@ pub mod tests {
     fn test_scoped_ident() {
         let input = "
         if(true){
-            i64 c = 4;
+            let c : i64 = 4;
         };
-        i64 d = c;
+        let d : i64 = c;
         ";
         expect_res(input, false);
     }
@@ -240,18 +240,18 @@ pub mod tests {
     #[test]
     fn test_compex_if() {
         let input = "
-        i64 a = 0;
-        bool b = true;
-        bool c = b;
+        let a : i64 = 0;
+        let b : bool = true;
+        let c : bool = b;
         // comment
         while(b){
             a += 10;
             if(c != ((10000 == a) != b == (0 < -1))){
-                i64 e = a / 20;
-                i64 d = e;
-            };
+                let j : i64 = a / 20;
+                let j : i64 = e;
+            }
             a = a * -20;
-        };
+        }
         ";
         expect_res(input, false);
     }
@@ -259,7 +259,7 @@ pub mod tests {
     #[test]
     fn test_if_int() {
         let input = "
-        if(0){};
+        if(0){}
         ";
         expect_res(input, false);
     }
@@ -267,7 +267,7 @@ pub mod tests {
     #[test]
     fn test_if_bool() {
         let input = "
-        if(true){};
+        if(true){}
         ";
         expect_res(input, true);
     }
@@ -277,7 +277,7 @@ pub mod tests {
         let input = "
         fn main(i64 a, bool b) -> i64 {
             return 0;
-        };
+        }
         ";
         expect_res(input, true);
     }
@@ -287,7 +287,7 @@ pub mod tests {
         let input = "
         fn main(i64 a, bool b) -> i64 {
             return true;
-        };
+        }
         ";
         expect_res(input, false);
     }

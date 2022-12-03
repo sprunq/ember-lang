@@ -80,7 +80,7 @@ impl<'source> Parser<'source> {
 
     fn parse_statement(&mut self) -> Result<Stmt, ParseErr> {
         match self.current_token.token {
-            Token::I64 | Token::Bool => self.parse_declaration_stmt(),
+            Token::Let => self.parse_declaration_stmt(),
             Token::While => self.parse_while_stmt(),
             Token::If => self.parse_if_stmt(),
             Token::Function => self.parse_define_function_stmt(),
@@ -143,8 +143,9 @@ impl<'source> Parser<'source> {
         let ty = self.parse_type()?;
         self.expect_and_move(Token::LBrace, ParseErr::ExpectedLbrace)?;
         let body = self.parse_sequence()?;
-
-        self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
+        if self.peek_token.token == Token::Semicolon {
+            self.next_token();
+        }
         Ok(Stmt::FunctionDefinition {
             name,
             parameters,
@@ -167,7 +168,9 @@ impl<'source> Parser<'source> {
         } else {
             None
         };
-        self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
+        if self.peek_token.token == Token::Semicolon {
+            self.next_token();
+        }
 
         Ok(Stmt::If {
             condition: Box::new(condition),
@@ -183,7 +186,9 @@ impl<'source> Parser<'source> {
         self.expect_and_move(Token::RParenthesis, ParseErr::ExpectedRparen)?;
         self.expect_and_move(Token::LBrace, ParseErr::ExpectedLbrace)?;
         let consequence = self.parse_sequence()?;
-        self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
+        if self.peek_token.token == Token::Semicolon {
+            self.next_token();
+        }
 
         Ok(Stmt::While {
             condition: Box::new(condition),
@@ -413,10 +418,19 @@ impl<'source> Parser<'source> {
         }
     }
 
+    // let a [: int] = 20;
     fn parse_declaration_stmt(&mut self) -> Result<Stmt, ParseErr> {
-        let ty = self.parse_type()?;
         self.next_token();
         let ident = self.parse_identifier_string()?;
+        // type declaration
+        let ty = if self.peek_token.token == Token::Colon {
+            self.next_token();
+            self.next_token();
+            let ret = Some(self.parse_type()?);
+            ret
+        } else {
+            None
+        };
         self.expect_and_move(Token::Assign, ParseErr::ExpectedAssign)?;
         self.next_token();
         let value = self.parse_expr(Precedence::Lowest)?;
