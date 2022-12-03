@@ -12,6 +12,7 @@ type InfixFunctionType<'source> =
     Option<for<'r> fn(&'r mut Parser<'source>, Spanned<Expr>) -> Result<Spanned<Expr>, ParseErr>>;
 type PrefixFunctionType<'source> =
     Option<for<'r> fn(&'r mut Parser<'source>) -> Result<Spanned<Expr>, ParseErr>>;
+type TypedFunctionParameter = (Spanned<String>, Spanned<Type>);
 
 pub struct Parser<'source> {
     pub tokens: Vec<TokenInfo>,
@@ -99,7 +100,7 @@ impl<'source> Parser<'source> {
         }
     }
 
-    fn parse_function_parameter(&mut self) -> Result<(Spanned<String>, Spanned<Type>), ParseErr> {
+    fn parse_function_parameter(&mut self) -> Result<TypedFunctionParameter, ParseErr> {
         let start_pos = self.current_token.span.start;
         let ty = self.parse_type()?;
         self.next_token();
@@ -110,9 +111,7 @@ impl<'source> Parser<'source> {
         Ok((expr_sp, type_sp))
     }
 
-    fn parse_function_parameters(
-        &mut self,
-    ) -> Result<Vec<(Spanned<String>, Spanned<Type>)>, ParseErr> {
+    fn parse_function_parameters(&mut self) -> Result<Vec<TypedFunctionParameter>, ParseErr> {
         let mut identifiers = vec![];
         if self.peek_token.token == Token::RParenthesis {
             return Ok(identifiers);
