@@ -1,10 +1,9 @@
 use super::parse_error::ParseErr;
-use crate::ast::ast_node::AstNode;
-use crate::ast::ast_root::AstRoot;
-use crate::ast::token::{Token, TokenInfo};
-use crate::ast::typed_expression::TypedExpr;
-use crate::ast::{
-    expression::Expr, infix::InfixOp, precedence::Precedence, prefix::PrefixOp, statement::Stmt,
+use crate::syntax::operands::Precedence;
+use crate::syntax::token::{Token, TokenInfo};
+use crate::syntax::{
+    ast::{AstNode, AstRoot, Expr, Stmt, TypedExpr},
+    operands::{InfixOp, PrefixOp},
     ty::Type,
 };
 use std::ops::Range;
@@ -415,8 +414,7 @@ impl<'source> Parser<'source> {
         let ty = if self.peek_token.token == Token::Colon {
             self.next_token();
             self.next_token();
-            let ret = Some(self.parse_type()?);
-            ret
+            Some(self.parse_type()?)
         } else {
             None
         };

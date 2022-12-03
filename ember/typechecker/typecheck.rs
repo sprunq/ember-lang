@@ -1,7 +1,8 @@
 use super::typechecker_error::TypeCheckError;
-use crate::ast::{
-    ast_node::AstNode, ast_root::AstRoot, expression::Expr, infix::InfixOp, statement::Stmt,
-    ty::Type, typed_expression::TypedExpr,
+use crate::syntax::{
+    ast::{AstNode, AstRoot, Expr, Stmt, TypedExpr},
+    operands::InfixOp,
+    ty::Type,
 };
 use std::{collections::HashMap, ops::Range};
 
@@ -158,7 +159,7 @@ impl<'source> TypeChecker<'source> {
         operand: &AstNode<InfixOp>,
     ) -> Result<Type, TypeCheckError> {
         let i_type = self.get_scoped_var(env, &ident.inner);
-        if let None = i_type {
+        if i_type.is_none() {
             return Err(TypeCheckError::IdentifierNotFound {
                 ident: ident.inner.clone(),
                 pos: ident.pos.clone(),

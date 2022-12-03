@@ -1,8 +1,8 @@
 #[cfg(test)]
 pub mod tests {
     use crate::{
-        ast::token::{Token, TokenInfo},
         lexer::lex::Lexer,
+        syntax::token::{Token, TokenInfo},
     };
 
     fn assert_lex_against(input: &str, expected: Vec<Token>) {

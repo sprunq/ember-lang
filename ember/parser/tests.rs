@@ -1,12 +1,13 @@
 #[cfg(test)]
 pub mod tests {
     use crate::{
-        ast::{
-            ast_node::AstNode, expression::Expr, infix::InfixOp, statement::Stmt, ty::Type,
-            typed_expression::TypedExpr,
-        },
         lexer::lex::Lexer,
         parser::parse::Parser,
+        syntax::{
+            ast::{AstNode, Expr, Stmt, TypedExpr},
+            operands::InfixOp,
+            ty::Type,
+        },
     };
 
     pub fn check_str_str_eq(intput_output: Vec<(&str, &str)>) {

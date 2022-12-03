@@ -1,4 +1,4 @@
-use super::{infix::InfixOp, token::Token};
+use super::{operands::InfixOp, token::Token};
 use std::fmt;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

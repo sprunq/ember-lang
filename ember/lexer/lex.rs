@@ -1,4 +1,4 @@
-use crate::ast::token::{lookup_ident, Token, TokenInfo};
+use crate::syntax::token::{lookup_ident, Token, TokenInfo};
 use std::str::Chars;
 
 pub struct Lexer<'source> {

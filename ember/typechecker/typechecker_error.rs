@@ -1,6 +1,6 @@
 use std::ops::Range;
 
-use crate::ast::{infix::InfixOp, ty::Type};
+use crate::syntax::{operands::InfixOp, ty::Type};
 
 #[derive(Debug, Clone)]
 pub enum TypeCheckError {

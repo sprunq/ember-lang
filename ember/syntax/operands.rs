@@ -17,6 +17,24 @@ pub enum InfixOp {
     AsteriskEquals,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum PrefixOp {
+    Minus,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd)]
+pub enum Precedence {
+    Lowest,
+    Assign,
+    Equals,
+    LessGreater,
+    Sum,
+    Product,
+    Prefix,
+    Call,
+    Index,
+}
+
 impl fmt::Display for InfixOp {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
@@ -33,6 +51,14 @@ impl fmt::Display for InfixOp {
             InfixOp::MinusEquals => write!(f, "-="),
             InfixOp::SlashEuqals => write!(f, "/="),
             InfixOp::AsteriskEquals => write!(f, "*="),
+        }
+    }
+}
+
+impl fmt::Display for PrefixOp {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            PrefixOp::Minus => write!(f, "-"),
         }
     }
 }

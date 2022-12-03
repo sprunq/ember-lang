@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::ast::ty::Type;
+use crate::syntax::ty::Type;
 
 use super::operands::{BinaryOp, CompareOp};
 

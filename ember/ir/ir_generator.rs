@@ -4,9 +4,10 @@ use super::{
     instruction::{IRInstruction, Label, Register, Value},
     operands::{BinaryOp, CompareOp},
 };
-use crate::ast::{
-    ast_node::AstNode, ast_root::AstRoot, expression::Expr, infix::InfixOp, prefix::PrefixOp,
-    statement::Stmt, ty::Type, typed_expression::TypedExpr,
+use crate::syntax::{
+    ast::{AstNode, AstRoot, Expr, Stmt, TypedExpr},
+    operands::{InfixOp, PrefixOp},
+    ty::Type,
 };
 
 pub struct IRGenerator {
@@ -265,7 +266,7 @@ impl IRGenerator {
     fn gen_expr_bool_literal(&mut self, literal: &AstNode<bool>) -> Option<Register> {
         let target = self.new_register();
         let node = IRInstruction::MovI {
-            value: Value(if literal.inner { 1 } else { 0 }),
+            value: Value(i64::from(literal.inner)),
             target,
         };
         self.instructions.push(node);
@@ -282,8 +283,8 @@ impl IRGenerator {
         Some(target)
     }
 
-    fn gen_expr_ident(&mut self, ident: &String) -> Option<Register> {
-        let s = ident.clone();
+    fn gen_expr_ident(&mut self, ident: &str) -> Option<Register> {
+        let s = ident.to_owned();
         let target = self.new_register();
         let node = IRInstruction::LoadI { name: s, target };
         self.instructions.push(node);

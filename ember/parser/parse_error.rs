@@ -1,6 +1,6 @@
 use std::num::ParseIntError;
 
-use crate::ast::token::TokenInfo;
+use crate::syntax::token::TokenInfo;
 
 #[derive(Debug, Clone)]
 pub enum ParseErr {
