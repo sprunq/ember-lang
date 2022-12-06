@@ -100,10 +100,11 @@ impl<'source> Parser<'source> {
 
     fn parse_function_parameter(&mut self) -> Result<TypedFunctionParameter, ParseErr> {
         let start_pos = self.current_token.span.start;
-        let ty = self.parse_type()?;
-        self.next_token();
-        let end_type = self.current_token.span.end;
         let ident = self.parse_identifier_string()?;
+        self.expect_and_move(Token::Colon, ParseErr::ExpectedColon)?;
+        self.next_token();
+        let ty = self.parse_type()?;
+        let end_type = self.current_token.span.end;
         let expr_sp = Spanned::new(ident.0, ident.1);
         let type_sp = Spanned::new(ty, start_pos..end_type);
         Ok((expr_sp, type_sp))

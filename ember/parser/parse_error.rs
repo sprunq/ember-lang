@@ -22,4 +22,5 @@ pub enum ParseErr {
     ExpectedBoolToken(TokenInfo),
     ExpectedArrow(TokenInfo),
     ExpectedReturn(TokenInfo),
+    ExpectedColon(TokenInfo),
 }

@@ -275,7 +275,7 @@ pub mod tests {
     #[test]
     fn test_function_declaration() {
         let input = "
-        fn main(i64 a, bool b) -> i64 {
+        fn main(a : i64, b : i64) -> i64 {
             return 0;
         }
         ";
@@ -285,7 +285,7 @@ pub mod tests {
     #[test]
     fn test_function_declaration_false() {
         let input = "
-        fn main(i64 a, bool b) -> i64 {
+        fn main(a : i64, b : i64) -> i64 {
             return true;
         }
         ";

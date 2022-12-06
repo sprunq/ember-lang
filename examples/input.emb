@@ -1,4 +1,4 @@
-fn increment_a(i64 a) -> i64 {
+fn increment_a(a : i64) -> i64 {
     let b : bool = false;
     while(b){
         if(a < 10){
