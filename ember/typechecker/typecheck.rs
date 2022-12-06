@@ -1,43 +1,279 @@
 use super::typechecker_error::TypeCheckErr;
 use crate::syntax::{
-    ast::{Spanned, Stmt},
+    ast::{Expr, Spanned, Stmt},
+    operands::InfixOp,
     ty::Type,
 };
 use std::collections::HashMap;
 
 #[allow(dead_code)]
+#[derive(Debug, Clone)]
 pub struct FunctionSignature<'a> {
     name: &'a Spanned<String>,
     parameters: &'a Vec<(Spanned<String>, Spanned<Type>)>,
     return_type: &'a Option<Spanned<Type>>,
 }
 
+#[derive(Debug, Clone)]
+struct SymbolTable {
+    symbols: HashMap<String, Type>,
+}
+
+impl SymbolTable {
+    fn new() -> Self {
+        Self {
+            symbols: HashMap::new(),
+        }
+    }
+
+    fn insert(&mut self, name: &str, ty: Type) -> Option<Type> {
+        self.symbols.insert(name.to_owned(), ty)
+    }
+
+    fn get(&self, name: &str) -> Option<&Type> {
+        self.symbols.get(name)
+    }
+}
+
 pub struct TypeChecker<'a> {
-    pub function_signatures: HashMap<String, FunctionSignature<'a>>,
+    function_signatures: HashMap<String, FunctionSignature<'a>>,
+    symbol_table: SymbolTable,
+    errors: Vec<TypeCheckErr>,
+    current_fun_signature: Option<FunctionSignature<'a>>,
 }
 
 impl<'a> TypeChecker<'a> {
     pub fn check(functions: &'a Vec<Stmt>) -> Vec<TypeCheckErr> {
-        let mut errs = Vec::new();
-        let fs = Self::get_function_signatures(functions).unwrap_or_default();
-        let sel = Self {
-            function_signatures: fs,
+        let (function_signatures, errors) = Self::get_function_signatures(functions);
+        let mut sel = Self {
+            function_signatures,
+            errors,
+            symbol_table: SymbolTable::new(),
+            current_fun_signature: None,
         };
 
-        if let Err(new_errs) = sel.typecheck() {
-            errs.extend(new_errs);
+        for fun in functions {
+            sel.check_statement(fun);
         }
 
-        errs
+        sel.errors
     }
 
-    fn typecheck(&self) -> Result<(), Vec<TypeCheckErr>> {
-        todo!()
+    fn emit_error(&mut self, error: TypeCheckErr) {
+        self.errors.push(error);
+    }
+
+    fn check_statement(&mut self, statement: &Stmt) {
+        match statement {
+            Stmt::Declaration { ty, ident, value } => {
+                let value_ty = self.check_expression(&value.inner);
+
+                let type_to_declare_with = match (ty, value_ty) {
+                    (None, Some(inferred)) => {
+                        // infer from value type
+                        Some(inferred)
+                    }
+                    (Some(te), Some(tv)) => {
+                        // check both same
+                        if *te != tv {
+                            self.emit_error(TypeCheckErr::DeclarationTypesNotMatching {
+                                ident: ident.clone(),
+                                declared_ty: ty.clone(),
+                                value_ty: value_ty,
+                            });
+                        }
+                        Some(tv)
+                    }
+                    _ => {
+                        // error
+                        self.emit_error(TypeCheckErr::DeclarationTypesNotMatching {
+                            ident: ident.clone(),
+                            declared_ty: ty.clone(),
+                            value_ty,
+                        });
+                        None
+                    }
+                };
+                match type_to_declare_with {
+                    Some(t) => {
+                        if let Some(prev) = self.symbol_table.insert(&ident.inner, t) {
+                            self.emit_error(TypeCheckErr::VariableDuplicate {
+                                ident: ident.clone(),
+                                previous_type: prev,
+                                value_ty: t,
+                            });
+                        }
+                    }
+                    None => {}
+                }
+            }
+            Stmt::Expression { expr } => {
+                let expr_ty = self.check_expression(&expr.inner);
+                match expr_ty {
+                    Some(ty) => self.emit_error(TypeCheckErr::StatementShouldNotReturnAnything {
+                        expr: expr.clone(),
+                        ty,
+                    }),
+                    None => {}
+                };
+            }
+            Stmt::While { condition, body } => todo!(),
+            Stmt::If {
+                condition,
+                body,
+                alternative,
+            } => todo!(),
+            Stmt::Sequence { statements } => {
+                for stmt in statements.iter() {
+                    self.check_statement(stmt);
+                }
+            }
+            Stmt::FunctionDefinition {
+                name: _,
+                parameters: _,
+                return_type: _,
+                body,
+            } => {
+                self.check_statement(body);
+            }
+            Stmt::Return { value } => {
+                let unwrapped_sig_ret_type = match &self.current_fun_signature {
+                    Some(fun_sig) => match fun_sig.return_type {
+                        Some(sig_ret) => Some(sig_ret),
+                        None => None,
+                    },
+                    None => None,
+                };
+                match (unwrapped_sig_ret_type, value) {
+                    (Some(t_sig_ret), Some(ret_expr)) => {
+                        let val_type = self.check_expression(&ret_expr.inner);
+                        if let Some(val_type) = val_type {
+                            if t_sig_ret.inner == val_type {
+                                // success
+                            } else {
+                                self.emit_error(TypeCheckErr::TypeMismatch {
+                                    expected: Some(t_sig_ret.clone()),
+                                    actual: Some(Spanned::new(val_type, ret_expr.pos.clone())),
+                                    positon: ret_expr.pos.clone(),
+                                })
+                            }
+                        }
+                    }
+                    (None, None) => {
+                        // success
+                    }
+                    (None, Some(val)) => {
+                        let val_type = self.check_expression(&val.inner);
+                        let actual_ret_ty_maybe_none = match val_type {
+                            Some(t) => Some(Spanned::new(t, val.pos.clone())),
+                            None => None,
+                        };
+                        self.emit_error(TypeCheckErr::TypeMismatch {
+                            expected: None,
+                            actual: actual_ret_ty_maybe_none,
+                            positon: val.pos.clone(),
+                        })
+                    }
+                    (Some(expected), None) => self.emit_error(TypeCheckErr::TypeMismatch {
+                        expected: Some(expected.clone()),
+                        actual: None,
+                        positon: expected.pos.clone(),
+                    }),
+                }
+            }
+        }
+    }
+
+    fn check_expression(&mut self, expression: &Expr) -> Option<Type> {
+        match expression {
+            Expr::Binary { op, left, right } => {
+                // Check that the operands have compatible types
+                let left_ty = self.check_expression(&left.inner);
+                let right_ty = self.check_expression(&right.inner);
+                let op_ty = self.check_binary_operator_type(op.clone(), left_ty, right_ty);
+                op_ty
+            }
+            Expr::Unary { op: _, expr } => self.check_expression(&expr.inner),
+            Expr::Identifier(ident) => {
+                let ty = self.symbol_table.get(&ident.inner);
+                // Return the type of the identifier, if it exists
+                ty.copied()
+            }
+            Expr::IntegerLiteral(_) => Some(Type::I64),
+            Expr::BooleanLiteral(_) => Some(Type::Bool),
+            Expr::Assign {
+                ident,
+                operand: _,
+                expr,
+            } => {
+                // Check that the right-hand side of the assignment has the same type as the left-hand side
+                let expr_ty = self.check_expression(&expr.inner);
+                let expected_ty = self.symbol_table.get(&ident.inner).cloned();
+                match (expr_ty, expected_ty) {
+                    (Some(operand_ty), Some(expected_ty)) if operand_ty == expected_ty => None,
+                    (Some(operand_ty), Some(expected_ty)) => {
+                        // If the operand has the wrong type, raise a type error
+                        self.emit_error(TypeCheckErr::AssignmentMismatch {
+                            ident: ident.clone(),
+                            expected: expected_ty,
+                            actual: operand_ty,
+                        });
+                        None
+                    }
+                    _ => {
+                        // If the operand or the expected type do not have a well-defined type, return `None`
+                        None
+                    }
+                }
+            }
+            Expr::FunctionParameter { name, ty } => todo!(),
+            Expr::FunctionInvocation { name, args } => {
+                let sig = self.function_signatures.get(&name.inner);
+                match sig {
+                    Some(fn_sig) => {
+                        self.current_fun_signature = Some(fn_sig.clone());
+
+                        // check args
+
+                        match fn_sig.return_type {
+                            Some(t) => Some(t.inner),
+                            None => None,
+                        }
+                    }
+                    None => None, // emit error,
+                }
+            }
+        }
+    }
+
+    fn check_binary_operator_type(
+        &mut self,
+        op: Spanned<InfixOp>,
+        left_ty: Option<Type>,
+        right_ty: Option<Type>,
+    ) -> Option<Type> {
+        match (left_ty, right_ty) {
+            (Some(left), Some(right)) => {
+                // If both operands have a well-defined type, check if they are compatible
+                match left.type_interaction(op.inner, right) {
+                    Some(ty) => Some(ty),
+                    None => {
+                        // If the operands have the wrong type, raise a type error
+                        self.emit_error(TypeCheckErr::IncompatibleOperandTypes { op, left, right });
+                        None
+                    }
+                }
+            }
+            _ => {
+                // If one or both operands do not have a well-defined type, return `None`
+                None
+            }
+        }
     }
 
     fn get_function_signatures(
         functions: &'a Vec<Stmt>,
-    ) -> Result<HashMap<String, FunctionSignature<'a>>, Vec<TypeCheckErr>> {
+    ) -> (HashMap<String, FunctionSignature<'a>>, Vec<TypeCheckErr>) {
         let mut fun_sigs = HashMap::<String, FunctionSignature>::new();
         let mut errs = Vec::new();
         for fun in functions {
@@ -66,10 +302,6 @@ impl<'a> TypeChecker<'a> {
             errs.push(TypeCheckErr::NoMainFunctionFound)
         }
 
-        if !errs.is_empty() {
-            Err(errs)
-        } else {
-            Ok(fun_sigs)
-        }
+        (fun_sigs, errs)
     }
 }
