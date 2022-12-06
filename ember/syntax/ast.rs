@@ -29,7 +29,7 @@ pub enum Stmt {
     FunctionDefinition {
         name: Spanned<String>,
         parameters: Vec<(Spanned<String>, Spanned<Type>)>,
-        return_type: Type,
+        return_type: Option<Spanned<Type>>,
         body: Box<Stmt>,
     },
     Return {
@@ -100,7 +100,7 @@ impl fmt::Display for Stmt {
             }
             Stmt::Expression { expr } => write!(f, "{expr};"),
             Stmt::While { condition, body } => {
-                write!(f, "while({condition}){{{body}}};")
+                write!(f, "while({condition}){{{body}}}")
             }
             Stmt::If {
                 condition,
@@ -111,7 +111,6 @@ impl fmt::Display for Stmt {
                 if let Some(alt) = alternative {
                     write!(f, " else {{ {alt} }}")?;
                 }
-                write!(f, ";")?;
                 Ok(())
             }
             Stmt::Sequence { statements } => {
@@ -131,7 +130,10 @@ impl fmt::Display for Stmt {
                     .map(|f| format!("{} : {}", f.0, f.1))
                     .collect::<Vec<_>>()
                     .join(", ");
-                write!(f, "fn {name}({decl}) -> {return_type} {{\n{body}}};")
+                match return_type {
+                    Some(ty) => write!(f, "fn {name}({decl}) -> {ty} {{{body}}}"),
+                    None => write!(f, "fn {name}({decl}) {{{body}}}"),
+                }
             }
             Stmt::Return { value } => {
                 if let Some(val) = value {

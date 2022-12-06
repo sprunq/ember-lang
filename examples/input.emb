@@ -1,17 +1,19 @@
-fn increment_a(a : i64) -> i64 {
-    let b : bool = false;
-    while(b){
-        if(a < 10){
-            a += 1;
-        }else{
-            b = false;
-        }
-    }
-    return a;
-}
-
-fn main() -> void {
-    let res : i64 = increment_a(20);
+fn main() {
+    -a * b;
+    a + b + c;
+    a + b - c;
+    a * b * c;
+    a * b / c;
+    a + b / c;
+    a + b * c + d / e - f;
+    3 + 4; -5 * 5;
+    5 > 4 == 3 < 4;
+    5 < 4 != 3 > 4;
+    3 + 4 * 5 == 3 * 1 + 4 * 5;
+    1 + 2 + 3 + 4;
+    5 + 5 * 2;
+    2 / 5 + 5;
+    -5 + 5;
 }
 
 

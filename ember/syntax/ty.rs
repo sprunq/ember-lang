@@ -5,7 +5,6 @@ use std::fmt;
 pub enum Type {
     I64,
     Bool,
-    Void,
 }
 
 impl Type {
@@ -13,7 +12,6 @@ impl Type {
         match token {
             Token::I64 => Some(Type::I64),
             Token::Bool => Some(Type::Bool),
-            Token::Void => Some(Type::Void),
             _ => None,
         }
     }
@@ -38,7 +36,6 @@ impl fmt::Display for Type {
         match &self {
             Type::I64 => write!(f, "i64"),
             Type::Bool => write!(f, "bool"),
-            Type::Void => write!(f, "void"),
         }
     }
 }

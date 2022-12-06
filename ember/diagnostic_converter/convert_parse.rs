@@ -49,7 +49,7 @@ pub fn build_parse_error_diagnostic(error: ParseErr, file_id: usize) -> Diagnost
             .with_message("Expected an opening Brace")
             .with_code("P010")
             .with_labels(vec![Label::primary(file_id, info.span)
-                .with_message(format!("expected [ but got {}", info.token))]),
+                .with_message(format!("expected {{ but got {}", info.token))]),
 
         ParseErr::ExpectedRbrace(info) => Diagnostic::error()
             .with_message("Expected a closing Brace")
@@ -128,5 +128,10 @@ pub fn build_parse_error_diagnostic(error: ParseErr, file_id: usize) -> Diagnost
             .with_labels(vec![Label::primary(file_id, info.span).with_message(
                 format!("expected a colon token but got {}", info.token),
             )]),
+        ParseErr::NotATopLevelStatement(info) => Diagnostic::error()
+            .with_message("Expected a top level statement")
+            .with_code("P024")
+            .with_labels(vec![Label::primary(file_id, info.span)
+                .with_message(format!("expected a function but got {}", info.token))]),
     }
 }

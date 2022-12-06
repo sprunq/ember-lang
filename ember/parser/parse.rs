@@ -66,13 +66,20 @@ impl<'source> Parser<'source> {
     pub fn parse_program(&mut self) -> Result<Stmt, ParseErr> {
         let mut statements = vec![];
         while self.current_token.token != Token::Eof {
-            let statement = self.parse_statement()?;
+            let statement = self.parse_top_level_statement()?;
             statements.push(statement);
             self.next_token();
         }
         Ok(Stmt::Sequence {
             statements: Box::new(statements),
         })
+    }
+
+    fn parse_top_level_statement(&mut self) -> Result<Stmt, ParseErr> {
+        match self.current_token.token {
+            Token::Function => self.parse_define_function_stmt(),
+            _ => return Err(ParseErr::NotATopLevelStatement(self.current_token.clone())),
+        }
     }
 
     fn parse_statement(&mut self) -> Result<Stmt, ParseErr> {
@@ -132,10 +139,20 @@ impl<'source> Parser<'source> {
         self.expect_and_move(Token::LParenthesis, ParseErr::ExpectedLparen)?;
         let parameters = self.parse_function_parameters()?;
         self.expect_and_move(Token::RParenthesis, ParseErr::ExpectedRparen)?;
-        self.expect_and_move(Token::Arrow, ParseErr::ExpectedArrow)?;
-        self.next_token();
-        let ty = self.parse_type()?;
+        let ty = if self.peek_token.token == Token::Arrow {
+            self.next_token();
+            self.next_token();
+            let ty_start = self.current_token.span.start;
+            let ty_opt = self.parse_type();
+            Some(Spanned::new(
+                ty_opt.unwrap(),
+                ty_start..self.current_token.span.end,
+            ))
+        } else {
+            None
+        };
         self.expect_and_move(Token::LBrace, ParseErr::ExpectedLbrace)?;
+
         let body = self.parse_sequence()?;
         if self.peek_token.token == Token::Semicolon {
             self.next_token();

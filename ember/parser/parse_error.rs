@@ -23,4 +23,5 @@ pub enum ParseErr {
     ExpectedArrow(TokenInfo),
     ExpectedReturn(TokenInfo),
     ExpectedColon(TokenInfo),
+    NotATopLevelStatement(TokenInfo),
 }
