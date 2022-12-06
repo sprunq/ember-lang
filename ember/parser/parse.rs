@@ -78,7 +78,7 @@ impl<'source> Parser<'source> {
     fn parse_top_level_statement(&mut self) -> Result<Stmt, ParseErr> {
         match self.current_token.token {
             Token::Function => self.parse_define_function_stmt(),
-            _ => return Err(ParseErr::NotATopLevelStatement(self.current_token.clone())),
+            _ => Err(ParseErr::NotATopLevelStatement(self.current_token.clone())),
         }
     }
 

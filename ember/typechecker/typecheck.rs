@@ -1,12 +1,11 @@
-use std::collections::{HashMap, HashSet};
-
+use super::typechecker_error::TypeCheckErr;
 use crate::syntax::{
     ast::{Spanned, Stmt},
     ty::Type,
 };
+use std::collections::HashMap;
 
-use super::typechecker_error::TypeCheckErr;
-
+#[allow(dead_code)]
 pub struct FunctionSignature<'a> {
     name: &'a Spanned<String>,
     parameters: &'a Vec<(Spanned<String>, Spanned<Type>)>,
@@ -18,15 +17,21 @@ pub struct TypeChecker<'a> {
 }
 
 impl<'a> TypeChecker<'a> {
-    pub fn build(functions: &'a Vec<Stmt>) -> Result<Self, Vec<TypeCheckErr>> {
-        let fs = Self::get_function_signatures(functions)?;
+    pub fn check(functions: &'a Vec<Stmt>) -> Vec<TypeCheckErr> {
+        let mut errs = Vec::new();
+        let fs = Self::get_function_signatures(functions).unwrap_or_default();
         let sel = Self {
             function_signatures: fs,
         };
-        Ok(sel)
+
+        if let Err(new_errs) = sel.typecheck() {
+            errs.extend(new_errs);
+        }
+
+        errs
     }
 
-    pub fn check(&self) -> Result<(), Vec<TypeCheckErr>> {
+    fn typecheck(&self) -> Result<(), Vec<TypeCheckErr>> {
         todo!()
     }
 
@@ -36,26 +41,24 @@ impl<'a> TypeChecker<'a> {
         let mut fun_sigs = HashMap::<String, FunctionSignature>::new();
         let mut errs = Vec::new();
         for fun in functions {
-            match fun {
-                Stmt::FunctionDefinition {
+            if let Stmt::FunctionDefinition {
+                name,
+                parameters,
+                return_type,
+                body: _,
+            } = fun
+            {
+                let fs = FunctionSignature {
                     name,
                     parameters,
                     return_type,
-                    body: _,
-                } => {
-                    let fs = FunctionSignature {
-                        name,
-                        parameters,
-                        return_type,
-                    };
-                    if let Some(other_sig) = fun_sigs.insert(name.inner.clone(), fs) {
-                        errs.push(TypeCheckErr::FunctionDuplicate {
-                            trying_to_init_ident: name.clone(),
-                            existing_fun_ident: other_sig.name.clone(),
-                        });
-                    }
+                };
+                if let Some(other_sig) = fun_sigs.insert(name.inner.clone(), fs) {
+                    errs.push(TypeCheckErr::FunctionDuplicate {
+                        trying_to_init_ident: name.clone(),
+                        existing_fun_ident: other_sig.name.clone(),
+                    });
                 }
-                _ => {}
             }
         }
 
@@ -63,7 +66,7 @@ impl<'a> TypeChecker<'a> {
             errs.push(TypeCheckErr::NoMainFunctionFound)
         }
 
-        if errs.len() > 0 {
+        if !errs.is_empty() {
             Err(errs)
         } else {
             Ok(fun_sigs)

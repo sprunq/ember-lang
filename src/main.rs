@@ -9,7 +9,8 @@ use ember::lexer::lex::Lexer;
 use ember::parser::parse::Parser;
 use ember::syntax::token::TokenInfo;
 use ember::typechecker::typecheck::TypeChecker;
-use std::{fs, time::Instant};
+use ember::typechecker::typechecker_error::TypeCheckErr;
+use std::fs;
 
 pub struct CompilerOptions {
     pub path: String,
@@ -27,12 +28,14 @@ fn main() {
         emit_ast: true,
         emit_ir: true,
     };
+
     let data = fs::read_to_string(&options.path).expect("Unable to read file");
     let mut files = SimpleFiles::new();
     let file_id = files.add(&options.path, data);
     let file = files.get(file_id).unwrap();
     let writer = StandardStream::stderr(ColorChoice::Auto);
     let config = codespan_reporting::term::Config::default();
+
     match build(&options, file.source(), file_id) {
         Ok(_) => {}
         Err(errs) => {
@@ -69,23 +72,12 @@ pub fn build(
         fs::write(".\\emit\\ast.txt", format!("{ast:#?}")).expect("Unable to write file");
     }
 
-    let mut tc_errs = Vec::new();
-    let typechecker = TypeChecker::build(&ast);
-    match typechecker {
-        Err(mut errs) => {
-            tc_errs.append(&mut errs);
-        }
-        Ok(sel) => {
-            if let Err(mut errs) = sel.check() {
-                tc_errs.append(&mut errs);
-            }
-        }
-    }
-    if tc_errs.len() > 0 {
+    let tc_errs = TypeChecker::check(&ast);
+    if !tc_errs.is_empty() {
         return Err(tc_errs
             .iter()
-            .map(|e| CompilerError::TypeCheck(e.clone()))
-            .collect::<Vec<_>>());
+            .map(|e: &TypeCheckErr| CompilerError::TypeCheck(e.clone()))
+            .collect::<Vec<CompilerError>>());
     }
 
     let mut ir_generator = IRGenerator::new();
@@ -97,7 +89,7 @@ pub fn build(
     Ok(())
 }
 
-fn emit_tokens_to_file(tokens: &Vec<TokenInfo>) {
+fn emit_tokens_to_file(tokens: &[TokenInfo]) {
     fs::create_dir_all(".\\emit").expect("Failed to create directory");
     let token_string = tokens
         .iter()
