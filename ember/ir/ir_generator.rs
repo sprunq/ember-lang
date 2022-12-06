@@ -29,8 +29,10 @@ impl IRGenerator {
         }
     }
 
-    pub fn gen_code(&mut self, ast: &Stmt) -> &Vec<IRInstruction> {
-        self.gen_statements(&ast);
+    pub fn gen_code(&mut self, ast: &Vec<Stmt>) -> &Vec<IRInstruction> {
+        for stmt in ast {
+            self.gen_statements(stmt);
+        }
         &self.instructions
     }
 

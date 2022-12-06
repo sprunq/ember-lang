@@ -63,16 +63,16 @@ impl<'source> Parser<'source> {
         &self.source[span]
     }
 
-    pub fn parse_program(&mut self) -> Result<Stmt, ParseErr> {
+    pub fn parse_program(&mut self) -> Result<Vec<Stmt>, Vec<ParseErr>> {
         let mut statements = vec![];
         while self.current_token.token != Token::Eof {
-            let statement = self.parse_top_level_statement()?;
-            statements.push(statement);
+            match self.parse_top_level_statement() {
+                Ok(a) => statements.push(a),
+                Err(b) => return Err(vec![b]),
+            }
             self.next_token();
         }
-        Ok(Stmt::Sequence {
-            statements: Box::new(statements),
-        })
+        Ok(statements)
     }
 
     fn parse_top_level_statement(&mut self) -> Result<Stmt, ParseErr> {
@@ -143,11 +143,8 @@ impl<'source> Parser<'source> {
             self.next_token();
             self.next_token();
             let ty_start = self.current_token.span.start;
-            let ty_opt = self.parse_type();
-            Some(Spanned::new(
-                ty_opt.unwrap(),
-                ty_start..self.current_token.span.end,
-            ))
+            let ty_opt = self.parse_type()?;
+            Some(Spanned::new(ty_opt, ty_start..self.current_token.span.end))
         } else {
             None
         };
