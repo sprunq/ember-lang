@@ -78,8 +78,8 @@ impl<'a> TypeChecker<'a> {
                         if *te != tv {
                             self.emit_error(TypeCheckErr::DeclarationTypesNotMatching {
                                 ident: ident.clone(),
-                                declared_ty: ty.clone(),
-                                value_ty: value_ty,
+                                declared_ty: *ty,
+                                value_ty,
                             });
                         }
                         Some(tv)
@@ -88,23 +88,20 @@ impl<'a> TypeChecker<'a> {
                         // error
                         self.emit_error(TypeCheckErr::DeclarationTypesNotMatching {
                             ident: ident.clone(),
-                            declared_ty: ty.clone(),
+                            declared_ty: *ty,
                             value_ty,
                         });
                         None
                     }
                 };
-                match type_to_declare_with {
-                    Some(t) => {
-                        if let Some(prev) = self.symbol_table.insert(&ident.inner, t) {
-                            self.emit_error(TypeCheckErr::VariableDuplicate {
-                                ident: ident.clone(),
-                                previous_type: prev,
-                                value_ty: t,
-                            });
-                        }
+                if let Some(t) = type_to_declare_with {
+                    if let Some(prev) = self.symbol_table.insert(&ident.inner, t) {
+                        self.emit_error(TypeCheckErr::VariableDuplicate {
+                            ident: ident.clone(),
+                            previous_type: prev,
+                            value_ty: t,
+                        });
                     }
-                    None => {}
                 }
             }
             Stmt::Expression { expr } => {
@@ -195,13 +192,9 @@ impl<'a> TypeChecker<'a> {
                     }
                     (None, Some(val)) => {
                         let val_type = self.check_expression(&val.inner);
-                        let actual_ret_ty_maybe_none = match val_type {
-                            Some(t) => Some(t),
-                            None => None,
-                        };
                         self.emit_error(TypeCheckErr::TypeMismatch {
                             expected: None,
-                            actual: actual_ret_ty_maybe_none,
+                            actual: val_type,
                             positon: val.pos.clone(),
                         })
                     }
@@ -221,8 +214,7 @@ impl<'a> TypeChecker<'a> {
                 // Check that the operands have compatible types
                 let left_ty = self.check_expression(&left.inner);
                 let right_ty = self.check_expression(&right.inner);
-                let op_ty = self.check_binary_operator_type(op.clone(), left_ty, right_ty);
-                op_ty
+                self.check_binary_operator_type(op.clone(), left_ty, right_ty)
             }
             Expr::Unary { op: _, expr } => self.check_expression(&expr.inner),
             Expr::Identifier(ident) => {
@@ -261,18 +253,34 @@ impl<'a> TypeChecker<'a> {
                 }
             }
             Expr::FunctionParameter { name: _, ty: _ } => unreachable!(),
-            Expr::FunctionInvocation { name, args: _ } => {
-                let sig = self.function_signatures.get(&name.inner);
+            Expr::FunctionInvocation { name, args } => {
+                let sig = self.function_signatures.get(&name.inner).cloned();
                 match sig {
                     Some(fn_sig) => {
-                        self.current_fun_signature = Some(fn_sig.clone());
-
                         // check args
+                        let decl_types = fn_sig
+                            .parameters
+                            .iter()
+                            .map(|p| Some(p.1.inner))
+                            .collect::<Vec<_>>();
+                        let invo_types = args
+                            .iter()
+                            .map(|p| self.check_expression(&p.inner))
+                            .collect::<Vec<_>>();
 
-                        match fn_sig.return_type {
-                            Some(t) => Some(t.inner),
-                            None => None,
+                        if decl_types != invo_types {
+                            self.emit_error(
+                                TypeCheckErr::FunctionInvocationNotMatchingDeclaration {
+                                    identifier: name.inner.clone(),
+                                    delcaration_types: decl_types,
+                                    invocation_types: invo_types,
+                                    decl_pos: fn_sig.name.pos.clone(),
+                                    invo_pos: name.pos.clone(),
+                                },
+                            )
                         }
+
+                        fn_sig.return_type.as_ref().map(|t| t.inner)
                     }
                     None => {
                         self.emit_error(TypeCheckErr::IdentifierNotFound {

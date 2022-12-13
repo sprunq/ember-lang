@@ -46,4 +46,11 @@ pub enum TypeCheckErr {
         identifier: String,
         positon: Range<usize>,
     },
+    FunctionInvocationNotMatchingDeclaration {
+        identifier: String,
+        delcaration_types: Vec<Option<Type>>,
+        invocation_types: Vec<Option<Type>>,
+        decl_pos: Range<usize>,
+        invo_pos: Range<usize>,
+    },
 }

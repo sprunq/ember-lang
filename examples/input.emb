@@ -10,7 +10,7 @@ fn main() {
 
      a += 20;
 
-    function_to_call(20, false);
+    function_to_call(20, true, 20);
 }
 
 fn function_to_call(a1: i64, b : bool) -> i64 {

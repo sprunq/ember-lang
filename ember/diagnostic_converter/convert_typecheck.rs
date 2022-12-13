@@ -89,7 +89,7 @@ pub fn build_typecheck_error_diagnostic(error: TypeCheckErr, file_id: usize) -> 
             .with_code("T008")
             .with_labels(vec![Label::primary(file_id, positon).with_message(
                 match (expected, actual) {
-                    (None, None) => format!("how did you get here"),
+                    (None, None) => "how did you get here".to_string(),
                     (None, Some(b)) => format!("expected None type but got {}", b),
                     (Some(a), None) => format!("expected type {} but got None", a),
                     (Some(a), Some(b)) => format!("expected type {} but got {}", a, b),
@@ -103,5 +103,44 @@ pub fn build_typecheck_error_diagnostic(error: TypeCheckErr, file_id: usize) -> 
             .with_code("T009")
             .with_labels(vec![Label::primary(file_id, positon)
                 .with_message(format!("cannot find identifier {}", identifier))]),
+        TypeCheckErr::FunctionInvocationNotMatchingDeclaration {
+            identifier: _,
+            delcaration_types,
+            invocation_types,
+            decl_pos,
+            invo_pos,
+        } => Diagnostic::error()
+            .with_message("Function invocation not matching declaration")
+            .with_code("T010")
+            .with_labels(vec![
+                Label::primary(file_id, decl_pos).with_message(format!(
+                    "declared with types ({})",
+                    delcaration_types
+                        .iter()
+                        .map(|o| {
+                            if let Some(s) = o {
+                                s.to_string()
+                            } else {
+                                "None".to_string()
+                            }
+                        })
+                        .collect::<Vec<_>>()
+                        .join(", ")
+                )),
+                Label::secondary(file_id, invo_pos).with_message(format!(
+                    "invoked with types ({})",
+                    invocation_types
+                        .iter()
+                        .map(|o| {
+                            if let Some(s) = o {
+                                s.to_string()
+                            } else {
+                                "None".to_string()
+                            }
+                        })
+                        .collect::<Vec<_>>()
+                        .join(", ")
+                )),
+            ]),
     }
 }
