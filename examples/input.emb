@@ -1,21 +1,8 @@
 fn main() {
-    let a : i64 = 0;
-    a = 2;
-
-    if(true){
-        a += 40;
-    }else {
-        a = a + 20;
-    }
-
-     a += 20;
-
-    function_to_call(20, true, 20);
+    function_to_call(20, true);
 }
 
-fn function_to_call(a1: i64, b : bool) -> i64 {
-    let c : i64 = a1;
-    return c;
+fn function_to_call(a: i64, b : bool) -> i64 {
 }
 
 
