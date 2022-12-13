@@ -40,6 +40,7 @@ pub struct TypeChecker {
     symbol_table: SymbolTable,
     errors: Vec<TypeCheckErr>,
     current_fun_signature: Option<FunctionSignature>,
+    is_errored: bool,
 }
 
 impl TypeChecker {
@@ -50,6 +51,7 @@ impl TypeChecker {
             errors,
             symbol_table: SymbolTable::new(),
             current_fun_signature: None,
+            is_errored: false,
         };
 
         for fun in functions {
@@ -60,7 +62,10 @@ impl TypeChecker {
     }
 
     fn emit_error(&mut self, error: TypeCheckErr) {
-        self.errors.push(error);
+        if !self.is_errored {
+            self.is_errored = true;
+            self.errors.push(error);
+        }
     }
 
     fn check_statement(&mut self, statement: &mut Stmt) {
@@ -83,6 +88,7 @@ impl TypeChecker {
             }
             Stmt::Sequence { statements } => {
                 for stmt in statements.iter_mut() {
+                    self.is_errored = false;
                     self.check_statement(stmt);
                 }
             }
