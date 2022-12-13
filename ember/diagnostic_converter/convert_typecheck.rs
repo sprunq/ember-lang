@@ -91,9 +91,17 @@ pub fn build_typecheck_error_diagnostic(error: TypeCheckErr, file_id: usize) -> 
                 match (expected, actual) {
                     (None, None) => format!("how did you get here"),
                     (None, Some(b)) => format!("expected None type but got {}", b),
-                    (Some(a), None) => format!("expected type {} but got no None", a),
+                    (Some(a), None) => format!("expected type {} but got None", a),
                     (Some(a), Some(b)) => format!("expected type {} but got {}", a, b),
                 },
             )]),
+        TypeCheckErr::IdentifierNotFound {
+            identifier,
+            positon,
+        } => Diagnostic::error()
+            .with_message("Identifier not found")
+            .with_code("T009")
+            .with_labels(vec![Label::primary(file_id, positon)
+                .with_message(format!("cannot find identifier {}", identifier))]),
     }
 }

@@ -38,8 +38,12 @@ pub enum TypeCheckErr {
         value_ty: Type,
     },
     TypeMismatch {
-        expected: Option<Spanned<Type>>,
-        actual: Option<Spanned<Type>>,
+        expected: Option<Type>,
+        actual: Option<Type>,
+        positon: Range<usize>,
+    },
+    IdentifierNotFound {
+        identifier: String,
         positon: Range<usize>,
     },
 }

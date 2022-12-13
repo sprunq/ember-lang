@@ -108,33 +108,64 @@ impl<'a> TypeChecker<'a> {
                 }
             }
             Stmt::Expression { expr } => {
-                let expr_ty = self.check_expression(&expr.inner);
-                match expr_ty {
-                    Some(ty) => self.emit_error(TypeCheckErr::StatementShouldNotReturnAnything {
-                        expr: expr.clone(),
-                        ty,
-                    }),
-                    None => {}
-                };
+                self.check_expression(&expr.inner);
             }
-            Stmt::While { condition, body } => todo!(),
+            Stmt::While { condition, body } => {
+                let condition_ty = self.check_expression(&condition.inner);
+                if condition_ty != Some(Type::Bool) {
+                    self.emit_error(TypeCheckErr::TypeMismatch {
+                        expected: Some(Type::Bool),
+                        actual: condition_ty,
+                        positon: condition.pos.clone(),
+                    })
+                }
+                self.check_statement(body);
+            }
             Stmt::If {
                 condition,
                 body,
                 alternative,
-            } => todo!(),
+            } => {
+                let condition_ty = self.check_expression(&condition.inner);
+                if condition_ty != Some(Type::Bool) {
+                    self.emit_error(TypeCheckErr::TypeMismatch {
+                        expected: Some(Type::Bool),
+                        actual: condition_ty,
+                        positon: condition.pos.clone(),
+                    })
+                }
+                self.check_statement(body);
+                if let Some(alternative) = alternative {
+                    self.check_statement(alternative);
+                }
+            }
             Stmt::Sequence { statements } => {
                 for stmt in statements.iter() {
                     self.check_statement(stmt);
                 }
             }
             Stmt::FunctionDefinition {
-                name: _,
-                parameters: _,
+                name,
+                parameters,
                 return_type: _,
                 body,
             } => {
-                self.check_statement(body);
+                if let Some(fun_sig) = self.function_signatures.get(&name.inner).cloned() {
+                    self.current_fun_signature = Some(fun_sig);
+                    let old_env = self.symbol_table.to_owned();
+                    self.symbol_table = SymbolTable::new();
+                    for param in parameters {
+                        self.symbol_table.insert(&param.0.inner, param.1.inner);
+                    }
+                    self.check_statement(body);
+                    self.symbol_table = old_env;
+                } else {
+                    self.current_fun_signature = None;
+                    self.emit_error(TypeCheckErr::IdentifierNotFound {
+                        identifier: name.inner.clone(),
+                        positon: name.pos.clone(),
+                    })
+                }
             }
             Stmt::Return { value } => {
                 let unwrapped_sig_ret_type = match &self.current_fun_signature {
@@ -152,8 +183,8 @@ impl<'a> TypeChecker<'a> {
                                 // success
                             } else {
                                 self.emit_error(TypeCheckErr::TypeMismatch {
-                                    expected: Some(t_sig_ret.clone()),
-                                    actual: Some(Spanned::new(val_type, ret_expr.pos.clone())),
+                                    expected: Some(t_sig_ret.inner),
+                                    actual: Some(val_type),
                                     positon: ret_expr.pos.clone(),
                                 })
                             }
@@ -165,7 +196,7 @@ impl<'a> TypeChecker<'a> {
                     (None, Some(val)) => {
                         let val_type = self.check_expression(&val.inner);
                         let actual_ret_ty_maybe_none = match val_type {
-                            Some(t) => Some(Spanned::new(t, val.pos.clone())),
+                            Some(t) => Some(t),
                             None => None,
                         };
                         self.emit_error(TypeCheckErr::TypeMismatch {
@@ -175,7 +206,7 @@ impl<'a> TypeChecker<'a> {
                         })
                     }
                     (Some(expected), None) => self.emit_error(TypeCheckErr::TypeMismatch {
-                        expected: Some(expected.clone()),
+                        expected: Some(expected.inner),
                         actual: None,
                         positon: expected.pos.clone(),
                     }),
@@ -195,9 +226,14 @@ impl<'a> TypeChecker<'a> {
             }
             Expr::Unary { op: _, expr } => self.check_expression(&expr.inner),
             Expr::Identifier(ident) => {
-                let ty = self.symbol_table.get(&ident.inner);
-                // Return the type of the identifier, if it exists
-                ty.copied()
+                let ty = self.symbol_table.get(&ident.inner).copied();
+                if ty.is_none() {
+                    self.emit_error(TypeCheckErr::IdentifierNotFound {
+                        identifier: ident.inner.clone(),
+                        positon: ident.pos.clone(),
+                    })
+                }
+                ty
             }
             Expr::IntegerLiteral(_) => Some(Type::I64),
             Expr::BooleanLiteral(_) => Some(Type::Bool),
@@ -210,24 +246,22 @@ impl<'a> TypeChecker<'a> {
                 let expr_ty = self.check_expression(&expr.inner);
                 let expected_ty = self.symbol_table.get(&ident.inner).cloned();
                 match (expr_ty, expected_ty) {
-                    (Some(operand_ty), Some(expected_ty)) if operand_ty == expected_ty => None,
-                    (Some(operand_ty), Some(expected_ty)) => {
+                    (Some(operand_ty), Some(expected_ty)) if operand_ty == expected_ty => {
+                        Some(operand_ty)
+                    }
+                    (operand_ty, expected_ty) => {
                         // If the operand has the wrong type, raise a type error
-                        self.emit_error(TypeCheckErr::AssignmentMismatch {
-                            ident: ident.clone(),
+                        self.emit_error(TypeCheckErr::TypeMismatch {
                             expected: expected_ty,
                             actual: operand_ty,
+                            positon: ident.pos.start..expr.pos.end,
                         });
-                        None
-                    }
-                    _ => {
-                        // If the operand or the expected type do not have a well-defined type, return `None`
                         None
                     }
                 }
             }
-            Expr::FunctionParameter { name, ty } => todo!(),
-            Expr::FunctionInvocation { name, args } => {
+            Expr::FunctionParameter { name: _, ty: _ } => unreachable!(),
+            Expr::FunctionInvocation { name, args: _ } => {
                 let sig = self.function_signatures.get(&name.inner);
                 match sig {
                     Some(fn_sig) => {
@@ -240,7 +274,13 @@ impl<'a> TypeChecker<'a> {
                             None => None,
                         }
                     }
-                    None => None, // emit error,
+                    None => {
+                        self.emit_error(TypeCheckErr::IdentifierNotFound {
+                            identifier: name.inner.clone(),
+                            positon: name.pos.clone(),
+                        });
+                        None
+                    }
                 }
             }
         }
