@@ -58,7 +58,7 @@ pub fn build(
     }
 
     let mut parser = Parser::new(tokens, input);
-    let ast = match parser.parse_program() {
+    let mut ast = match parser.parse_program() {
         Ok(stmts) => stmts,
         Err(errs) => {
             return Err(errs
@@ -67,17 +67,18 @@ pub fn build(
                 .collect::<Vec<_>>())
         }
     };
-    if options.emit_ast {
-        fs::create_dir_all(".\\emit").expect("Failed to create directory");
-        fs::write(".\\emit\\ast.txt", format!("{ast:#?}")).expect("Unable to write file");
-    }
 
-    let tc_errs = TypeChecker::check(&ast);
+    let tc_errs = TypeChecker::check(&mut ast);
     if !tc_errs.is_empty() {
         return Err(tc_errs
             .iter()
             .map(|e: &TypeCheckErr| CompilerError::TypeCheck(e.clone()))
             .collect::<Vec<CompilerError>>());
+    }
+
+    if options.emit_ast {
+        fs::create_dir_all(".\\emit").expect("Failed to create directory");
+        fs::write(".\\emit\\ast.txt", format!("{ast:#?}")).expect("Unable to write file");
     }
 
     let mut ir_generator = IRGenerator::new();

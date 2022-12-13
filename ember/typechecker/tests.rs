@@ -6,8 +6,8 @@ pub mod tests {
         let mut parser = Parser::new(Lexer::new(input).collect(), input);
         let parse_res = parser.parse_program();
         match parse_res {
-            Ok(program) => {
-                let tc = TypeChecker::check(&program);
+            Ok(mut program) => {
+                let tc = TypeChecker::check(&mut program);
                 if !tc.is_empty() {
                     println!("{:?}", tc);
                 }

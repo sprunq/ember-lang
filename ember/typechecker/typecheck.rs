@@ -8,10 +8,10 @@ use std::collections::HashMap;
 
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
-pub struct FunctionSignature<'a> {
-    name: &'a Spanned<String>,
-    parameters: &'a Vec<(Spanned<String>, Spanned<Type>)>,
-    return_type: &'a Option<Spanned<Type>>,
+pub struct FunctionSignature {
+    name: Spanned<String>,
+    parameters: Vec<(Spanned<String>, Spanned<Type>)>,
+    return_type: Option<Spanned<Type>>,
 }
 
 #[derive(Debug, Clone)]
@@ -35,15 +35,15 @@ impl SymbolTable {
     }
 }
 
-pub struct TypeChecker<'a> {
-    function_signatures: HashMap<String, FunctionSignature<'a>>,
+pub struct TypeChecker {
+    function_signatures: HashMap<String, FunctionSignature>,
     symbol_table: SymbolTable,
     errors: Vec<TypeCheckErr>,
-    current_fun_signature: Option<FunctionSignature<'a>>,
+    current_fun_signature: Option<FunctionSignature>,
 }
 
-impl<'a> TypeChecker<'a> {
-    pub fn check(functions: &'a Vec<Stmt>) -> Vec<TypeCheckErr> {
+impl TypeChecker {
+    pub fn check(functions: &mut Vec<Stmt>) -> Vec<TypeCheckErr> {
         let (function_signatures, errors) = Self::get_function_signatures(functions);
         let mut sel = Self {
             function_signatures,
@@ -63,7 +63,7 @@ impl<'a> TypeChecker<'a> {
         self.errors.push(error);
     }
 
-    fn check_statement(&mut self, statement: &Stmt) {
+    fn check_statement(&mut self, statement: &mut Stmt) {
         match statement {
             Stmt::Declaration { ty, ident, value } => {
                 self.check_declaration(value, ty, ident);
@@ -82,7 +82,7 @@ impl<'a> TypeChecker<'a> {
                 self.check_if(condition, body, alternative);
             }
             Stmt::Sequence { statements } => {
-                for stmt in statements.iter() {
+                for stmt in statements.iter_mut() {
                     self.check_statement(stmt);
                 }
             }
@@ -201,12 +201,12 @@ impl<'a> TypeChecker<'a> {
 
     fn check_declaration(
         &mut self,
-        value: &Spanned<Expr>,
-        ty: &Option<Type>,
-        ident: &Spanned<String>,
+        value: &mut Spanned<Expr>,
+        ty: &mut Option<Type>,
+        ident: &mut Spanned<String>,
     ) {
         let value_ty = self.check_expression(&value.inner);
-        let type_to_declare_with = match (ty, value_ty) {
+        let type_to_declare_with = match (&ty, value_ty) {
             (None, Some(inferred)) => {
                 // infer from value type
                 Some(inferred)
@@ -233,6 +233,7 @@ impl<'a> TypeChecker<'a> {
             }
         };
         if let Some(t) = type_to_declare_with {
+            *ty = Some(t);
             if let Some(prev) = self.symbol_table.insert(&ident.inner, t) {
                 self.emit_error(TypeCheckErr::VariableDuplicate {
                     ident: ident.clone(),
@@ -243,7 +244,7 @@ impl<'a> TypeChecker<'a> {
         }
     }
 
-    fn check_while(&mut self, condition: &Box<Spanned<Expr>>, body: &Box<Stmt>) {
+    fn check_while(&mut self, condition: &Box<Spanned<Expr>>, body: &mut Box<Stmt>) {
         let condition_ty = self.check_expression(&condition.inner);
         if condition_ty != Some(Type::Bool) {
             self.emit_error(TypeCheckErr::TypeMismatch {
@@ -257,9 +258,9 @@ impl<'a> TypeChecker<'a> {
 
     fn check_if(
         &mut self,
-        condition: &Box<Spanned<Expr>>,
-        body: &Box<Stmt>,
-        alternative: &Option<Box<Stmt>>,
+        condition: &mut Box<Spanned<Expr>>,
+        body: &mut Box<Stmt>,
+        alternative: &mut Option<Box<Stmt>>,
     ) {
         let condition_ty = self.check_expression(&condition.inner);
         if condition_ty != Some(Type::Bool) {
@@ -275,9 +276,9 @@ impl<'a> TypeChecker<'a> {
         }
     }
 
-    fn check_return(&mut self, value: &Option<Spanned<Expr>>) {
+    fn check_return(&mut self, value: &mut Option<Spanned<Expr>>) {
         let unwrapped_sig_ret_type = match &self.current_fun_signature {
-            Some(fun_sig) => match fun_sig.return_type {
+            Some(fun_sig) => match fun_sig.return_type.clone() {
                 Some(sig_ret) => Some(sig_ret),
                 None => None,
             },
@@ -319,9 +320,9 @@ impl<'a> TypeChecker<'a> {
 
     fn check_function_definition(
         &mut self,
-        name: &Spanned<String>,
-        parameters: &Vec<(Spanned<String>, Spanned<Type>)>,
-        body: &Box<Stmt>,
+        name: &mut Spanned<String>,
+        parameters: &mut Vec<(Spanned<String>, Spanned<Type>)>,
+        mut body: &mut Box<Stmt>,
     ) {
         if let Some(fun_sig) = self.function_signatures.get(&name.inner).cloned() {
             self.current_fun_signature = Some(fun_sig);
@@ -330,7 +331,7 @@ impl<'a> TypeChecker<'a> {
             for param in parameters {
                 self.symbol_table.insert(&param.0.inner, param.1.inner);
             }
-            self.check_statement(body);
+            self.check_statement(&mut body);
             self.symbol_table = old_env;
         } else {
             self.current_fun_signature = None;
@@ -367,8 +368,8 @@ impl<'a> TypeChecker<'a> {
     }
 
     fn get_function_signatures(
-        functions: &'a Vec<Stmt>,
-    ) -> (HashMap<String, FunctionSignature<'a>>, Vec<TypeCheckErr>) {
+        functions: &Vec<Stmt>,
+    ) -> (HashMap<String, FunctionSignature>, Vec<TypeCheckErr>) {
         let mut fun_sigs = HashMap::<String, FunctionSignature>::new();
         let mut errs = Vec::new();
         for fun in functions {
@@ -380,9 +381,9 @@ impl<'a> TypeChecker<'a> {
             } = fun
             {
                 let fs = FunctionSignature {
-                    name,
-                    parameters,
-                    return_type,
+                    name: name.clone(),
+                    parameters: parameters.clone(),
+                    return_type: return_type.clone(),
                 };
                 if let Some(other_sig) = fun_sigs.insert(name.inner.clone(), fs) {
                     errs.push(TypeCheckErr::FunctionDuplicate {

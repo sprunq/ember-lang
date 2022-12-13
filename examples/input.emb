@@ -1,5 +1,11 @@
 fn main() {
-    function_to_call(20, true);
+    let a = 20;
+    a += 20;
+    let b = false;
+    let c = (a+20) < 100;
+    if(c == 200){
+        a += 1;
+    }
 }
 
 fn function_to_call(a: i64, b : bool) -> i64 {
