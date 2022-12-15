@@ -126,7 +126,7 @@ impl<'source> Lexer<'source> {
                     return TokenInfo::new(lookup_ident(ident), start_pos..self.position, 0);
                 } else if Self::is_digit(self.character) {
                     self.consume_number();
-                    return TokenInfo::new(Token::Number, start_pos..self.position, 0);
+                    return TokenInfo::new(Token::IntLiteral, start_pos..self.position, 0);
                 } else {
                     tok = Token::Illegal
                 }

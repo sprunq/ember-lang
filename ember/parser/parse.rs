@@ -47,13 +47,12 @@ impl<'source> Parser<'source> {
         self.token_idx += 1;
     }
 
-    fn expect_and_move(
-        &mut self,
-        token: Token,
-        expected: fn(TokenInfo) -> ParseErr,
-    ) -> Result<(), ParseErr> {
-        if self.peek_token.token != token {
-            return Err(expected(self.peek_token.clone()));
+    fn expect_and_move(&mut self, expected: Token) -> Result<(), ParseErr> {
+        if self.peek_token.token != expected {
+            return Err(ParseErr::TokenMismatch {
+                expected,
+                actual: self.peek_token.clone(),
+            });
         }
         self.next_token();
         Ok(())
@@ -95,12 +94,12 @@ impl<'source> Parser<'source> {
 
     fn parse_return_stmt(&mut self) -> Result<Stmt, ParseErr> {
         if self.peek_token.token == Token::Semicolon {
-            self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
+            self.expect_and_move(Token::Semicolon)?;
             Ok(Stmt::Return { value: None })
         } else {
             self.next_token();
             let expr = self.parse_expr(Precedence::Lowest)?;
-            self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
+            self.expect_and_move(Token::Semicolon)?;
             Ok(Stmt::Return { value: Some(expr) })
         }
     }
@@ -108,7 +107,7 @@ impl<'source> Parser<'source> {
     fn parse_function_parameter(&mut self) -> Result<TypedFunctionParameter, ParseErr> {
         let start_pos = self.current_token.span.start;
         let ident = self.parse_identifier_string()?;
-        self.expect_and_move(Token::Colon, ParseErr::ExpectedColon)?;
+        self.expect_and_move(Token::Colon)?;
         self.next_token();
         let ty = self.parse_type()?;
         let end_type = self.current_token.span.end;
@@ -136,9 +135,9 @@ impl<'source> Parser<'source> {
     fn parse_define_function_stmt(&mut self) -> Result<Stmt, ParseErr> {
         self.next_token();
         let name = self.parse_identifier_string()?;
-        self.expect_and_move(Token::LParenthesis, ParseErr::ExpectedLparen)?;
+        self.expect_and_move(Token::LParenthesis)?;
         let parameters = self.parse_function_parameters()?;
-        self.expect_and_move(Token::RParenthesis, ParseErr::ExpectedRparen)?;
+        self.expect_and_move(Token::RParenthesis)?;
         let ty = if self.peek_token.token == Token::Arrow {
             self.next_token();
             self.next_token();
@@ -148,7 +147,7 @@ impl<'source> Parser<'source> {
         } else {
             None
         };
-        self.expect_and_move(Token::LBrace, ParseErr::ExpectedLbrace)?;
+        self.expect_and_move(Token::LBrace)?;
 
         let body = self.parse_sequence()?;
         if self.peek_token.token == Token::Semicolon {
@@ -163,15 +162,13 @@ impl<'source> Parser<'source> {
     }
 
     fn parse_if_stmt(&mut self) -> Result<Stmt, ParseErr> {
-        self.expect_and_move(Token::LParenthesis, ParseErr::ExpectedLparen)?;
         self.next_token();
         let condition = self.parse_expr(Precedence::Lowest)?;
-        self.expect_and_move(Token::RParenthesis, ParseErr::ExpectedRparen)?;
-        self.expect_and_move(Token::LBrace, ParseErr::ExpectedLbrace)?;
+        self.expect_and_move(Token::LBrace)?;
         let consequence = self.parse_sequence()?;
         let alternative = if self.peek_token.token == Token::Else {
             self.next_token();
-            self.expect_and_move(Token::LBrace, ParseErr::ExpectedLbrace)?;
+            self.expect_and_move(Token::LBrace)?;
             Some(Box::new(self.parse_sequence()?))
         } else {
             None
@@ -188,11 +185,9 @@ impl<'source> Parser<'source> {
     }
 
     fn parse_while_stmt(&mut self) -> Result<Stmt, ParseErr> {
-        self.expect_and_move(Token::LParenthesis, ParseErr::ExpectedLparen)?;
         self.next_token();
         let condition = self.parse_expr(Precedence::Lowest)?;
-        self.expect_and_move(Token::RParenthesis, ParseErr::ExpectedRparen)?;
-        self.expect_and_move(Token::LBrace, ParseErr::ExpectedLbrace)?;
+        self.expect_and_move(Token::LBrace)?;
         let consequence = self.parse_sequence()?;
         if self.peek_token.token == Token::Semicolon {
             self.next_token();
@@ -209,7 +204,7 @@ impl<'source> Parser<'source> {
             Token::Identifier => Some(Parser::parse_identifier_expression),
             Token::Minus => Some(Parser::parse_prefix_expression),
             Token::LParenthesis => Some(Parser::parse_grouped_expression),
-            Token::Number => Some(Parser::parse_literal_expression),
+            Token::IntLiteral => Some(Parser::parse_int_literal_expression),
             Token::True | Token::False => Some(Parser::parse_boolean_expression),
             _ => None,
         }
@@ -229,8 +224,8 @@ impl<'source> Parser<'source> {
         })
     }
 
-    fn parse_literal_expression(&mut self) -> Result<Spanned<Expr>, ParseErr> {
-        if let Token::Number = &self.current_token.token {
+    fn parse_int_literal_expression(&mut self) -> Result<Spanned<Expr>, ParseErr> {
+        if let Token::IntLiteral = &self.current_token.token {
             match &self.get_str(self.current_token.span.clone()).parse::<i64>() {
                 Ok(value) => Ok(Spanned::new(
                     Expr::IntegerLiteral(Spanned::<i64>::new(
@@ -245,7 +240,10 @@ impl<'source> Parser<'source> {
                 )),
             }
         } else {
-            Err(ParseErr::ExpectedLiteral(self.current_token.clone()))
+            Err(ParseErr::TokenMismatch {
+                expected: Token::IntLiteral,
+                actual: self.current_token.clone(),
+            })
         }
     }
 
@@ -263,7 +261,10 @@ impl<'source> Parser<'source> {
         };
         match value {
             Some(expr) => Ok(Spanned::new(expr, self.current_token.span.clone())),
-            None => Err(ParseErr::ExpectedBoolToken(self.current_token.clone())),
+            None => Err(ParseErr::TokenMismatch {
+                expected: Token::Bool,
+                actual: self.current_token.clone(),
+            }),
         }
     }
 
@@ -290,7 +291,9 @@ impl<'source> Parser<'source> {
     fn get_prefix_token(&self, token: &TokenInfo) -> Result<PrefixOp, ParseErr> {
         match token.token {
             Token::Minus => Ok(PrefixOp::Minus),
-            _ => Err(ParseErr::ExpectedPrefixToken(token.clone())),
+            _ => Err(ParseErr::ExpectedPrefixToken {
+                actual: token.clone(),
+            }),
         }
     }
 
@@ -318,7 +321,9 @@ impl<'source> Parser<'source> {
     fn parse_expr(&mut self, precedence: Precedence) -> Result<Spanned<Expr>, ParseErr> {
         let prefix = self
             .get_prefix_fn()
-            .ok_or_else(|| ParseErr::ExpectedPrefixToken(self.current_token.clone()))?;
+            .ok_or_else(|| ParseErr::ExpectedPrefixToken {
+                actual: self.current_token.clone(),
+            })?;
 
         let mut left_expr = prefix(self)?;
 
@@ -337,7 +342,7 @@ impl<'source> Parser<'source> {
 
     fn parse_call_expression(&mut self, left: Spanned<Expr>) -> Result<Spanned<Expr>, ParseErr> {
         let start = left.pos.start;
-        let args = self.parse_expressions(Token::RParenthesis, ParseErr::ExpectedRparen)?;
+        let args = self.parse_expressions(Token::RParenthesis)?;
         let inv = Expr::FunctionInvocation {
             name: Spanned::new(left.inner.to_string(), left.pos),
             args,
@@ -346,11 +351,7 @@ impl<'source> Parser<'source> {
         Ok(Spanned::new(inv, start..end))
     }
 
-    fn parse_expressions(
-        &mut self,
-        closing_token: Token,
-        expected: fn(TokenInfo) -> ParseErr,
-    ) -> Result<Vec<Spanned<Expr>>, ParseErr> {
+    fn parse_expressions(&mut self, closing_token: Token) -> Result<Vec<Spanned<Expr>>, ParseErr> {
         let mut exps = vec![];
         if self.peek_token.token == closing_token {
             self.next_token();
@@ -363,7 +364,7 @@ impl<'source> Parser<'source> {
             self.next_token();
             exps.push(self.parse_expr(Precedence::Lowest)?);
         }
-        self.expect_and_move(closing_token, expected)?;
+        self.expect_and_move(closing_token)?;
 
         Ok(exps)
     }
@@ -412,10 +413,10 @@ impl<'source> Parser<'source> {
         } else {
             None
         };
-        self.expect_and_move(Token::Assign, ParseErr::ExpectedAssign)?;
+        self.expect_and_move(Token::Assign)?;
         self.next_token();
         let value = self.parse_expr(Precedence::Lowest)?;
-        self.expect_and_move(Token::Semicolon, ParseErr::ExpectedSemicolon)?;
+        self.expect_and_move(Token::Semicolon)?;
         Ok(Stmt::Declaration {
             ty,
             ident: Spanned::new(ident.0, ident.1),
@@ -449,9 +450,10 @@ impl<'source> Parser<'source> {
                 self.current_token.span.clone(),
             ))
         } else {
-            Err(ParseErr::ExpectedIdentifierToken(
-                self.current_token.clone(),
-            ))
+            Err(ParseErr::TokenMismatch {
+                expected: Token::Identifier,
+                actual: self.current_token.clone(),
+            })
         }
     }
 
@@ -471,7 +473,9 @@ impl<'source> Parser<'source> {
 
     fn parse_infix_expression(&mut self, left: Spanned<Expr>) -> Result<Spanned<Expr>, ParseErr> {
         let (precedence, infix) = self.get_infix_token(&self.current_token.token);
-        let i = infix.ok_or_else(|| ParseErr::ExpectedInfixToken(self.current_token.clone()))?;
+        let i = infix.ok_or_else(|| ParseErr::ExpectedInfixToken {
+            actual: self.current_token.clone(),
+        })?;
         let infix_pos = self.current_token.span.clone();
         self.next_token();
         let right = self.parse_expr(precedence)?;
@@ -489,7 +493,7 @@ impl<'source> Parser<'source> {
     fn parse_grouped_expression(&mut self) -> Result<Spanned<Expr>, ParseErr> {
         self.next_token();
         let expr = self.parse_expr(Precedence::Lowest)?;
-        self.expect_and_move(Token::RParenthesis, ParseErr::ExpectedRparen)?;
+        self.expect_and_move(Token::RParenthesis)?;
         Ok(expr)
     }
 }

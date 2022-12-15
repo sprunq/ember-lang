@@ -111,7 +111,7 @@ impl TypeChecker {
             Expr::Binary { op, left, right } => self.check_binary(left, right, op),
             Expr::Unary { op: _, expr } => self.check_expression(&expr.inner),
             Expr::Identifier(ident) => self.check_identifier(ident),
-            Expr::IntegerLiteral(_) => Some(Type::I64),
+            Expr::IntegerLiteral(_) => Some(Type::Int),
             Expr::BooleanLiteral(_) => Some(Type::Bool),
             Expr::Assign {
                 ident,

@@ -1,0 +1,28 @@
+def main() {
+    let n = 9;
+    let fib_rec = fib_recursive(n);
+    let fib_itr = fib_iterative(n);
+}
+
+def fib_recursive(n: int) -> int {
+    if n < 2{
+        return n;
+    }
+    return fib_recursive(n-1) + fib_recursive(n - 2);
+}
+
+def fib_iterative(n : int) -> int {
+    let prev_prev_number = 0;
+    let prev_number = 0;
+    let current_number = 1;
+
+    let loop_i = 1;
+    while loop_i < n {
+        loop_i += 1;
+        prev_prev_number = prev_number;
+        prev_number = current_number;
+        current_number = prev_prev_number + prev_number;
+    }
+    return current_number;
+}
+

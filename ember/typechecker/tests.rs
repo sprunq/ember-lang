@@ -20,8 +20,8 @@ pub mod tests {
     #[test]
     fn test_decl_int() {
         let input = "
-        fn main() {
-            let a : i64 = 20;
+        def main() {
+            let a : int = 20;
         }
         ";
         check_and_expect_result(input, false);
@@ -30,7 +30,7 @@ pub mod tests {
     #[test]
     fn test_decl_bool() {
         let input = "
-        fn main() {
+        def main() {
             let a : bool = false;
         }
         ";
@@ -40,8 +40,8 @@ pub mod tests {
     #[test]
     fn test_decl_mismatch() {
         let input = "
-        fn main() {
-            let a : i64 = false;
+        def main() {
+            let a : int = false;
         }
         ";
         check_and_expect_result(input, true);
@@ -50,7 +50,7 @@ pub mod tests {
     #[test]
     fn test_decl_complex() {
         let input = "
-        fn main() {
+        def main() {
             let a : bool = (20*5) == 100;
         }
         ";
@@ -60,8 +60,8 @@ pub mod tests {
     #[test]
     fn test_var_assign() {
         let input = "
-        fn main() {
-            let a : i64 = 20;
+        def main() {
+            let a : int = 20;
             a += 20;
             a = 10;
             a -= 100;
@@ -75,8 +75,8 @@ pub mod tests {
     #[test]
     fn test_type_interop() {
         let input = "
-        fn main() {
-            let a : i64 = 20;
+        def main() {
+            let a : int = 20;
             a + 20;
             a - 20;
             a * 20;
@@ -89,8 +89,8 @@ pub mod tests {
     #[test]
     fn test_type_interop_fail() {
         let input = "
-        fn main() {
-            let a : i64 = 20;
+        def main() {
+            let a : int = 20;
             a + false;
         }
         ";
@@ -100,7 +100,7 @@ pub mod tests {
     #[test]
     fn test_type_iterop_cond() {
         let input = "
-        fn main() {
+        def main() {
             if(true){
             }
         }
@@ -111,7 +111,7 @@ pub mod tests {
     #[test]
     fn test_type_iterop_cond_int() {
         let input = "
-        fn main() {
+        def main() {
             if(0){
             }
         }
@@ -122,7 +122,7 @@ pub mod tests {
     #[test]
     fn test_type_iterop_cond_comp() {
         let input = "
-        fn main() {
+        def main() {
             if(200 == 200){
             }
         }
@@ -133,7 +133,7 @@ pub mod tests {
     #[test]
     fn test_nomain() {
         let input = "
-        fn not_main() {
+        def not_main() {
         }
         ";
         check_and_expect_result(input, true);
@@ -142,9 +142,9 @@ pub mod tests {
     #[test]
     fn test_double_fun_decl() {
         let input = "
-        fn not_main() {
+        def not_main() {
         }
-        fn not_main() {
+        def not_main() {
         }
         ";
         check_and_expect_result(input, true);
@@ -153,8 +153,8 @@ pub mod tests {
     #[test]
     fn test_param() {
         let input = "
-        fn main(a : i64) {
-            let b : i64 = a;
+        def main(a : int) {
+            let b : int = a;
         }
         ";
         check_and_expect_result(input, false);
@@ -163,7 +163,7 @@ pub mod tests {
     #[test]
     fn test_param_mismatch() {
         let input = "
-        fn main(a : i64) {
+        def main(a : int) {
             let b : bool = a;
         }
         ";
@@ -173,11 +173,11 @@ pub mod tests {
     #[test]
     fn test_invoc() {
         let input = "
-        fn main() {
+        def main() {
             function_to_call(20, true);
         }
         
-        fn function_to_call(a: i64, b : bool) {
+        def function_to_call(a: int, b : bool) {
         }
         ";
         check_and_expect_result(input, false);
@@ -186,11 +186,11 @@ pub mod tests {
     #[test]
     fn test_invoc_too_many_args() {
         let input = "
-        fn main() {
+        def main() {
             function_to_call(20, true, 0);
         }
         
-        fn function_to_call(a: i64, b : bool) {
+        def function_to_call(a: int, b : bool) {
         }
         ";
         check_and_expect_result(input, true);
@@ -199,11 +199,11 @@ pub mod tests {
     #[test]
     fn test_func_decl_return() {
         let input = "
-        fn main() {
+        def main() {
             function_to_call(20, true, 0);
         }
         
-        fn function_to_call(a: i64, b : bool) -> i64 {
+        def function_to_call(a: int, b : bool) -> int {
             return 0;
         }
         ";
@@ -213,11 +213,11 @@ pub mod tests {
     #[test]
     fn test_func_decl_wrong_return() {
         let input = "
-        fn main() {
+        def main() {
             function_to_call(20, true, 0);
         }
         
-        fn function_to_call(a: i64, b : bool) -> i64 {
+        def function_to_call(a: int, b : bool) -> int {
             return false;
         }
         ";

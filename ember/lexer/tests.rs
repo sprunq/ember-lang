@@ -22,19 +22,19 @@ pub mod tests {
     #[test]
     fn test_var_lex() {
         let input = r#"
-        i64 five = 5;
-        i64 ten = 10;
+        int five = 5;
+        int ten = 10;
         "#;
         let expected = vec![
-            Token::I64,
+            Token::Int,
             Token::Identifier,
             Token::Assign,
-            Token::Number,
+            Token::IntLiteral,
             Token::Semicolon,
-            Token::I64,
+            Token::Int,
             Token::Identifier,
             Token::Assign,
-            Token::Number,
+            Token::IntLiteral,
             Token::Semicolon,
         ];
         assert_lex_against(input, expected);
@@ -51,13 +51,13 @@ pub mod tests {
             Token::Minus,
             Token::Slash,
             Token::Asterisk,
-            Token::Number,
+            Token::IntLiteral,
             Token::Semicolon,
-            Token::Number,
+            Token::IntLiteral,
             Token::Lt,
-            Token::Number,
+            Token::IntLiteral,
             Token::Gt,
-            Token::Number,
+            Token::IntLiteral,
             Token::Semicolon,
         ];
 
@@ -71,13 +71,13 @@ pub mod tests {
         10 != 9;
         "#;
         let expected = vec![
-            Token::Number,
+            Token::IntLiteral,
             Token::Equal,
-            Token::Number,
+            Token::IntLiteral,
             Token::Semicolon,
-            Token::Number,
+            Token::IntLiteral,
             Token::NotEqual,
-            Token::Number,
+            Token::IntLiteral,
             Token::Semicolon,
         ];
 

@@ -1,15 +1,14 @@
-fn main() {
+def main() {
     let a = 0;
     a += 20;
     let b = false;
     let c = (a+20) < 100;
-    if(c == false){
+    while c == false {
         a += 1;
     }
     function_to_call(20,false)
 }
 
-fn function_to_call(a: i64, b : bool) -> i64 {
+def function_to_call(a: int, b : bool) -> int {
 }
-
 

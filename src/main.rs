@@ -22,7 +22,7 @@ pub struct CompilerOptions {
 
 fn main() {
     let options = CompilerOptions {
-        path: String::from(".\\examples\\input.emb"),
+        path: String::from(".\\examples\\fibonacci.emb"),
         measure_performance: true,
         emit_tokens: true,
         emit_ast: true,
