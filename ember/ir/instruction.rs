@@ -105,12 +105,12 @@ impl fmt::Display for IRInstruction {
                 write!(f, "\t{operand}I  {left}, {right}, {target}")
             }
             IRInstruction::Label { name } => write!(f, "\n{name}:"),
-            IRInstruction::Branch { label: target } => write!(f, "\tJUMP  {target}"),
+            IRInstruction::Branch { label: target } => write!(f, "\tJMP   {target}"),
             IRInstruction::BranchCond {
                 condition: cond,
                 on_true,
                 on_false,
-            } => write!(f, "\tCJUMP {cond}, {on_true}, {on_false}"),
+            } => write!(f, "\tJMPIF {cond}, {on_true}, {on_false}"),
             IRInstruction::CompareI {
                 left,
                 operand,

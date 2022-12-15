@@ -74,8 +74,7 @@ impl IRGenerator {
                 body,
             } => {
                 let body_label = self.new_label();
-                let mut name_str = name.inner.clone();
-                name_str.insert_str(0, "__");
+                let name_str = name.inner.clone();
                 let params = parameters
                     .iter()
                     .map(|f| (f.0.inner.clone(), f.1.inner))
@@ -128,8 +127,7 @@ impl IRGenerator {
                     arg_regs.push(arg_reg);
                 }
                 let target = self.new_register();
-                let mut name_str = name.inner.clone();
-                name_str.insert_str(0, "__");
+                let name_str = name.inner.clone();
                 let node = IRInstruction::FunctionInvocation {
                     name: name_str,
                     registers: arg_regs,
@@ -198,13 +196,13 @@ impl IRGenerator {
         let jmp_to_merge_node = IRInstruction::Branch { label: merge_label };
         self.instructions.push(jmp_to_merge_node);
         // false block
+        let f_label_node = IRInstruction::Label { name: f_label };
+        self.instructions.push(f_label_node);
         if let Some(alt) = alternative {
-            let f_label_node = IRInstruction::Label { name: f_label };
-            self.instructions.push(f_label_node);
             self.gen_statements(alt);
-            let jmp_to_merge_node = IRInstruction::Branch { label: merge_label };
-            self.instructions.push(jmp_to_merge_node);
         }
+        let jmp_to_merge_node = IRInstruction::Branch { label: merge_label };
+        self.instructions.push(jmp_to_merge_node);
         let merge_node = IRInstruction::Label { name: merge_label };
         self.instructions.push(merge_node);
     }
