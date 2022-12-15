@@ -13,6 +13,7 @@ pub struct IRGenerator {
     register_count: usize,
     label_count: usize,
     instructions: Vec<IRInstruction>,
+    loop_merge_label_stack: Vec<Label>,
 }
 impl Default for IRGenerator {
     fn default() -> Self {
@@ -26,6 +27,7 @@ impl IRGenerator {
             register_count: 0,
             label_count: 0,
             instructions: Vec::new(),
+            loop_merge_label_stack: Vec::new(),
         }
     }
 
@@ -102,6 +104,12 @@ impl IRGenerator {
                 };
                 self.instructions.push(node);
             }
+            Stmt::Break => {
+                if let Some(label) = self.loop_merge_label_stack.last() {
+                    self.instructions
+                        .push(IRInstruction::Branch { label: *label });
+                }
+            }
         }
     }
 
@@ -143,6 +151,7 @@ impl IRGenerator {
         let top_label = self.new_label();
         let start_label = self.new_label();
         let merge_label = self.new_label();
+        self.loop_merge_label_stack.push(merge_label);
 
         self.instructions
             .push(IRInstruction::Branch { label: top_label });
@@ -169,6 +178,8 @@ impl IRGenerator {
 
         self.instructions
             .push(IRInstruction::Label { name: merge_label });
+
+        self.loop_merge_label_stack.pop();
     }
 
     fn gen_stmt_if(
@@ -383,9 +394,9 @@ impl IRGenerator {
 
                 self.instructions.push(node_arith);
 
-                let node = IRInstruction::LoadI {
-                    name: ident.inner.to_string(),
+                let node = IRInstruction::StoreI {
                     target,
+                    name: ident.inner.to_string(),
                 };
                 self.instructions.push(node);
                 Some(target)

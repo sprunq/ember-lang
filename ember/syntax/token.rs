@@ -56,6 +56,7 @@ pub enum Token {
     Arrow,
     Return,
     Let,
+    Break,
 }
 
 pub fn lookup_ident(ident: &str) -> Token {
@@ -68,8 +69,9 @@ pub fn lookup_ident(ident: &str) -> Token {
         "int" => Some(Token::Int),
         "bool" => Some(Token::Bool),
         "def" => Some(Token::Function),
-        "return" => Some(Token::Return),
+        //  "return" => Some(Token::Return),
         "let" => Some(Token::Let),
+        "break" => Some(Token::Break),
         _ => None,
     };
     if let Some(token) = token {
@@ -119,6 +121,7 @@ impl fmt::Display for Token {
             Token::Arrow => write!(f, "->"),
             Token::Return => write!(f, "return"),
             Token::Let => write!(f, "let"),
+            Token::Break => write!(f, "break"),
         }
     }
 }

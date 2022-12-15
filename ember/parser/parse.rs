@@ -88,8 +88,14 @@ impl<'source> Parser<'source> {
             Token::If => self.parse_if_stmt(),
             Token::Function => self.parse_define_function_stmt(),
             Token::Return => self.parse_return_stmt(),
+            Token::Break => self.parse_break_stmt(),
             _ => self.parse_expr_stmt(),
         }
+    }
+
+    fn parse_break_stmt(&mut self) -> Result<Stmt, ParseErr> {
+        self.expect_and_move(Token::Semicolon)?;
+        Ok(Stmt::Break)
     }
 
     fn parse_return_stmt(&mut self) -> Result<Stmt, ParseErr> {

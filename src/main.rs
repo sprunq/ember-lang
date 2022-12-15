@@ -36,7 +36,7 @@ fn main() {
     let writer = StandardStream::stderr(ColorChoice::Auto);
     let config = codespan_reporting::term::Config::default();
 
-    match build(&options, file.source(), file_id) {
+    match compile(&options, file.source(), file_id) {
         Ok(_) => {}
         Err(errs) => {
             errs.iter()
@@ -47,7 +47,7 @@ fn main() {
     }
 }
 
-pub fn build(
+pub fn compile(
     options: &CompilerOptions,
     input: &str,
     file_id: usize,

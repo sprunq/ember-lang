@@ -35,6 +35,7 @@ pub enum Stmt {
     Return {
         value: Option<Spanned<Expr>>,
     },
+    Break,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -142,6 +143,7 @@ impl fmt::Display for Stmt {
                     write!(f, "return;")
                 }
             }
+            Stmt::Break => write!(f, "break;"),
         }
     }
 }

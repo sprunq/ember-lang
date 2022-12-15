@@ -103,6 +103,7 @@ impl TypeChecker {
             Stmt::Return { value } => {
                 self.check_return(value);
             }
+            Stmt::Break => {}
         }
     }
 

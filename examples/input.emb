@@ -1,14 +1,20 @@
 def main() {
-    let a = 0;
-    a += 20;
-    let b = false;
-    let c = (a+20) < 100;
-    while c == false {
-        a += 1;
+    let start = 0;
+    while true {
+        while false {
+            if false {
+                let in_cond = 0;
+                break;
+            }
+        }
+        let after_inner_while = 0;
     }
-    function_to_call(20,false)
+    let after_if = 0;
 }
 
-def function_to_call(a: int, b : bool) -> int {
+def fib_recursive(n: int) -> int {
+    if n < 2 {
+        <- n;
+    }
+    <- fib_recursive(n-1) + fib_recursive(n - 2);
 }
-

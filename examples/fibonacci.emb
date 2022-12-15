@@ -6,9 +6,9 @@ def main() {
 
 def fib_recursive(n: int) -> int {
     if n < 2{
-        return n;
+        <- n;
     }
-    return fib_recursive(n-1) + fib_recursive(n - 2);
+    <- fib_recursive(n-1) + fib_recursive(n - 2);
 }
 
 def fib_iterative(n : int) -> int {
@@ -23,6 +23,6 @@ def fib_iterative(n : int) -> int {
         prev_number = current_number;
         current_number = prev_prev_number + prev_number;
     }
-    return current_number;
+    <- current_number;
 }
 

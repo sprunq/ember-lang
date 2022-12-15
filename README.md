@@ -26,4 +26,3 @@ Ember is a statically typed simple hobby project language I'm working on which w
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⬜️ Other optimizations
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⬜️ Data flow analysis
-

@@ -44,7 +44,6 @@ impl<'source> Lexer<'source> {
         let tok: Token;
         let start_pos = self.position;
         match &self.character {
-            '<' => tok = Token::Lt,
             '>' => tok = Token::Gt,
             ';' => tok = Token::Semicolon,
             ':' => tok = Token::Colon,
@@ -59,6 +58,16 @@ impl<'source> Lexer<'source> {
             }
             ']' => {
                 tok = Token::RBracket;
+            }
+            '<' => {
+                tok = {
+                    if self.peek_char() == '-' {
+                        self.read_char();
+                        Token::Return
+                    } else {
+                        Token::Lt
+                    }
+                };
             }
             '=' => {
                 tok = {
