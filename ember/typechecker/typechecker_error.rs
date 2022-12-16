@@ -34,8 +34,7 @@ pub enum TypeCheckErr {
     },
     VariableDuplicate {
         ident: Spanned<String>,
-        previous_type: Type,
-        value_ty: Type,
+        already_declared_ident: Spanned<String>,
     },
     TypeMismatch {
         expected: Option<Type>,

@@ -70,16 +70,16 @@ pub fn build_typecheck_error_diagnostic(error: TypeCheckErr, file_id: usize) -> 
                 ))]),
         TypeCheckErr::VariableDuplicate {
             ident,
-            previous_type,
-            value_ty,
+            already_declared_ident,
         } => Diagnostic::error()
             .with_message("Variable Duplicate")
             .with_code("T007")
-            .with_labels(vec![Label::primary(file_id, ident.pos.clone())
-                .with_message(format!(
-                    "cannot declare {} with {} since it has already exists for {}",
-                    ident, value_ty, previous_type
-                ))]),
+            .with_labels(vec![
+                Label::primary(file_id, ident.pos.clone())
+                    .with_message(format!("cannot declare {} ", ident.inner)),
+                Label::secondary(file_id, already_declared_ident.pos)
+                    .with_message("already exists here".to_string()),
+            ]),
         TypeCheckErr::TypeMismatch {
             expected,
             actual,

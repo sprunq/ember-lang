@@ -87,6 +87,10 @@ pub fn compile(
         emit_ir_to_file(generated_ir);
     }
 
+    // We no longer need the ast.
+    // Drop it to convere memory
+    drop(ast);
+
     Ok(())
 }
 

@@ -1,4 +1,7 @@
-use super::typechecker_error::TypeCheckErr;
+use super::{
+    symbol_table::{SymbolTable, VariableInformation},
+    typechecker_error::TypeCheckErr,
+};
 use crate::parser::{
     ast::{Expr, Spanned, Stmt},
     operands::InfixOp,
@@ -12,27 +15,6 @@ pub struct FunctionSignature {
     name: Spanned<String>,
     parameters: Vec<(Spanned<String>, Spanned<Type>)>,
     return_type: Option<Spanned<Type>>,
-}
-
-#[derive(Debug, Clone)]
-struct SymbolTable {
-    symbols: HashMap<String, Type>,
-}
-
-impl SymbolTable {
-    fn new() -> Self {
-        Self {
-            symbols: HashMap::new(),
-        }
-    }
-
-    fn insert(&mut self, name: &str, ty: Type) -> Option<Type> {
-        self.symbols.insert(name.to_owned(), ty)
-    }
-
-    fn get(&self, name: &str) -> Option<&Type> {
-        self.symbols.get(name)
-    }
 }
 
 pub struct TypeChecker {
@@ -49,10 +31,13 @@ impl TypeChecker {
         let mut sel = Self {
             function_signatures,
             errors,
-            symbol_table: SymbolTable::new(),
+            symbol_table: SymbolTable::default(),
             current_fun_signature: None,
             is_errored: false,
         };
+
+        // global scope
+        sel.symbol_table.push_scope();
 
         for fun in functions {
             sel.check_statement(fun);
@@ -139,13 +124,15 @@ impl TypeChecker {
     fn check_assign(&mut self, expr: &Spanned<Expr>, ident: &Spanned<String>) -> Option<Type> {
         // Check that the right-hand side of the assignment has the same type as the left-hand side
         let expr_ty = self.check_expression(&expr.inner);
-        let expected_ty = self.symbol_table.get(&ident.inner).cloned();
+        let expected_ty = self.symbol_table.get_variable_from_scope(&ident.inner);
         match (expr_ty, expected_ty) {
-            (Some(operand_ty), Some(expected_ty)) if operand_ty == expected_ty => Some(operand_ty),
+            (Some(operand_ty), Some(expected_ty)) if operand_ty == expected_ty.ty => {
+                Some(operand_ty)
+            }
             (operand_ty, expected_ty) => {
                 // If the operand has the wrong type, raise a type error
                 self.emit_error(TypeCheckErr::TypeMismatch {
-                    expected: expected_ty,
+                    expected: expected_ty.map(|x| x.ty),
                     actual: operand_ty,
                     positon: ident.pos.start..expr.pos.end,
                 });
@@ -196,14 +183,17 @@ impl TypeChecker {
     }
 
     fn check_identifier(&mut self, ident: &Spanned<String>) -> Option<Type> {
-        let ty = self.symbol_table.get(&ident.inner).copied();
+        let ty = self
+            .symbol_table
+            .get_variable_from_scope(&ident.inner)
+            .cloned();
         if ty.is_none() {
             self.emit_error(TypeCheckErr::IdentifierNotFound {
                 identifier: ident.inner.clone(),
                 positon: ident.pos.clone(),
             })
         }
-        ty
+        ty.map(|x| x.ty)
     }
 
     fn check_declaration(
@@ -241,17 +231,27 @@ impl TypeChecker {
         };
         if let Some(t) = type_to_declare_with {
             *ty = Some(t);
-            if let Some(prev) = self.symbol_table.insert(&ident.inner, t) {
+            if let Some(prev) = self
+                .symbol_table
+                .insert_var_in_scope(VariableInformation::new(
+                    ident.inner.clone(),
+                    t,
+                    ident.pos.clone(),
+                ))
+            {
                 self.emit_error(TypeCheckErr::VariableDuplicate {
                     ident: ident.clone(),
-                    previous_type: prev,
-                    value_ty: t,
+                    already_declared_ident: Spanned {
+                        pos: prev.position,
+                        inner: prev.ident,
+                    },
                 });
             }
         }
     }
 
     fn check_while(&mut self, condition: &Spanned<Expr>, body: &mut Box<Stmt>) {
+        self.symbol_table.push_scope();
         let condition_ty = self.check_expression(&condition.inner);
         if condition_ty != Some(Type::Bool) {
             self.emit_error(TypeCheckErr::TypeMismatch {
@@ -261,6 +261,7 @@ impl TypeChecker {
             })
         }
         self.check_statement(body);
+        self.symbol_table.pop_scope();
     }
 
     fn check_if(
@@ -269,6 +270,7 @@ impl TypeChecker {
         body: &mut Box<Stmt>,
         alternative: &mut Option<Box<Stmt>>,
     ) {
+        self.symbol_table.push_scope();
         let condition_ty = self.check_expression(&condition.inner);
         if condition_ty != Some(Type::Bool) {
             self.emit_error(TypeCheckErr::TypeMismatch {
@@ -281,6 +283,7 @@ impl TypeChecker {
         if let Some(alternative) = alternative {
             self.check_statement(alternative);
         }
+        self.symbol_table.pop_scope();
     }
 
     fn check_return(&mut self, value: &mut Option<Spanned<Expr>>) {
@@ -330,13 +333,17 @@ impl TypeChecker {
     ) {
         if let Some(fun_sig) = self.function_signatures.get(&name.inner).cloned() {
             self.current_fun_signature = Some(fun_sig);
-            let old_env = self.symbol_table.to_owned();
-            self.symbol_table = SymbolTable::new();
+            self.symbol_table.push_scope();
             for param in parameters {
-                self.symbol_table.insert(&param.0.inner, param.1.inner);
+                self.symbol_table
+                    .insert_var_in_scope(VariableInformation::new(
+                        param.0.inner.clone(),
+                        param.1.inner,
+                        param.0.pos.clone(),
+                    ));
             }
             self.check_statement(body);
-            self.symbol_table = old_env;
+            self.symbol_table.pop_scope();
         } else {
             self.current_fun_signature = None;
             self.emit_error(TypeCheckErr::IdentifierNotFound {
