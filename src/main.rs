@@ -3,8 +3,8 @@ use codespan_reporting::files::SimpleFiles;
 use codespan_reporting::term;
 use codespan_reporting::term::termcolor::{ColorChoice, StandardStream};
 use compiler_error::CompilerError;
-use ember::ir::instruction::IRInstruction;
-use ember::ir::ir_generator::IRGenerator;
+use ember::ir_ssa::instruction::SSAInstruction;
+use ember::ir_ssa::ir_generator::IRGeneratorSSA;
 use ember::lexer::lex::Lexer;
 use ember::parser::parse::Parser;
 use ember::syntax::token::TokenInfo;
@@ -81,7 +81,7 @@ pub fn compile(
         fs::write(".\\emit\\ast.txt", format!("{ast:#?}")).expect("Unable to write file");
     }
 
-    let mut ir_generator = IRGenerator::new();
+    let mut ir_generator = IRGeneratorSSA::new();
     let generated_ir = ir_generator.gen_code(&ast).to_owned();
     if options.emit_ir {
         emit_ir_to_file(generated_ir);
@@ -106,7 +106,7 @@ fn emit_tokens_to_file(tokens: &[TokenInfo]) {
     fs::write(".\\emit\\tokens.txt", token_string).expect("Unable to write file");
 }
 
-fn emit_ir_to_file(generated_ir: Vec<IRInstruction>) {
+fn emit_ir_to_file(generated_ir: Vec<SSAInstruction>) {
     fs::create_dir_all(".\\emit").expect("Failed to create directory");
     let ir_string = generated_ir
         .iter()

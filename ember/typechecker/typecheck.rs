@@ -126,8 +126,8 @@ impl TypeChecker {
 
     fn check_binary(
         &mut self,
-        left: &Box<Spanned<Expr>>,
-        right: &Box<Spanned<Expr>>,
+        left: &Spanned<Expr>,
+        right: &Spanned<Expr>,
         op: &Spanned<InfixOp>,
     ) -> Option<Type> {
         // Check that the operands have compatible types
@@ -136,7 +136,7 @@ impl TypeChecker {
         self.check_binary_operator_type(op.clone(), left_ty, right_ty)
     }
 
-    fn check_assign(&mut self, expr: &Box<Spanned<Expr>>, ident: &Spanned<String>) -> Option<Type> {
+    fn check_assign(&mut self, expr: &Spanned<Expr>, ident: &Spanned<String>) -> Option<Type> {
         // Check that the right-hand side of the assignment has the same type as the left-hand side
         let expr_ty = self.check_expression(&expr.inner);
         let expected_ty = self.symbol_table.get(&ident.inner).cloned();
@@ -157,7 +157,7 @@ impl TypeChecker {
     fn check_function_invocation(
         &mut self,
         name: &Spanned<String>,
-        args: &Vec<Spanned<Expr>>,
+        args: &[Spanned<Expr>],
     ) -> Option<Type> {
         let sig = self.function_signatures.get(&name.inner).cloned();
         match sig {
@@ -227,7 +227,7 @@ impl TypeChecker {
                         value_ty,
                     });
                 }
-                Some(tv)
+                Some(*te)
             }
             _ => {
                 // error
@@ -251,7 +251,7 @@ impl TypeChecker {
         }
     }
 
-    fn check_while(&mut self, condition: &Box<Spanned<Expr>>, body: &mut Box<Stmt>) {
+    fn check_while(&mut self, condition: &Spanned<Expr>, body: &mut Box<Stmt>) {
         let condition_ty = self.check_expression(&condition.inner);
         if condition_ty != Some(Type::Bool) {
             self.emit_error(TypeCheckErr::TypeMismatch {
@@ -285,10 +285,7 @@ impl TypeChecker {
 
     fn check_return(&mut self, value: &mut Option<Spanned<Expr>>) {
         let unwrapped_sig_ret_type = match &self.current_fun_signature {
-            Some(fun_sig) => match fun_sig.return_type.clone() {
-                Some(sig_ret) => Some(sig_ret),
-                None => None,
-            },
+            Some(fun_sig) => fun_sig.return_type.clone(),
             None => None,
         };
         match (unwrapped_sig_ret_type, value) {
@@ -320,7 +317,7 @@ impl TypeChecker {
             (Some(expected), None) => self.emit_error(TypeCheckErr::TypeMismatch {
                 expected: Some(expected.inner),
                 actual: None,
-                positon: expected.pos.clone(),
+                positon: expected.pos,
             }),
         }
     }
@@ -329,7 +326,7 @@ impl TypeChecker {
         &mut self,
         name: &mut Spanned<String>,
         parameters: &mut Vec<(Spanned<String>, Spanned<Type>)>,
-        mut body: &mut Box<Stmt>,
+        body: &mut Box<Stmt>,
     ) {
         if let Some(fun_sig) = self.function_signatures.get(&name.inner).cloned() {
             self.current_fun_signature = Some(fun_sig);
@@ -338,7 +335,7 @@ impl TypeChecker {
             for param in parameters {
                 self.symbol_table.insert(&param.0.inner, param.1.inner);
             }
-            self.check_statement(&mut body);
+            self.check_statement(body);
             self.symbol_table = old_env;
         } else {
             self.current_fun_signature = None;

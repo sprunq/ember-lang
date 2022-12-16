@@ -1,7 +1,7 @@
 #![allow(unused_variables)]
 #![allow(dead_code)]
 use super::{
-    instruction::{IRInstruction, Label, Register, Value},
+    instruction::{SSAInstruction, SSALabel, SSARegister, SSAValue},
     operands::{BinaryOp, CompareOp},
 };
 use crate::syntax::{
@@ -9,19 +9,19 @@ use crate::syntax::{
     operands::{InfixOp, PrefixOp},
 };
 
-pub struct IRGenerator {
+pub struct IRGeneratorSSA {
     register_count: usize,
     label_count: usize,
-    instructions: Vec<IRInstruction>,
-    loop_merge_label_stack: Vec<Label>,
+    instructions: Vec<SSAInstruction>,
+    loop_merge_label_stack: Vec<SSALabel>,
 }
-impl Default for IRGenerator {
+impl Default for IRGeneratorSSA {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl IRGenerator {
+impl IRGeneratorSSA {
     pub fn new() -> Self {
         Self {
             register_count: 0,
@@ -31,21 +31,21 @@ impl IRGenerator {
         }
     }
 
-    pub fn gen_code(&mut self, ast: &Vec<Stmt>) -> &Vec<IRInstruction> {
+    pub fn gen_code(&mut self, ast: &Vec<Stmt>) -> &Vec<SSAInstruction> {
         for stmt in ast {
             self.gen_statements(stmt);
         }
         &self.instructions
     }
 
-    fn new_register(&mut self) -> Register {
+    fn new_register(&mut self) -> SSARegister {
         self.register_count += 1;
-        Register(self.register_count)
+        SSARegister(self.register_count)
     }
 
-    fn new_label(&mut self) -> Label {
+    fn new_label(&mut self) -> SSALabel {
         self.label_count += 1;
-        Label(self.label_count)
+        SSALabel(self.label_count)
     }
 
     fn gen_statements(&mut self, stmt: &Stmt) {
@@ -87,7 +87,7 @@ impl IRGenerator {
 
                 self.gen_statements(body);
 
-                let node = IRInstruction::FunctionDefinition {
+                let node = SSAInstruction::FunctionDefinition {
                     name: name_str,
                     parameters: params,
                     body: self.instructions.to_owned(),
@@ -98,22 +98,22 @@ impl IRGenerator {
             Stmt::Return { value } => {
                 let node = if let Some(val) = value {
                     let reg = self.gen_expressions(&val.inner);
-                    IRInstruction::Return { register: reg }
+                    SSAInstruction::Return { register: reg }
                 } else {
-                    IRInstruction::Return { register: None }
+                    SSAInstruction::Return { register: None }
                 };
                 self.instructions.push(node);
             }
             Stmt::Break => {
                 if let Some(label) = self.loop_merge_label_stack.last() {
                     self.instructions
-                        .push(IRInstruction::Branch { label: *label });
+                        .push(SSAInstruction::Branch { label: *label });
                 }
             }
         }
     }
 
-    fn gen_expressions(&mut self, expr: &Expr) -> Option<Register> {
+    fn gen_expressions(&mut self, expr: &Expr) -> Option<SSARegister> {
         match &expr {
             Expr::Binary { op, left, right } => self.gen_expr_infix(left, right, op),
             Expr::Unary { op, expr } => self.gen_expr_prefix(expr, op),
@@ -131,12 +131,12 @@ impl IRGenerator {
                 for arg in args {
                     let arg_reg = self
                         .gen_expressions(&arg.inner)
-                        .unwrap_or(Register(usize::MAX));
+                        .unwrap_or(SSARegister(usize::MAX));
                     arg_regs.push(arg_reg);
                 }
                 let target = self.new_register();
                 let name_str = name.inner.clone();
-                let node = IRInstruction::FunctionInvocation {
+                let node = SSAInstruction::FunctionInvocation {
                     name: name_str,
                     registers: arg_regs,
                     target,
@@ -154,16 +154,16 @@ impl IRGenerator {
         self.loop_merge_label_stack.push(merge_label);
 
         self.instructions
-            .push(IRInstruction::Branch { label: top_label });
+            .push(SSAInstruction::Branch { label: top_label });
 
         self.instructions
-            .push(IRInstruction::Label { name: top_label });
+            .push(SSAInstruction::Label { name: top_label });
 
         let cond_reg = self
             .gen_expressions(&condition.inner)
-            .unwrap_or(Register(usize::MAX));
+            .unwrap_or(SSARegister(usize::MAX));
 
-        let cond_node = IRInstruction::BranchCond {
+        let cond_node = SSAInstruction::BranchCond {
             condition: cond_reg,
             on_true: start_label,
             on_false: merge_label,
@@ -171,13 +171,13 @@ impl IRGenerator {
         self.instructions.push(cond_node);
 
         self.instructions
-            .push(IRInstruction::Label { name: start_label });
+            .push(SSAInstruction::Label { name: start_label });
         self.gen_statements(body);
         self.instructions
-            .push(IRInstruction::Branch { label: top_label });
+            .push(SSAInstruction::Branch { label: top_label });
 
         self.instructions
-            .push(IRInstruction::Label { name: merge_label });
+            .push(SSAInstruction::Label { name: merge_label });
 
         self.loop_merge_label_stack.pop();
     }
@@ -190,31 +190,31 @@ impl IRGenerator {
     ) {
         let cond_register = self
             .gen_expressions(&condition.inner)
-            .unwrap_or(Register(usize::MAX));
+            .unwrap_or(SSARegister(usize::MAX));
         let t_label = self.new_label();
         let f_label = self.new_label();
         let merge_label = self.new_label();
-        let cond_node = IRInstruction::BranchCond {
+        let cond_node = SSAInstruction::BranchCond {
             condition: cond_register,
             on_true: t_label,
             on_false: f_label,
         };
         self.instructions.push(cond_node);
         // true block
-        let t_label_node = IRInstruction::Label { name: t_label };
+        let t_label_node = SSAInstruction::Label { name: t_label };
         self.instructions.push(t_label_node);
         self.gen_statements(body);
-        let jmp_to_merge_node = IRInstruction::Branch { label: merge_label };
+        let jmp_to_merge_node = SSAInstruction::Branch { label: merge_label };
         self.instructions.push(jmp_to_merge_node);
         // false block
-        let f_label_node = IRInstruction::Label { name: f_label };
+        let f_label_node = SSAInstruction::Label { name: f_label };
         self.instructions.push(f_label_node);
         if let Some(alt) = alternative {
             self.gen_statements(alt);
         }
-        let jmp_to_merge_node = IRInstruction::Branch { label: merge_label };
+        let jmp_to_merge_node = SSAInstruction::Branch { label: merge_label };
         self.instructions.push(jmp_to_merge_node);
-        let merge_node = IRInstruction::Label { name: merge_label };
+        let merge_node = SSAInstruction::Label { name: merge_label };
         self.instructions.push(merge_node);
     }
 
@@ -226,22 +226,22 @@ impl IRGenerator {
         &mut self,
         expr: &Spanned<Expr>,
         op: &Spanned<PrefixOp>,
-    ) -> Option<Register> {
+    ) -> Option<SSARegister> {
         let expr_reg = self
             .gen_expressions(&expr.inner)
-            .unwrap_or(Register(usize::MAX));
+            .unwrap_or(SSARegister(usize::MAX));
         let target = self.new_register();
         let prefix_node = match op.inner {
             PrefixOp::Minus => {
                 // do value * -1;
                 let int_literal_target = self.new_register();
-                let int_literal = IRInstruction::MovI {
-                    value: Value(-1),
+                let int_literal = SSAInstruction::MovI {
+                    value: SSAValue(-1),
                     target: int_literal_target,
                 };
                 self.instructions.push(int_literal);
 
-                IRInstruction::ArithmeticBinaryI {
+                SSAInstruction::ArithmeticBinaryI {
                     operand: BinaryOp::Mul,
                     left: int_literal_target,
                     right: expr_reg,
@@ -260,43 +260,43 @@ impl IRGenerator {
     }
 
     fn gen_stmt_declaration(&mut self, value: &Spanned<Expr>, ident: &Spanned<String>) {
-        let node_decl = IRInstruction::Allocation {
+        let node_decl = SSAInstruction::Allocation {
             name: ident.inner.clone(),
         };
         self.instructions.push(node_decl);
         let a = self
             .gen_expressions(&value.inner)
-            .unwrap_or(Register(usize::MAX));
-        self.instructions.push(IRInstruction::StoreI {
+            .unwrap_or(SSARegister(usize::MAX));
+        self.instructions.push(SSAInstruction::StoreI {
             target: a,
             name: ident.inner.clone(),
         });
     }
 
-    fn gen_expr_bool_literal(&mut self, literal: &Spanned<bool>) -> Option<Register> {
+    fn gen_expr_bool_literal(&mut self, literal: &Spanned<bool>) -> Option<SSARegister> {
         let target = self.new_register();
-        let node = IRInstruction::MovI {
-            value: Value(i64::from(literal.inner)),
+        let node = SSAInstruction::MovI {
+            value: SSAValue(i64::from(literal.inner)),
             target,
         };
         self.instructions.push(node);
         Some(target)
     }
 
-    fn gen_expr_int_literal(&mut self, literal: &Spanned<i64>) -> Option<Register> {
+    fn gen_expr_int_literal(&mut self, literal: &Spanned<i64>) -> Option<SSARegister> {
         let target = self.new_register();
-        let node = IRInstruction::MovI {
-            value: Value(literal.inner),
+        let node = SSAInstruction::MovI {
+            value: SSAValue(literal.inner),
             target,
         };
         self.instructions.push(node);
         Some(target)
     }
 
-    fn gen_expr_ident(&mut self, ident: &str) -> Option<Register> {
+    fn gen_expr_ident(&mut self, ident: &str) -> Option<SSARegister> {
         let s = ident.to_owned();
         let target = self.new_register();
-        let node = IRInstruction::LoadI { name: s, target };
+        let node = SSAInstruction::LoadI { name: s, target };
         self.instructions.push(node);
         Some(target)
     }
@@ -306,13 +306,13 @@ impl IRGenerator {
         left: &Spanned<Expr>,
         right: &Spanned<Expr>,
         op: &Spanned<InfixOp>,
-    ) -> Option<Register> {
+    ) -> Option<SSARegister> {
         let left_reg = self
             .gen_expressions(&left.inner)
-            .unwrap_or(Register(usize::MAX));
+            .unwrap_or(SSARegister(usize::MAX));
         let right_reg = self
             .gen_expressions(&right.inner)
-            .unwrap_or(Register(usize::MAX));
+            .unwrap_or(SSARegister(usize::MAX));
         let cmp_op = match op.inner {
             InfixOp::Eq => Some(CompareOp::Eq),
             InfixOp::NotEq => Some(CompareOp::NotEq),
@@ -330,14 +330,14 @@ impl IRGenerator {
         let target = self.new_register();
         let node = {
             if let Some(cmp) = cmp_op {
-                Some(IRInstruction::CompareI {
+                Some(SSAInstruction::CompareI {
                     left: left_reg,
                     operand: cmp,
                     right: right_reg,
                     target,
                 })
             } else {
-                bin_op.map(|bin| IRInstruction::ArithmeticBinaryI {
+                bin_op.map(|bin| SSAInstruction::ArithmeticBinaryI {
                     operand: bin,
                     left: left_reg,
                     right: right_reg,
@@ -355,14 +355,14 @@ impl IRGenerator {
         ident: &Spanned<String>,
         operand: &Spanned<InfixOp>,
         expr: &Spanned<Expr>,
-    ) -> Option<Register> {
+    ) -> Option<SSARegister> {
         let expr_reg = self
             .gen_expressions(&expr.inner)
-            .unwrap_or(Register(usize::MAX));
+            .unwrap_or(SSARegister(usize::MAX));
 
         match operand.inner {
             InfixOp::Assign => {
-                let node = IRInstruction::LoadI {
+                let node = SSAInstruction::LoadI {
                     name: ident.inner.to_string(),
                     target: expr_reg,
                 };
@@ -382,10 +382,10 @@ impl IRGenerator {
                 };
                 let ident_reg = self
                     .gen_expr_ident(&ident.inner)
-                    .unwrap_or(Register(usize::MAX));
+                    .unwrap_or(SSARegister(usize::MAX));
 
                 let target = self.new_register();
-                let node_arith = IRInstruction::ArithmeticBinaryI {
+                let node_arith = SSAInstruction::ArithmeticBinaryI {
                     operand: op.unwrap(),
                     left: ident_reg,
                     right: expr_reg,
@@ -394,7 +394,7 @@ impl IRGenerator {
 
                 self.instructions.push(node_arith);
 
-                let node = IRInstruction::StoreI {
+                let node = SSAInstruction::StoreI {
                     target,
                     name: ident.inner.to_string(),
                 };

@@ -14,7 +14,7 @@ def main() {
 
 def fib_recursive(n: int) -> int {
     if n < 2 {
-        <- n;
+        ret n;
     }
-    <- fib_recursive(n-1) + fib_recursive(n - 2);
+    ret fib_recursive(n-1) + fib_recursive(n - 2);
 }

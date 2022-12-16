@@ -69,7 +69,7 @@ pub fn lookup_ident(ident: &str) -> Token {
         "int" => Some(Token::Int),
         "bool" => Some(Token::Bool),
         "def" => Some(Token::Function),
-        //  "return" => Some(Token::Return),
+        "ret" => Some(Token::Return),
         "let" => Some(Token::Let),
         "break" => Some(Token::Break),
         _ => None,
