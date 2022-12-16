@@ -1,4 +1,4 @@
-use crate::syntax::token::{Token, TokenInfo};
+use crate::lexer::token::{Token, TokenInfo};
 use std::num::ParseIntError;
 
 #[derive(Debug, Clone)]

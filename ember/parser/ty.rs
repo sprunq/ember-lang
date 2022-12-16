@@ -1,4 +1,5 @@
-use super::{operands::InfixOp, token::Token};
+use super::operands::InfixOp;
+use crate::lexer::token::Token;
 use std::fmt;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

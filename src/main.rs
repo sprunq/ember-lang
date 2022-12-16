@@ -3,11 +3,11 @@ use codespan_reporting::files::SimpleFiles;
 use codespan_reporting::term;
 use codespan_reporting::term::termcolor::{ColorChoice, StandardStream};
 use compiler_error::CompilerError;
+use ember::ir_ssa::generator::SSAGenerator;
 use ember::ir_ssa::instruction::SSAInstruction;
-use ember::ir_ssa::ir_generator::IRGeneratorSSA;
 use ember::lexer::lex::Lexer;
+use ember::lexer::token::TokenInfo;
 use ember::parser::parse::Parser;
-use ember::syntax::token::TokenInfo;
 use ember::typechecker::typecheck::TypeChecker;
 use ember::typechecker::typechecker_error::TypeCheckErr;
 use std::fs;
@@ -81,7 +81,7 @@ pub fn compile(
         fs::write(".\\emit\\ast.txt", format!("{ast:#?}")).expect("Unable to write file");
     }
 
-    let mut ir_generator = IRGeneratorSSA::new();
+    let mut ir_generator = SSAGenerator::new();
     let generated_ir = ir_generator.gen_code(&ast).to_owned();
     if options.emit_ir {
         emit_ir_to_file(generated_ir);

@@ -2,26 +2,26 @@
 #![allow(dead_code)]
 use super::{
     instruction::{SSAInstruction, SSALabel, SSARegister, SSAValue},
-    operands::{BinaryOp, CompareOp},
+    operands::{SSABinaryOp, SSACompareOp},
 };
-use crate::syntax::{
+use crate::parser::{
     ast::{Expr, Spanned, Stmt},
     operands::{InfixOp, PrefixOp},
 };
 
-pub struct IRGeneratorSSA {
+pub struct SSAGenerator {
     register_count: usize,
     label_count: usize,
     instructions: Vec<SSAInstruction>,
     loop_merge_label_stack: Vec<SSALabel>,
 }
-impl Default for IRGeneratorSSA {
+impl Default for SSAGenerator {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl IRGeneratorSSA {
+impl SSAGenerator {
     pub fn new() -> Self {
         Self {
             register_count: 0,
@@ -242,7 +242,7 @@ impl IRGeneratorSSA {
                 self.instructions.push(int_literal);
 
                 SSAInstruction::ArithmeticBinaryI {
-                    operand: BinaryOp::Mul,
+                    operand: SSABinaryOp::Mul,
                     left: int_literal_target,
                     right: expr_reg,
                     target,
@@ -314,17 +314,17 @@ impl IRGeneratorSSA {
             .gen_expressions(&right.inner)
             .unwrap_or(SSARegister(usize::MAX));
         let cmp_op = match op.inner {
-            InfixOp::Eq => Some(CompareOp::Eq),
-            InfixOp::NotEq => Some(CompareOp::NotEq),
-            InfixOp::Lt => Some(CompareOp::Lt),
-            InfixOp::Gt => Some(CompareOp::Gt),
+            InfixOp::Eq => Some(SSACompareOp::Eq),
+            InfixOp::NotEq => Some(SSACompareOp::NotEq),
+            InfixOp::Lt => Some(SSACompareOp::Lt),
+            InfixOp::Gt => Some(SSACompareOp::Gt),
             _ => None,
         };
         let bin_op = match op.inner {
-            InfixOp::Plus => Some(BinaryOp::Add),
-            InfixOp::Minus => Some(BinaryOp::Sub),
-            InfixOp::Asterisk => Some(BinaryOp::Mul),
-            InfixOp::Slash => Some(BinaryOp::Div),
+            InfixOp::Plus => Some(SSABinaryOp::Add),
+            InfixOp::Minus => Some(SSABinaryOp::Sub),
+            InfixOp::Asterisk => Some(SSABinaryOp::Mul),
+            InfixOp::Slash => Some(SSABinaryOp::Div),
             _ => None,
         };
         let target = self.new_register();
@@ -374,10 +374,10 @@ impl IRGeneratorSSA {
             | InfixOp::AsteriskEquals
             | InfixOp::SlashEuqals => {
                 let op = match operand.inner {
-                    InfixOp::PlusEquals => Some(BinaryOp::Add),
-                    InfixOp::MinusEquals => Some(BinaryOp::Sub),
-                    InfixOp::AsteriskEquals => Some(BinaryOp::Mul),
-                    InfixOp::SlashEuqals => Some(BinaryOp::Div),
+                    InfixOp::PlusEquals => Some(SSABinaryOp::Add),
+                    InfixOp::MinusEquals => Some(SSABinaryOp::Sub),
+                    InfixOp::AsteriskEquals => Some(SSABinaryOp::Mul),
+                    InfixOp::SlashEuqals => Some(SSABinaryOp::Div),
                     _ => None,
                 };
                 let ident_reg = self

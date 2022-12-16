@@ -1,6 +1,6 @@
 use std::ops::Range;
 
-use crate::syntax::{
+use crate::parser::{
     ast::{Expr, Spanned},
     operands::InfixOp,
     ty::Type,

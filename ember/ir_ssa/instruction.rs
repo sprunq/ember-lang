@@ -1,8 +1,6 @@
+use super::operands::{SSABinaryOp, SSACompareOp};
+use crate::parser::ty::Type;
 use std::fmt;
-
-use crate::syntax::ty::Type;
-
-use super::operands::{BinaryOp, CompareOp};
 
 #[derive(Debug, Copy, Clone)]
 pub struct SSAValue(pub i64);
@@ -50,13 +48,13 @@ pub enum SSAInstruction {
         name: String,
     },
     CompareI {
-        operand: CompareOp,
+        operand: SSACompareOp,
         left: SSARegister,
         right: SSARegister,
         target: SSARegister,
     },
     ArithmeticBinaryI {
-        operand: BinaryOp,
+        operand: SSABinaryOp,
         left: SSARegister,
         right: SSARegister,
         target: SSARegister,

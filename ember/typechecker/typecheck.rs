@@ -1,5 +1,5 @@
 use super::typechecker_error::TypeCheckErr;
-use crate::syntax::{
+use crate::parser::{
     ast::{Expr, Spanned, Stmt},
     operands::InfixOp,
     ty::Type,

@@ -1,51 +1,51 @@
 use std::fmt;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
-pub enum UnaryOp {
+pub enum SSAUnaryOp {
     Neg,
     Not,
 }
-impl fmt::Display for UnaryOp {
+impl fmt::Display for SSAUnaryOp {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            UnaryOp::Neg => write!(f, "!"),
-            UnaryOp::Not => write!(f, "-"),
+            SSAUnaryOp::Neg => write!(f, "!"),
+            SSAUnaryOp::Not => write!(f, "-"),
         }
     }
 }
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
-pub enum BinaryOp {
+pub enum SSABinaryOp {
     Add,
     Sub,
     Mul,
     Div,
 }
-impl fmt::Display for BinaryOp {
+impl fmt::Display for SSABinaryOp {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            BinaryOp::Add => write!(f, "ADD"),
-            BinaryOp::Sub => write!(f, "SUB"),
-            BinaryOp::Mul => write!(f, "MUL"),
-            BinaryOp::Div => write!(f, "DIV"),
+            SSABinaryOp::Add => write!(f, "ADD"),
+            SSABinaryOp::Sub => write!(f, "SUB"),
+            SSABinaryOp::Mul => write!(f, "MUL"),
+            SSABinaryOp::Div => write!(f, "DIV"),
         }
     }
 }
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
-pub enum CompareOp {
+pub enum SSACompareOp {
     Eq,
     NotEq,
     Lt,
     Gt,
 }
-impl fmt::Display for CompareOp {
+impl fmt::Display for SSACompareOp {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            CompareOp::Eq => write!(f, "="),
-            CompareOp::NotEq => write!(f, "!="),
-            CompareOp::Lt => write!(f, "<"),
-            CompareOp::Gt => write!(f, ">"),
+            SSACompareOp::Eq => write!(f, "="),
+            SSACompareOp::NotEq => write!(f, "!="),
+            SSACompareOp::Lt => write!(f, "<"),
+            SSACompareOp::Gt => write!(f, ">"),
         }
     }
 }

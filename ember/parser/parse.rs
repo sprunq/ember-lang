@@ -1,11 +1,10 @@
-use super::parse_error::ParseErr;
-use crate::syntax::operands::Precedence;
-use crate::syntax::token::{Token, TokenInfo};
-use crate::syntax::{
+use super::{
     ast::{Expr, Spanned, Stmt},
-    operands::{InfixOp, PrefixOp},
+    operands::{InfixOp, Precedence, PrefixOp},
+    parse_error::ParseErr,
     ty::Type,
 };
+use crate::lexer::token::{Token, TokenInfo};
 use std::ops::Range;
 
 type InfixFunctionType<'source> =
