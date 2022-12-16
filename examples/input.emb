@@ -1,20 +1,6 @@
 def main() {
-    let start = 0;
-    while true {
-        while false {
-            if false {
-                let in_cond = 0;
-                break;
-            }
-        }
-        let after_inner_while = 0;
+    let a = 0;
+    while true{ 
+        let a = 1;
     }
-    let after_if = 0;
-}
-
-def fib_recursive(n: int) -> int {
-    if n < 2 {
-        ret n;
-    }
-    ret fib_recursive(n-1) + fib_recursive(n - 2);
 }

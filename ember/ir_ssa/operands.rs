@@ -24,10 +24,10 @@ pub enum SSABinaryOp {
 impl fmt::Display for SSABinaryOp {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            SSABinaryOp::Add => write!(f, "ADD"),
-            SSABinaryOp::Sub => write!(f, "SUB"),
-            SSABinaryOp::Mul => write!(f, "MUL"),
-            SSABinaryOp::Div => write!(f, "DIV"),
+            SSABinaryOp::Add => write!(f, "+"),
+            SSABinaryOp::Sub => write!(f, "-"),
+            SSABinaryOp::Mul => write!(f, "*"),
+            SSABinaryOp::Div => write!(f, "/"),
         }
     }
 }
@@ -42,7 +42,7 @@ pub enum SSACompareOp {
 impl fmt::Display for SSACompareOp {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            SSACompareOp::Eq => write!(f, "="),
+            SSACompareOp::Eq => write!(f, "=="),
             SSACompareOp::NotEq => write!(f, "!="),
             SSACompareOp::Lt => write!(f, "<"),
             SSACompareOp::Gt => write!(f, ">"),

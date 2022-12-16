@@ -4,9 +4,12 @@ use super::{
     instruction::{SSAInstruction, SSALabel, SSARegister, SSAValue},
     operands::{SSABinaryOp, SSACompareOp},
 };
-use crate::parser::{
-    ast::{Expr, Spanned, Stmt},
-    operands::{InfixOp, PrefixOp},
+use crate::{
+    parser::{
+        ast::{Expr, Spanned, Stmt},
+        operands::{InfixOp, PrefixOp},
+    },
+    typechecker::symbol_table::SymbolTable,
 };
 
 pub struct SSAGenerator {
@@ -14,6 +17,7 @@ pub struct SSAGenerator {
     label_count: usize,
     instructions: Vec<SSAInstruction>,
     loop_merge_label_stack: Vec<SSALabel>,
+    symbol_table: SymbolTable,
 }
 impl Default for SSAGenerator {
     fn default() -> Self {
@@ -23,12 +27,15 @@ impl Default for SSAGenerator {
 
 impl SSAGenerator {
     pub fn new() -> Self {
-        Self {
+        let mut sel = Self {
             register_count: 0,
             label_count: 0,
             instructions: Vec::new(),
             loop_merge_label_stack: Vec::new(),
-        }
+            symbol_table: SymbolTable::new(),
+        };
+        sel.symbol_table.push_scope();
+        sel
     }
 
     pub fn gen_code(&mut self, ast: &Vec<Stmt>) -> &Vec<SSAInstruction> {
@@ -75,40 +82,13 @@ impl SSAGenerator {
                 return_type,
                 body,
             } => {
-                let body_label = self.new_label();
-                let name_str = name.inner.clone();
-                let params = parameters
-                    .iter()
-                    .map(|f| (f.0.inner.clone(), f.1.inner))
-                    .collect();
-
-                let old_code = self.instructions.to_owned();
-                self.instructions = vec![];
-
-                self.gen_statements(body);
-
-                let node = SSAInstruction::FunctionDefinition {
-                    name: name_str,
-                    parameters: params,
-                    body: self.instructions.to_owned(),
-                };
-                self.instructions = old_code;
-                self.instructions.push(node);
+                self.gen_stmt_function_definition(name, parameters, body);
             }
             Stmt::Return { value } => {
-                let node = if let Some(val) = value {
-                    let reg = self.gen_expressions(&val.inner);
-                    SSAInstruction::Return { register: reg }
-                } else {
-                    SSAInstruction::Return { register: None }
-                };
-                self.instructions.push(node);
+                self.gen_stmt_return(value);
             }
             Stmt::Break => {
-                if let Some(label) = self.loop_merge_label_stack.last() {
-                    self.instructions
-                        .push(SSAInstruction::Branch { label: *label });
-                }
+                self.gen_stmt_break();
             }
         }
     }
@@ -127,24 +107,73 @@ impl SSAGenerator {
             } => self.gen_expr_assign(ident, operand, expr),
             Expr::FunctionParameter { name, ty } => todo!(),
             Expr::FunctionInvocation { name, args } => {
-                let mut arg_regs = vec![];
-                for arg in args {
-                    let arg_reg = self
-                        .gen_expressions(&arg.inner)
-                        .unwrap_or(SSARegister(usize::MAX));
-                    arg_regs.push(arg_reg);
-                }
-                let target = self.new_register();
-                let name_str = name.inner.clone();
-                let node = SSAInstruction::FunctionInvocation {
-                    name: name_str,
-                    registers: arg_regs,
-                    target,
-                };
-                self.instructions.push(node);
-                Some(target)
+                self.gen_expr_function_invocation(args, name)
             }
         }
+    }
+
+    fn gen_expr_function_invocation(
+        &mut self,
+        args: &Vec<Spanned<Expr>>,
+        name: &Spanned<String>,
+    ) -> Option<SSARegister> {
+        let mut arg_regs = vec![];
+        for arg in args {
+            let arg_reg = self
+                .gen_expressions(&arg.inner)
+                .unwrap_or(SSARegister(usize::MAX));
+            arg_regs.push(arg_reg);
+        }
+        let target = self.new_register();
+        let name_str = name.inner.clone();
+        let node = SSAInstruction::FunctionInvocation {
+            name: name_str,
+            registers: arg_regs,
+            target,
+        };
+        self.instructions.push(node);
+        Some(target)
+    }
+
+    fn gen_stmt_break(&mut self) {
+        if let Some(label) = self.loop_merge_label_stack.last() {
+            self.instructions
+                .push(SSAInstruction::Branch { label: *label });
+        }
+    }
+
+    fn gen_stmt_return(&mut self, value: &Option<Spanned<Expr>>) {
+        let node = if let Some(val) = value {
+            let reg = self.gen_expressions(&val.inner);
+            SSAInstruction::Return { register: reg }
+        } else {
+            SSAInstruction::Return { register: None }
+        };
+        self.instructions.push(node);
+    }
+
+    fn gen_stmt_function_definition(
+        &mut self,
+        name: &Spanned<String>,
+        parameters: &Vec<(Spanned<String>, Spanned<crate::parser::ty::Type>)>,
+        body: &Box<Stmt>,
+    ) {
+        let body_label = self.new_label();
+        let name_str = name.inner.clone();
+        let params = parameters
+            .iter()
+            .map(|f| (f.0.inner.clone(), f.1.inner))
+            .collect();
+        let old_code = self.instructions.to_owned();
+        self.instructions = vec![];
+        self.gen_statements(body);
+        let node = SSAInstruction::FunctionDefinition {
+            name: name_str,
+            parameters: params,
+            body: self.instructions.to_owned(),
+        };
+        self.instructions = old_code;
+        self.instructions.push(node);
     }
 
     fn gen_stmt_while(&mut self, condition: &Spanned<Expr>, body: &Stmt) {
@@ -235,13 +264,13 @@ impl SSAGenerator {
             PrefixOp::Minus => {
                 // do value * -1;
                 let int_literal_target = self.new_register();
-                let int_literal = SSAInstruction::MovI {
+                let int_literal = SSAInstruction::Mov {
                     value: SSAValue(-1),
                     target: int_literal_target,
                 };
                 self.instructions.push(int_literal);
 
-                SSAInstruction::ArithmeticBinaryI {
+                SSAInstruction::ArithmeticBinary {
                     operand: SSABinaryOp::Mul,
                     left: int_literal_target,
                     right: expr_reg,
@@ -267,15 +296,15 @@ impl SSAGenerator {
         let a = self
             .gen_expressions(&value.inner)
             .unwrap_or(SSARegister(usize::MAX));
-        self.instructions.push(SSAInstruction::StoreI {
-            target: a,
-            name: ident.inner.clone(),
+        self.instructions.push(SSAInstruction::Store {
+            source: a,
+            target: ident.inner.clone(),
         });
     }
 
     fn gen_expr_bool_literal(&mut self, literal: &Spanned<bool>) -> Option<SSARegister> {
         let target = self.new_register();
-        let node = SSAInstruction::MovI {
+        let node = SSAInstruction::Mov {
             value: SSAValue(i64::from(literal.inner)),
             target,
         };
@@ -285,7 +314,7 @@ impl SSAGenerator {
 
     fn gen_expr_int_literal(&mut self, literal: &Spanned<i64>) -> Option<SSARegister> {
         let target = self.new_register();
-        let node = SSAInstruction::MovI {
+        let node = SSAInstruction::Mov {
             value: SSAValue(literal.inner),
             target,
         };
@@ -296,7 +325,7 @@ impl SSAGenerator {
     fn gen_expr_ident(&mut self, ident: &str) -> Option<SSARegister> {
         let s = ident.to_owned();
         let target = self.new_register();
-        let node = SSAInstruction::LoadI { name: s, target };
+        let node = SSAInstruction::Load { source: s, target };
         self.instructions.push(node);
         Some(target)
     }
@@ -330,14 +359,14 @@ impl SSAGenerator {
         let target = self.new_register();
         let node = {
             if let Some(cmp) = cmp_op {
-                Some(SSAInstruction::CompareI {
+                Some(SSAInstruction::Compare {
                     left: left_reg,
                     operand: cmp,
                     right: right_reg,
                     target,
                 })
             } else {
-                bin_op.map(|bin| SSAInstruction::ArithmeticBinaryI {
+                bin_op.map(|bin| SSAInstruction::ArithmeticBinary {
                     operand: bin,
                     left: left_reg,
                     right: right_reg,
@@ -362,9 +391,9 @@ impl SSAGenerator {
 
         match operand.inner {
             InfixOp::Assign => {
-                let node = SSAInstruction::LoadI {
-                    name: ident.inner.to_string(),
-                    target: expr_reg,
+                let node = SSAInstruction::Store {
+                    source: expr_reg,
+                    target: ident.inner.to_string(),
                 };
                 self.instructions.push(node);
                 Some(expr_reg)
@@ -384,22 +413,22 @@ impl SSAGenerator {
                     .gen_expr_ident(&ident.inner)
                     .unwrap_or(SSARegister(usize::MAX));
 
-                let target = self.new_register();
-                let node_arith = SSAInstruction::ArithmeticBinaryI {
+                let tmp_reg = self.new_register();
+                let node_arith = SSAInstruction::ArithmeticBinary {
                     operand: op.unwrap(),
                     left: ident_reg,
                     right: expr_reg,
-                    target,
+                    target: tmp_reg,
                 };
 
                 self.instructions.push(node_arith);
 
-                let node = SSAInstruction::StoreI {
-                    target,
-                    name: ident.inner.to_string(),
+                let node = SSAInstruction::Store {
+                    target: ident.inner.to_string(),
+                    source: tmp_reg,
                 };
                 self.instructions.push(node);
-                Some(target)
+                Some(tmp_reg)
             }
             _ => None,
         }

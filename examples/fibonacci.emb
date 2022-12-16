@@ -1,7 +1,14 @@
 def main() {
-    let n : int = 9;
+    let n = 9;
     let fib_rec = fib_recursive(n);
     let fib_itr = fib_iterative(n);
+}
+
+def do_something_else(arg1 : int, arg2 : bool, arg3: bool) -> bool {
+    let a = arg1;
+    let b = arg2;
+    let c = arg3;
+    ret (a == 1) == b == c;
 }
 
 def fib_recursive(n: int) -> int {

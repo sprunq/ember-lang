@@ -32,28 +32,32 @@ impl fmt::Display for SSARegister {
 #[derive(Debug, Clone)]
 pub enum SSAInstruction {
     NOP,
-    Allocation {
-        name: String,
-    },
-    MovI {
+    // Loads a constant into a register
+    Mov {
         value: SSAValue,
         target: SSARegister,
     },
-    LoadI {
-        name: String,
+    // Load variable into register
+    Load {
+        source: String,
         target: SSARegister,
     },
-    StoreI {
-        target: SSARegister,
+    // Store register value in variable
+    Store {
+        target: String,
+        source: SSARegister,
+    },
+    // Allocate a new variable
+    Allocation {
         name: String,
     },
-    CompareI {
+    Compare {
         operand: SSACompareOp,
         left: SSARegister,
         right: SSARegister,
         target: SSARegister,
     },
-    ArithmeticBinaryI {
+    ArithmeticBinary {
         operand: SSABinaryOp,
         left: SSARegister,
         right: SSARegister,
@@ -88,37 +92,43 @@ pub enum SSAInstruction {
 impl fmt::Display for SSAInstruction {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            SSAInstruction::NOP => write!(f, "\tNOP"),
-            SSAInstruction::MovI { value, target } => {
-                write!(f, "\tMOVEI {value}, {target}")
+            SSAInstruction::NOP => write!(f, "\tnop"),
+            SSAInstruction::Mov { value, target } => {
+                write!(f, "\t{target} ← move {value}")
             }
-            SSAInstruction::LoadI { target, name } => write!(f, "\tLOAD  {name}, {target}"),
-            SSAInstruction::StoreI { target, name } => write!(f, "\tSTORE {target}, {name}"),
-            SSAInstruction::ArithmeticBinaryI {
+            SSAInstruction::Load {
+                target,
+                source: name,
+            } => write!(f, "\t{target} ← load {name}"),
+            SSAInstruction::Store {
+                target,
+                source: name,
+            } => write!(f, "\t{target} ← store {name}"),
+            SSAInstruction::ArithmeticBinary {
                 left,
                 operand,
                 right,
                 target,
             } => {
-                write!(f, "\t{operand}I  {left}, {right}, {target}")
+                write!(f, "\t{target} ← {left} {operand} {right}")
             }
             SSAInstruction::Label { name } => write!(f, "\n{name}:"),
-            SSAInstruction::Branch { label: target } => write!(f, "\tJMP   {target}"),
+            SSAInstruction::Branch { label: target } => write!(f, "\tjump {target}"),
             SSAInstruction::BranchCond {
                 condition: cond,
                 on_true,
                 on_false,
-            } => write!(f, "\tJMPIF {cond}, {on_true}, {on_false}"),
-            SSAInstruction::CompareI {
+            } => write!(f, "\tjump_if {cond}, {on_true}, {on_false}"),
+            SSAInstruction::Compare {
                 left,
                 operand,
                 right,
                 target,
             } => {
-                write!(f, "\tCOMPI {operand}, {left}, {right}, {target}")
+                write!(f, "\t{target} ← cmp {left} {operand} {right}, ")
             }
             SSAInstruction::Allocation { name } => {
-                write!(f, "\tALLOC {name}")
+                write!(f, "\talloc {name}")
             }
             SSAInstruction::FunctionDefinition {
                 name,
@@ -135,13 +145,13 @@ impl fmt::Display for SSAInstruction {
                     .map(|s| format!("{s}"))
                     .collect::<Vec<String>>()
                     .join("\n");
-                write!(f, "{name}({param_str})\n{body_str}\n",)
+                write!(f, "function {name}({param_str}):\n{body_str}\n",)
             }
             SSAInstruction::Return { register } => {
                 if let Some(reg) = register {
-                    write!(f, "\tRET   {}", reg)
+                    write!(f, "\tret {}", reg)
                 } else {
-                    write!(f, "\tRET")
+                    write!(f, "\tret")
                 }
             }
             SSAInstruction::FunctionInvocation {
@@ -154,7 +164,7 @@ impl fmt::Display for SSAInstruction {
                     .map(|r| format!("{}", r))
                     .collect::<Vec<String>>()
                     .join(", ");
-                write!(f, "\tCALL  {name}, ({param_str}), {target}")
+                write!(f, "\t{target} ← call {name}({param_str})")
             }
         }
     }
