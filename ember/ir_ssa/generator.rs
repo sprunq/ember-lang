@@ -1,13 +1,12 @@
-#![allow(unused_variables)]
-#![allow(dead_code)]
 use super::{
     syntax::{SSABinaryOp, SSACompareOp},
-    syntax::{SSAInstruction, SSALabel, SSARegister, SSAValue},
+    syntax::{SSAInstruction, SSALabel, SSAType, SSAValue},
 };
 use crate::{
     parser::{
         syntax::{Expr, Spanned, Stmt},
         syntax::{InfixOp, PrefixOp},
+        ty::Type,
     },
     typechecker::symbol_table::SymbolTable,
 };
@@ -45,9 +44,9 @@ impl SSAGenerator {
         &self.instructions
     }
 
-    fn new_register(&mut self) -> SSARegister {
+    fn new_register(&mut self) -> SSAValue {
         self.register_count += 1;
-        SSARegister(self.register_count)
+        SSAValue(self.register_count)
     }
 
     fn new_label(&mut self) -> SSALabel {
@@ -58,7 +57,7 @@ impl SSAGenerator {
     fn gen_statements(&mut self, stmt: &Stmt) {
         match stmt {
             Stmt::Declaration { ty, ident, value } => {
-                self.gen_stmt_declaration(value, ident);
+                self.gen_stmt_declaration(value, ident, ty);
             }
             Stmt::Expression { expr } => {
                 self.gen_stmt_expr(expr);
@@ -82,7 +81,7 @@ impl SSAGenerator {
                 return_type,
                 body,
             } => {
-                self.gen_stmt_function_definition(name, parameters, body);
+                self.gen_stmt_function_definition(name, parameters, body, return_type);
             }
             Stmt::Return { value } => {
                 self.gen_stmt_return(value);
@@ -93,7 +92,7 @@ impl SSAGenerator {
         }
     }
 
-    fn gen_expressions(&mut self, expr: &Expr) -> Option<SSARegister> {
+    fn gen_expressions(&mut self, expr: &Expr) -> Option<SSAValue> {
         match &expr {
             Expr::Binary { op, left, right } => self.gen_expr_infix(left, right, op),
             Expr::Unary { op, expr } => self.gen_expr_prefix(expr, op),
@@ -105,7 +104,7 @@ impl SSAGenerator {
                 operand,
                 expr,
             } => self.gen_expr_assign(ident, operand, expr),
-            Expr::FunctionParameter { name, ty } => todo!(),
+            Expr::FunctionParameter { name: _, ty: _ } => todo!(),
             Expr::FunctionInvocation { name, args } => {
                 self.gen_expr_function_invocation(args, name)
             }
@@ -116,12 +115,12 @@ impl SSAGenerator {
         &mut self,
         args: &Vec<Spanned<Expr>>,
         name: &Spanned<String>,
-    ) -> Option<SSARegister> {
+    ) -> Option<SSAValue> {
         let mut arg_regs = vec![];
         for arg in args {
             let arg_reg = self
                 .gen_expressions(&arg.inner)
-                .unwrap_or(SSARegister(usize::MAX));
+                .unwrap_or(SSAValue(usize::MAX));
             arg_regs.push(arg_reg);
         }
         let target = self.new_register();
@@ -157,12 +156,12 @@ impl SSAGenerator {
         name: &Spanned<String>,
         parameters: &[(Spanned<String>, Spanned<crate::parser::ty::Type>)],
         body: &Stmt,
+        return_type: &Option<Spanned<Type>>,
     ) {
-        let body_label = self.new_label();
         let name_str = name.inner.clone();
         let params = parameters
             .iter()
-            .map(|f| (f.0.inner.clone(), f.1.inner))
+            .map(|f| (f.0.inner.clone(), SSAType::from(f.1.inner)))
             .collect();
         let old_code = self.instructions.to_owned();
         self.instructions = vec![];
@@ -171,6 +170,7 @@ impl SSAGenerator {
             name: name_str,
             parameters: params,
             body: self.instructions.to_owned(),
+            return_type: SSAType::from(return_type.as_ref().map(|r| r.inner)),
         };
         self.instructions = old_code;
         self.instructions.push(node);
@@ -190,7 +190,7 @@ impl SSAGenerator {
 
         let cond_reg = self
             .gen_expressions(&condition.inner)
-            .unwrap_or(SSARegister(usize::MAX));
+            .unwrap_or(SSAValue(usize::MAX));
 
         let cond_node = SSAInstruction::BranchCond {
             condition: cond_reg,
@@ -219,7 +219,7 @@ impl SSAGenerator {
     ) {
         let cond_register = self
             .gen_expressions(&condition.inner)
-            .unwrap_or(SSARegister(usize::MAX));
+            .unwrap_or(SSAValue(usize::MAX));
         let t_label = self.new_label();
         let f_label = self.new_label();
         let merge_label = self.new_label();
@@ -255,17 +255,17 @@ impl SSAGenerator {
         &mut self,
         expr: &Spanned<Expr>,
         op: &Spanned<PrefixOp>,
-    ) -> Option<SSARegister> {
+    ) -> Option<SSAValue> {
         let expr_reg = self
             .gen_expressions(&expr.inner)
-            .unwrap_or(SSARegister(usize::MAX));
+            .unwrap_or(SSAValue(usize::MAX));
         let target = self.new_register();
         let prefix_node = match op.inner {
             PrefixOp::Minus => {
                 // do value * -1;
                 let int_literal_target = self.new_register();
-                let int_literal = SSAInstruction::Mov {
-                    value: SSAValue(-1),
+                let int_literal = SSAInstruction::MovI {
+                    value: -1,
                     target: int_literal_target,
                 };
                 self.instructions.push(int_literal);
@@ -288,41 +288,47 @@ impl SSAGenerator {
         }
     }
 
-    fn gen_stmt_declaration(&mut self, value: &Spanned<Expr>, ident: &Spanned<String>) {
+    fn gen_stmt_declaration(
+        &mut self,
+        value: &Spanned<Expr>,
+        ident: &Spanned<String>,
+        ty: &Option<Type>,
+    ) {
         let node_decl = SSAInstruction::Allocation {
             name: ident.inner.clone(),
+            ty: SSAType::from(ty.unwrap_or_else(|| panic!("Missing type information"))),
         };
         self.instructions.push(node_decl);
         let a = self
             .gen_expressions(&value.inner)
-            .unwrap_or(SSARegister(usize::MAX));
+            .unwrap_or(SSAValue(usize::MAX));
         self.instructions.push(SSAInstruction::Store {
             source: a,
             target: ident.inner.clone(),
         });
     }
 
-    fn gen_expr_bool_literal(&mut self, literal: &Spanned<bool>) -> Option<SSARegister> {
+    fn gen_expr_bool_literal(&mut self, literal: &Spanned<bool>) -> Option<SSAValue> {
         let target = self.new_register();
-        let node = SSAInstruction::Mov {
-            value: SSAValue(i64::from(literal.inner)),
+        let node = SSAInstruction::MovI {
+            value: i64::from(literal.inner),
             target,
         };
         self.instructions.push(node);
         Some(target)
     }
 
-    fn gen_expr_int_literal(&mut self, literal: &Spanned<i64>) -> Option<SSARegister> {
+    fn gen_expr_int_literal(&mut self, literal: &Spanned<i64>) -> Option<SSAValue> {
         let target = self.new_register();
-        let node = SSAInstruction::Mov {
-            value: SSAValue(literal.inner),
+        let node = SSAInstruction::MovI {
+            value: literal.inner,
             target,
         };
         self.instructions.push(node);
         Some(target)
     }
 
-    fn gen_expr_ident(&mut self, ident: &str) -> Option<SSARegister> {
+    fn gen_expr_ident(&mut self, ident: &str) -> Option<SSAValue> {
         let s = ident.to_owned();
         let target = self.new_register();
         let node = SSAInstruction::Load { source: s, target };
@@ -335,13 +341,13 @@ impl SSAGenerator {
         left: &Spanned<Expr>,
         right: &Spanned<Expr>,
         op: &Spanned<InfixOp>,
-    ) -> Option<SSARegister> {
+    ) -> Option<SSAValue> {
         let left_reg = self
             .gen_expressions(&left.inner)
-            .unwrap_or(SSARegister(usize::MAX));
+            .unwrap_or(SSAValue(usize::MAX));
         let right_reg = self
             .gen_expressions(&right.inner)
-            .unwrap_or(SSARegister(usize::MAX));
+            .unwrap_or(SSAValue(usize::MAX));
         let cmp_op = match op.inner {
             InfixOp::Eq => Some(SSACompareOp::Eq),
             InfixOp::NotEq => Some(SSACompareOp::NotEq),
@@ -384,10 +390,10 @@ impl SSAGenerator {
         ident: &Spanned<String>,
         operand: &Spanned<InfixOp>,
         expr: &Spanned<Expr>,
-    ) -> Option<SSARegister> {
+    ) -> Option<SSAValue> {
         let expr_reg = self
             .gen_expressions(&expr.inner)
-            .unwrap_or(SSARegister(usize::MAX));
+            .unwrap_or(SSAValue(usize::MAX));
 
         match operand.inner {
             InfixOp::Assign => {
@@ -411,7 +417,7 @@ impl SSAGenerator {
                 };
                 let ident_reg = self
                     .gen_expr_ident(&ident.inner)
-                    .unwrap_or(SSARegister(usize::MAX));
+                    .unwrap_or(SSAValue(usize::MAX));
 
                 let tmp_reg = self.new_register();
                 let node_arith = SSAInstruction::ArithmeticBinary {
