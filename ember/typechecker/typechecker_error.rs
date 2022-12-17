@@ -1,10 +1,9 @@
-use std::ops::Range;
-
 use crate::parser::{
-    ast::{Expr, Spanned},
-    operands::InfixOp,
+    syntax::InfixOp,
+    syntax::{Expr, Spanned},
     ty::Type,
 };
+use std::ops::Range;
 
 #[derive(Debug, Clone)]
 pub enum TypeCheckErr {

@@ -1,33 +1,5 @@
-use super::operands::{SSABinaryOp, SSACompareOp};
 use crate::parser::ty::Type;
 use std::fmt;
-
-#[derive(Debug, Copy, Clone)]
-pub struct SSAValue(pub i64);
-
-impl fmt::Display for SSAValue {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "#{}", self.0)
-    }
-}
-
-#[derive(Debug, Copy, Clone)]
-pub struct SSALabel(pub usize);
-
-impl fmt::Display for SSALabel {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "L{}", self.0)
-    }
-}
-
-#[derive(Debug, Copy, Clone)]
-pub struct SSARegister(pub usize);
-
-impl fmt::Display for SSARegister {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "R{}", self.0)
-    }
-}
 
 #[derive(Debug, Clone)]
 pub enum SSAInstruction {
@@ -87,7 +59,42 @@ pub enum SSAInstruction {
     Return {
         register: Option<SSARegister>,
     },
+    Phi {
+        target: SSARegister,
+        values: Vec<SSARegister>,
+    },
 }
+
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+pub enum SSAUnaryOp {
+    Neg,
+    Not,
+}
+
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+pub enum SSABinaryOp {
+    Add,
+    Sub,
+    Mul,
+    Div,
+}
+
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+pub enum SSACompareOp {
+    Eq,
+    NotEq,
+    Lt,
+    Gt,
+}
+
+#[derive(Debug, Copy, Clone)]
+pub struct SSAValue(pub i64);
+
+#[derive(Debug, Copy, Clone)]
+pub struct SSALabel(pub usize);
+
+#[derive(Debug, Copy, Clone)]
+pub struct SSARegister(pub usize);
 
 impl fmt::Display for SSAInstruction {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -166,6 +173,63 @@ impl fmt::Display for SSAInstruction {
                     .join(", ");
                 write!(f, "\t{target} ← call {name}({param_str})")
             }
+            SSAInstruction::Phi { target, values } => {
+                let phi_vals = values
+                    .iter()
+                    .map(|r| format!("{}", r))
+                    .collect::<Vec<String>>()
+                    .join(", ");
+                write!(f, "\t{target} ← phi {phi_vals}")
+            }
         }
+    }
+}
+
+impl fmt::Display for SSABinaryOp {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            SSABinaryOp::Add => write!(f, "+"),
+            SSABinaryOp::Sub => write!(f, "-"),
+            SSABinaryOp::Mul => write!(f, "*"),
+            SSABinaryOp::Div => write!(f, "/"),
+        }
+    }
+}
+
+impl fmt::Display for SSACompareOp {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            SSACompareOp::Eq => write!(f, "=="),
+            SSACompareOp::NotEq => write!(f, "!="),
+            SSACompareOp::Lt => write!(f, "<"),
+            SSACompareOp::Gt => write!(f, ">"),
+        }
+    }
+}
+
+impl fmt::Display for SSAUnaryOp {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            SSAUnaryOp::Neg => write!(f, "!"),
+            SSAUnaryOp::Not => write!(f, "-"),
+        }
+    }
+}
+
+impl fmt::Display for SSARegister {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "R{}", self.0)
+    }
+}
+
+impl fmt::Display for SSALabel {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "L{}", self.0)
+    }
+}
+
+impl fmt::Display for SSAValue {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "#{}", self.0)
     }
 }

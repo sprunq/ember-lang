@@ -3,8 +3,8 @@ use super::{
     typechecker_error::TypeCheckErr,
 };
 use crate::parser::{
-    ast::{Expr, Spanned, Stmt},
-    operands::InfixOp,
+    syntax::InfixOp,
+    syntax::{Expr, Spanned, Stmt},
     ty::Type,
 };
 use std::collections::HashMap;

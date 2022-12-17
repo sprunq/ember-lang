@@ -1,4 +1,4 @@
-use super::operands::InfixOp;
+use super::syntax::InfixOp;
 use crate::lexer::token::Token;
 use std::fmt;
 

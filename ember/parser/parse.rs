@@ -1,7 +1,7 @@
 use super::{
-    ast::{Expr, Spanned, Stmt},
-    operands::{InfixOp, Precedence, PrefixOp},
     parse_error::ParseErr,
+    syntax::{Expr, Spanned, Stmt},
+    syntax::{InfixOp, Precedence, PrefixOp},
     ty::Type,
 };
 use crate::lexer::token::{Token, TokenInfo};

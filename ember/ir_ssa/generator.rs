@@ -1,13 +1,13 @@
 #![allow(unused_variables)]
 #![allow(dead_code)]
 use super::{
-    instruction::{SSAInstruction, SSALabel, SSARegister, SSAValue},
-    operands::{SSABinaryOp, SSACompareOp},
+    syntax::{SSABinaryOp, SSACompareOp},
+    syntax::{SSAInstruction, SSALabel, SSARegister, SSAValue},
 };
 use crate::{
     parser::{
-        ast::{Expr, Spanned, Stmt},
-        operands::{InfixOp, PrefixOp},
+        syntax::{Expr, Spanned, Stmt},
+        syntax::{InfixOp, PrefixOp},
     },
     typechecker::symbol_table::SymbolTable,
 };
@@ -155,8 +155,8 @@ impl SSAGenerator {
     fn gen_stmt_function_definition(
         &mut self,
         name: &Spanned<String>,
-        parameters: &Vec<(Spanned<String>, Spanned<crate::parser::ty::Type>)>,
-        body: &Box<Stmt>,
+        parameters: &[(Spanned<String>, Spanned<crate::parser::ty::Type>)],
+        body: &Stmt,
     ) {
         let body_label = self.new_label();
         let name_str = name.inner.clone();

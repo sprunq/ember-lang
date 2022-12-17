@@ -4,7 +4,7 @@ use codespan_reporting::term;
 use codespan_reporting::term::termcolor::{ColorChoice, StandardStream};
 use compiler_error::CompilerError;
 use ember::ir_ssa::generator::SSAGenerator;
-use ember::ir_ssa::instruction::SSAInstruction;
+use ember::ir_ssa::syntax::SSAInstruction;
 use ember::lexer::lex::Lexer;
 use ember::lexer::token::TokenInfo;
 use ember::parser::parse::Parser;
