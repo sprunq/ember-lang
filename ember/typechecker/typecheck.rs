@@ -36,11 +36,11 @@ impl TypeChecker {
             is_errored: false,
         };
 
-        // global scope
-        sel.symbol_table.push_scope();
-
+        // only support types in function scopes
         for fun in functions {
+            sel.symbol_table.push_scope();
             sel.check_statement(fun);
+            sel.symbol_table.pop_scope();
         }
 
         sel.errors
@@ -251,7 +251,6 @@ impl TypeChecker {
     }
 
     fn check_while(&mut self, condition: &Spanned<Expr>, body: &mut Box<Stmt>) {
-        self.symbol_table.push_scope();
         let condition_ty = self.check_expression(&condition.inner);
         if condition_ty != Some(Type::Bool) {
             self.emit_error(TypeCheckErr::TypeMismatch {
@@ -261,7 +260,6 @@ impl TypeChecker {
             })
         }
         self.check_statement(body);
-        self.symbol_table.pop_scope();
     }
 
     fn check_if(
@@ -270,7 +268,6 @@ impl TypeChecker {
         body: &mut Box<Stmt>,
         alternative: &mut Option<Box<Stmt>>,
     ) {
-        self.symbol_table.push_scope();
         let condition_ty = self.check_expression(&condition.inner);
         if condition_ty != Some(Type::Bool) {
             self.emit_error(TypeCheckErr::TypeMismatch {
@@ -283,7 +280,6 @@ impl TypeChecker {
         if let Some(alternative) = alternative {
             self.check_statement(alternative);
         }
-        self.symbol_table.pop_scope();
     }
 
     fn check_return(&mut self, value: &mut Option<Spanned<Expr>>) {
@@ -333,7 +329,6 @@ impl TypeChecker {
     ) {
         if let Some(fun_sig) = self.function_signatures.get(&name.inner).cloned() {
             self.current_fun_signature = Some(fun_sig);
-            self.symbol_table.push_scope();
             for param in parameters {
                 self.symbol_table
                     .insert_var_in_scope(VariableInformation::new(
@@ -343,7 +338,6 @@ impl TypeChecker {
                     ));
             }
             self.check_statement(body);
-            self.symbol_table.pop_scope();
         } else {
             self.current_fun_signature = None;
             self.emit_error(TypeCheckErr::IdentifierNotFound {

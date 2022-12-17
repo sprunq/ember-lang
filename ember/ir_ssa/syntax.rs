@@ -179,7 +179,7 @@ impl fmt::Display for SSAInstruction {
                     .map(|r| format!("{}", r))
                     .collect::<Vec<String>>()
                     .join(", ");
-                write!(f, "\t{target} ← phi {phi_vals}")
+                write!(f, "\t{target} ← Φ({phi_vals})")
             }
         }
     }
